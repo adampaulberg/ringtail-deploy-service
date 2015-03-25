@@ -1,0 +1,63 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstallerService", "InstallerService\InstallerService.csproj", "{D7125A9C-F28C-4E2E-B1A5-9CA25B07CB2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstallerWindowsService", "InstallerWindowsService\InstallerWindowsService.csproj", "{BA0259A2-B630-4163-9F37-171154665E85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateInstallerService", "UpdateInstallerService\UpdateInstallerService.csproj", "{DDA69AF1-7779-42AB-99BE-75BACFC9FE08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstallerServiceTests", "InstallerServiceTests\InstallerServiceTests.csproj", "{2C8476B4-62CB-424D-80BE-4FEBAA418AD8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{A9A9A456-B332-4BE0-BDF9-6FF86FC277D8}"
+	ProjectSection(SolutionItems) = preProject
+		..\Shared\VersionInfo.cs = ..\Shared\VersionInfo.cs
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 5
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://tfs2012.dev.tech.local:8080/tfs/fticollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = InstallerService\\InstallerService.csproj
+		SccProjectName1 = InstallerService
+		SccLocalPath1 = InstallerService
+		SccProjectUniqueName2 = InstallerWindowsService\\InstallerWindowsService.csproj
+		SccProjectName2 = InstallerWindowsService
+		SccLocalPath2 = InstallerWindowsService
+		SccProjectUniqueName3 = UpdateInstallerService\\UpdateInstallerService.csproj
+		SccProjectName3 = UpdateInstallerService
+		SccLocalPath3 = UpdateInstallerService
+		SccProjectUniqueName4 = InstallerServiceTests\\InstallerServiceTests.csproj
+		SccProjectName4 = InstallerServiceTests
+		SccLocalPath4 = InstallerServiceTests
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D7125A9C-F28C-4E2E-B1A5-9CA25B07CB2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7125A9C-F28C-4E2E-B1A5-9CA25B07CB2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7125A9C-F28C-4E2E-B1A5-9CA25B07CB2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7125A9C-F28C-4E2E-B1A5-9CA25B07CB2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA0259A2-B630-4163-9F37-171154665E85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA0259A2-B630-4163-9F37-171154665E85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA0259A2-B630-4163-9F37-171154665E85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA0259A2-B630-4163-9F37-171154665E85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDA69AF1-7779-42AB-99BE-75BACFC9FE08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDA69AF1-7779-42AB-99BE-75BACFC9FE08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDA69AF1-7779-42AB-99BE-75BACFC9FE08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDA69AF1-7779-42AB-99BE-75BACFC9FE08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C8476B4-62CB-424D-80BE-4FEBAA418AD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C8476B4-62CB-424D-80BE-4FEBAA418AD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C8476B4-62CB-424D-80BE-4FEBAA418AD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C8476B4-62CB-424D-80BE-4FEBAA418AD8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
