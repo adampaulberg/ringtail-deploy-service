@@ -44,6 +44,7 @@
       <HintPath>..\packages\CommandLineParser.1.9.71\lib\net45\CommandLine.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Management.Automation" />    
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -58,13 +59,14 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="ConfigCompareTests.cs" />
-    <Compile Include="DatabaseUpgraderTests.cs" />
-    <Compile Include="FindInstallationsFromRootFolderTests.cs" />
-    <Compile Include="GetRequiredConfigsTests.cs" />
-    <Compile Include="RegistryReaderScrubberTests.cs" />
+    <Compile Include="MasterTests\ConfigCompareTests.cs" />
+    <Compile Include="DatabaseUpgraderTests\DatabaseUpgraderTests.cs" />
+    <Compile Include="InstallFetcherTests\FindInstallationsFromRootFolderTests.cs" />
+    <Compile Include="RequiredConfigurationsGeneratorTests\GetRequiredConfigsTests.cs" />
+    <Compile Include="MasterRunnerTests\PowerShellFileTest.cs" />
+    <Compile Include="RegistryReaderTests\RegistryReaderScrubberTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RoleResolverTests.cs" />
+    <Compile Include="RoleResolverTests\RoleResolverTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DatabaseUpgrader\DatabaseUpgrader.csproj">
@@ -74,6 +76,10 @@
     <ProjectReference Include="..\InstallFetcher\InstallFetcher.csproj">
       <Project>{8308311f-c693-4da5-9c67-c8f42b04d0bf}</Project>
       <Name>InstallFetcher</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MasterRunner\MasterRunner.csproj">
+      <Project>{0c42661b-a8fa-49e6-bdd9-58ef68fa1636}</Project>
+      <Name>MasterRunner</Name>
     </ProjectReference>
     <ProjectReference Include="..\RegCleaner\RegistryReader.csproj">
       <Project>{bc440277-0249-4bbe-9d58-5c41eaca2418}</Project>
@@ -95,9 +101,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="TestHelpers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

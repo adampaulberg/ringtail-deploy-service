@@ -44,6 +44,7 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Management.Automation" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -52,6 +53,10 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="App\Options.cs" />
+    <Compile Include="App\Runners\BatchFileRunner.cs" />
+    <Compile Include="App\Runners\ExeFileRunner.cs" />
+    <Compile Include="App\Runners\IRunner.cs" />
+    <Compile Include="App\Runners\PowerShellFileRunner.cs" />
     <Compile Include="Util\ProcessExecutorHelper.cs" />
     <Compile Include="App\Runner.cs" />
     <Compile Include="Program.cs" />
