@@ -81,6 +81,15 @@ namespace DatabaseUpgrader.App
             return singleString;
         }
 
+        public bool ValidateIsDefaultAction()
+        {
+            var action = this.Actions[0];
+            if (this.Actions.Count == 0)
+                return false;
+            var normalized = action.ToLower();
+            return normalized == "datacamel_action";
+        }
+
         public bool ValidateActions()
         {
             if (this.Actions.Count == 0)

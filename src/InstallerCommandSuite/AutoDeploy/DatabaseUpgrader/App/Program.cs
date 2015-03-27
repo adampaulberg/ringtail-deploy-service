@@ -19,6 +19,10 @@ namespace DatabaseUpgrader
 
                 if (CommandLine.Parser.Default.ParseArguments(args, options))
                 {
+                    if (args.Length == 0 || options.ValidateIsDefaultAction())
+                    {
+                        return 0;
+                    }
                     if (!options.ValidateActions())
                     {
                         Console.WriteLine(options.GetUsage());
