@@ -51,7 +51,7 @@ namespace DataCamel.App
 
 ");
             var version = Assembly.GetExecutingAssembly().GetName().Version;
-            heading.AppendLine(string.Format("DataCamel {0}.{1}.{2}", version.Major, version.Minor, version.Revision));
+            heading.AppendLine(string.Format("DataCamel {0}.{1}.{2}", version.Major, version.Minor, version.Build));
             heading.AppendLine("Copyright c 2015 FTI Consulting");
 
             return heading.ToString();

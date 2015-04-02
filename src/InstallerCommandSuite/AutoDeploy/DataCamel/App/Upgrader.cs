@@ -39,13 +39,13 @@ namespace DataCamel.App
             string prefix = "SQL Component_v";
             DirectoryInfo di = new DirectoryInfo(options.InstallPath);
             var dirs = di.GetDirectories(prefix + options.Version, SearchOption.TopDirectoryOnly);
-            
-            if(dirs.Length != 1)
+
+            if (dirs.Length != 1)
                 return false;
             else
                 return true;
         }
-        
+
 
         public void UpgradeDatabases(Options options)
         {
@@ -82,7 +82,7 @@ namespace DataCamel.App
         {
             try
             {
-                if(! async) Logger(string.Format("Updating database '{0}'... ", database));
+                if (!async) Logger(string.Format("Updating database '{0}'... ", database));
                 else Logger(string.Format("Starting update for database '{0}'\r\n", database));
 
                 string connStr = string.Format("Data Source={0};Initial Catalog={1};User Id={2};Password={3}", options.Server, "master", options.Username, options.Password);
@@ -96,8 +96,7 @@ namespace DataCamel.App
                     command.CommandType = System.Data.CommandType.StoredProcedure;
                     command.Parameters.AddWithValue("@database_name", database);
                     command.Parameters.AddWithValue("@username", options.Username);
-                    command.Parameters.AddWithValue("@password", options.Password);
-                    command.Parameters.AddWithValue(@"@ringtail_database_model", options.Version);
+                    command.Parameters.AddWithValue("@ringtail_app_version", options.Version);
                     command.ExecuteNonQuery();
                 }
                 if (!async) Logger("Complete\r\n");
