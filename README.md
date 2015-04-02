@@ -1,7 +1,7 @@
 ringtail-deploy-service
 ===================
 
-This project is a collection of tools that live on a Ringtail machine and facilitatae installations and upgrades.  It consists of two major parts - a web-service API, and a set of loosly coupled command line utilities to do installations.
+This project is a collection of tools that live on a Ringtail machine and facilitate installations and upgrades.  It consists of two major parts - a web-service API, and a set of loosely coupled command line utilities to do installations.
 
 ##Getting Started
 
