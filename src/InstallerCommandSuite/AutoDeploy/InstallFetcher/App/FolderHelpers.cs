@@ -100,10 +100,12 @@ namespace InstallFetcher.App
             {
                 Console.WriteLine("    ....folder exists: " + root);
                 var folders = rootFolder.GetDirectories();
+                var files = rootFolder.GetFiles(); 
 
-                if (folders.Length > 0)
-                {
+                if (folders.Length > 0 || files.Length > 0)
+                {                       
                     DirectoryInfo finalFolder = GetFirstFolderWithFiles(rootFolder, options.FolderSuffix);
+
                     if (finalFolder != null)
                     {
                         string realPath = finalFolder.FullName;
@@ -126,13 +128,13 @@ namespace InstallFetcher.App
                 }
                 else
                 {
-                    Console.WriteLine("The target folder was accessible, but no builds have been made yet: " + options.FolderRoot);
+                    Console.WriteLine("The target folder was accessible, but no builds have been made yet: " + root);
                     Environment.Exit(1);
                 }
             }
             else
             {
-                Console.WriteLine("The target folder was not accessible or not found: " + options.FolderRoot);
+                Console.WriteLine("The target folder was not accessible or not found: " + root);
                 Environment.Exit(1);
             }
 
