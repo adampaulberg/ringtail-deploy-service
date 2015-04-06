@@ -38,58 +38,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{804BDC
 		..\Shared\VersionInfo.cs = ..\Shared\VersionInfo.cs
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileCleaner", "FileCleaner\FileCleaner.csproj", "{A28E7347-1ABA-4F32-B7EA-2BF9D6F091B9}"
+EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 16
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://tfs2012.dev.tech.local:8080/tfs/fticollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = Composer\\Composer.csproj
-		SccProjectName1 = Composer
-		SccLocalPath1 = Composer
-		SccProjectUniqueName2 = DatabaseUpgrader\\DatabaseUpgrader.csproj
-		SccProjectName2 = DatabaseUpgrader
-		SccLocalPath2 = DatabaseUpgrader
-		SccProjectUniqueName3 = GenericInstaller\\GenericInstaller.csproj
-		SccProjectName3 = GenericInstaller
-		SccLocalPath3 = GenericInstaller
-		SccProjectUniqueName4 = InstallFetcher\\InstallFetcher.csproj
-		SccProjectName4 = InstallFetcher
-		SccLocalPath4 = InstallFetcher
-		SccProjectUniqueName5 = InstallNameTruncator\\InstallNameTruncator.csproj
-		SccProjectName5 = InstallNameTruncator
-		SccLocalPath5 = InstallNameTruncator
-		SccProjectUniqueName6 = RingtailAutoInstaller\\Master.csproj
-		SccProjectName6 = RingtailAutoInstaller
-		SccLocalPath6 = RingtailAutoInstaller
-		SccProjectUniqueName7 = Deployer\\Deployer.csproj
-		SccProjectName7 = Deployer
-		SccLocalPath7 = Deployer
-		SccProjectUniqueName8 = InstallerTests\\InstallerTests.csproj
-		SccProjectName8 = InstallerTests
-		SccLocalPath8 = InstallerTests
-		SccProjectUniqueName9 = RoleResolver\\RoleResolver.csproj
-		SccProjectName9 = RoleResolver
-		SccLocalPath9 = RoleResolver
-		SccProjectUniqueName10 = RegCleaner\\RegistryReader.csproj
-		SccProjectName10 = RegCleaner
-		SccLocalPath10 = RegCleaner
-		SccProjectUniqueName11 = ConfiguratorHelper\\ConfiguratorHelper.csproj
-		SccProjectName11 = ConfiguratorHelper
-		SccLocalPath11 = ConfiguratorHelper
-		SccProjectUniqueName12 = DataCamel\\DataCamel.csproj
-		SccProjectName12 = DataCamel
-		SccLocalPath12 = DataCamel
-		SccProjectUniqueName13 = MasterRunner\\MasterRunner.csproj
-		SccProjectName13 = MasterRunner
-		SccLocalPath13 = MasterRunner
-		SccProjectUniqueName14 = UninstallerHelper\\UninstallerHelper.csproj
-		SccProjectName14 = UninstallerHelper
-		SccLocalPath14 = UninstallerHelper
-		SccProjectUniqueName15 = RequiredConfigurationsGenerator\\RequiredConfigurationsGenerator.csproj
-		SccProjectName15 = RequiredConfigurationsGenerator
-		SccLocalPath15 = RequiredConfigurationsGenerator
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -249,6 +200,16 @@ Global
 		{B6CC9F23-007D-47BA-8F49-236FBA118442}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{B6CC9F23-007D-47BA-8F49-236FBA118442}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B6CC9F23-007D-47BA-8F49-236FBA118442}.Release|Win32.ActiveCfg = Release|Any CPU
+		{A28E7347-1ABA-4F32-B7EA-2BF9D6F091B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A28E7347-1ABA-4F32-B7EA-2BF9D6F091B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A28E7347-1ABA-4F32-B7EA-2BF9D6F091B9}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A28E7347-1ABA-4F32-B7EA-2BF9D6F091B9}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A28E7347-1ABA-4F32-B7EA-2BF9D6F091B9}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{A28E7347-1ABA-4F32-B7EA-2BF9D6F091B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A28E7347-1ABA-4F32-B7EA-2BF9D6F091B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A28E7347-1ABA-4F32-B7EA-2BF9D6F091B9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A28E7347-1ABA-4F32-B7EA-2BF9D6F091B9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A28E7347-1ABA-4F32-B7EA-2BF9D6F091B9}.Release|Win32.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
