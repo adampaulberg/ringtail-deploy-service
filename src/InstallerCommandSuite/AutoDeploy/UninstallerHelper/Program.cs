@@ -30,15 +30,32 @@ namespace UninstallerHelper
                     matchBy = args[0];
                 }
 
-                ringtailKeys.ForEach(z => allUninstallStrings.Add(UninstallCommandGenerator.CreateUninstallString(z, matchBy)));
+                string outputFile = "uninstall.bat";
+                if (args.Length > 1)
+                {
+                    outputFile = args[1];
+                }
+
+                string[] exclusions = null;
+                if (args.Length > 2)
+                {
+                    var exclusionStrings = args[2];
+                    var exclusionParts = exclusionStrings.Split(',');
+                    exclusions = exclusionParts
+                        .Select(p => p.Trim())
+                        .Where(p => !string.IsNullOrEmpty(p))
+                        .ToArray();
+                }
+
+                ringtailKeys.ForEach(z => allUninstallStrings.Add(UninstallCommandGenerator.CreateUninstallString(z, matchBy, exclusions)));
                 allUninstallStrings.ForEach(x => Console.WriteLine(x));                
 
-                l.AddAndWrite("Writing uninstall.bat");
-                SimpleFileWriter.Write("uninstall.bat", allUninstallStrings);
+                l.AddAndWrite("Writing " + outputFile);
+                SimpleFileWriter.Write(outputFile, allUninstallStrings);
 
-                if (!new FileInfo("uninstall.bat").Exists)
+                if (!new FileInfo(outputFile).Exists)
                 {
-                    l.AddAndWrite("Failed to write uninstall.bat");
+                    l.AddAndWrite("Failed to write " + outputFile);
                     exitCode = 1;
                 }
                 if (allUninstallStrings.Count == 0)

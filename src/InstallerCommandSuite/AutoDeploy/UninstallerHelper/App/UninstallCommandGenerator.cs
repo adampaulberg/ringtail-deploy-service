@@ -9,7 +9,7 @@ namespace UninstallerHelper.App
 {
     public class UninstallCommandGenerator
     {
-        internal static string CreateUninstallString(RegistryKey app, string matchBy)
+        internal static string CreateUninstallString(RegistryKey app, string matchBy, string[] exclusions)
         {
             var uninstallString = string.Empty;
             var hasUninstallString = !String.IsNullOrEmpty(app.GetValueNames().ToList().Find(x => x == "UninstallString"));
@@ -18,20 +18,19 @@ namespace UninstallerHelper.App
             if (hasUninstallString && hasAppName)
             {
                 var appName = app.GetValue("DisplayName").ToString();
+                var isExclusion = exclusions != null ? exclusions.Any(p => appName.Contains(p)) : false;
 
-                if (appName.Contains(matchBy) || String.IsNullOrEmpty(matchBy))
+                if (!isExclusion && (appName.Contains(matchBy) || String.IsNullOrEmpty(matchBy)))
                 {
                     var registryUnintallString = app.GetValue("UninstallString").ToString();
                     var type = appName.Contains("Configurator") ? "partial" : "complete";
                     type = appName.Contains("Framework Workers") ? "wmic" : type;
                     uninstallString = AddArgumentsToUninstallString(registryUnintallString, type, appName);
-
                 }
             }
 
             return uninstallString;
-        }
-
+        }        
 
         private static string AddArgumentsToUninstallString(string uninstall, string type, string appName)
         {
