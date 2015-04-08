@@ -31,15 +31,11 @@ namespace UninstallerHelper
                 }
 
                 string outputFile = "uninstall.bat";
-                if (args.Length > 1)
-                {
-                    outputFile = args[1];
-                }
 
                 string[] exclusions = null;
-                if (args.Length > 2)
+                if (args.Length > 1)
                 {
-                    var exclusionStrings = args[2];
+                    var exclusionStrings = args[1];
                     var exclusionParts = exclusionStrings.Split(',');
                     exclusions = exclusionParts
                         .Select(p => p.Trim())
