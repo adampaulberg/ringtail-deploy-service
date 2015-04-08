@@ -54,14 +54,12 @@ namespace FileCleaner
                 if (attr.HasFlag(FileAttributes.Directory))
                     this.Output.AppendLine(string.Format("rd /S /Q \"{0}\"", path));
                 else
-                    this.Output.AppendLine(string.Format("del /F /Q \"{0}\"", path));
-                exitCode = 0;
+                    this.Output.AppendLine(string.Format("del /F /Q \"{0}\"", path));                
             }
             catch (Exception ex)
             {
                 this.Log.AppendLine("ERROR");
-                this.Log.AppendLine("  -> " + ex.Message);
-                exitCode = 2;
+                this.Log.AppendLine("  -> " + ex.Message);                
             }            
 
             return exitCode;
@@ -112,7 +110,6 @@ namespace FileCleaner
                 {
                     this.Log.AppendLine("ERROR");
                     this.Log.AppendLine("  -> " + ex.Message);
-                    exitCode = exitCode | 2;
                 }
             }
             return exitCode;
