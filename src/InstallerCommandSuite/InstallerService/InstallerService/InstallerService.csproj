@@ -62,7 +62,7 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CommandLine">
@@ -97,6 +97,7 @@
     <Compile Include="Daemon\Controllers\BaseController.cs" />
     <Compile Include="Daemon\Controllers\ExistingConfigurationController.cs" />
     <Compile Include="Daemon\Controllers\HelpController.cs" />
+    <Compile Include="Daemon\Controllers\InstallCertificateController.cs" />
     <Compile Include="Daemon\Controllers\InstallDiagnosticController.cs" />
     <Compile Include="Daemon\Controllers\InstalledBuildsController.cs" />
     <Compile Include="Daemon\Controllers\InstallerController.cs" />
