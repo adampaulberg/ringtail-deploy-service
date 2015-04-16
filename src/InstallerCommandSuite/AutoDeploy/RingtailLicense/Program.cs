@@ -140,11 +140,22 @@ namespace RingtailCertificate
 				string ProgramData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
 				string keypath = ProgramData + "\\Microsoft\\Crypto\\RSA\\MachineKeys\\" + rsa.CspKeyContainerInfo.UniqueKeyContainerName;
 				FileSystemAccessRule rules = new FileSystemAccessRule("IIS_IUSRS", FileSystemRights.Read, AccessControlType.Allow);
-				DirectoryInfo dir = new DirectoryInfo(keypath);
-				DirectorySecurity sec = dir.GetAccessControl();
+				FileInfo file = new FileInfo(keypath);
+				FileSecurity sec = file.GetAccessControl();
 				try
 				{
 					sec.AddAccessRule(rules);
+					try
+					{
+						sec.SetAccessRule(rules);
+						file.SetAccessControl(sec);
+					}
+					catch
+					{
+						result += " [ Could not set access rule ] ";
+						Console.WriteLine(result);
+						Environment.Exit(1);
+					}
 					result += "[ Set access rules successfully ]";
 				}
 				catch
