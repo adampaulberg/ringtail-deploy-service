@@ -7,6 +7,7 @@ using System.Web.Http;
 
 namespace InstallerService.Daemon.Controllers
 {
+    [ApiLoggerActionFilter]
     public class BaseController : ApiController
     {        
         public Options Options
@@ -14,5 +15,9 @@ namespace InstallerService.Daemon.Controllers
             get { return this.Configuration.Properties["Options"] as Options; }
         }
 
+        public ApiLogger Logger
+        {
+            get { return this.Configuration.Properties["ApiLogger"] as ApiLogger; }
+        }
     }
 }

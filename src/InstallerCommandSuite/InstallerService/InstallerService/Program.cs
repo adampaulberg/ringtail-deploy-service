@@ -72,6 +72,11 @@ namespace InstallerService
 
             var config = new HttpSelfHostConfiguration(address);
             config.Properties["Options"] = options;
+
+            var logger = new ApiLogger(EnvironmentInfo.INSTALLER_SERVICE_WORKING_FOLDER + "apilog.txt");
+            logger.Log("Starting API");
+            config.Properties["ApiLogger"] = logger;
+
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
             config.Routes.MapHttpRoute(
                 name: "Default",
