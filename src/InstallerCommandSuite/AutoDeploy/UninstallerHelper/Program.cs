@@ -44,6 +44,14 @@ namespace UninstallerHelper
                 }
 
                 ringtailKeys.ForEach(z => allUninstallStrings.Add(UninstallCommandGenerator.CreateUninstallString(z, matchBy, exclusions)));
+
+                if (allUninstallStrings.Count == 0)
+                {
+                    allUninstallStrings.Add("@echo Nothing to uninstall");
+                    l.AddAndWrite("WARNING: Found nothing to uninstall.");
+                    exitCode = 0;
+                }  
+
                 allUninstallStrings.ForEach(x => Console.WriteLine(x));                
 
                 l.AddAndWrite("Writing " + outputFile);
@@ -54,13 +62,7 @@ namespace UninstallerHelper
                     l.AddAndWrite("Failed to write " + outputFile);
                     exitCode = 1;
                 }
-                if (allUninstallStrings.Count == 0)
-                {
-                    allUninstallStrings.Add("echo Nothing to uninstall");
-                    SimpleFileWriter.Write("uninstall.bat", allUninstallStrings);
-                    l.AddAndWrite("WARNING: Found nothing to uninstall.");                    
-                    exitCode = 0;
-                }                
+              
             }
             catch (Exception ex)
             {
