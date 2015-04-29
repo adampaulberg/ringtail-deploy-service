@@ -47,6 +47,13 @@ namespace ConfiguratorHelper.App
         [Option("dbuserpassword", Required = true, HelpText = "portal database password")]
         public string dbuserpassword { get; set; }
 
+        [Option("dbPort", Required = false, DefaultValue="1433", HelpText = "database port")]
+        public string dbPort { get; set; }
+
+        [Option("agentVirtualName", Required = false, DefaultValue = "Agent", HelpText = "virtual name for the agent")]
+        public string agentVirtualName { get; set; }
+        
+
         [HelpOption]
         public string GetUsage()
         {
