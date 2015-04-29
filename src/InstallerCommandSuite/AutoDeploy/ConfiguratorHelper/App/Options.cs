@@ -52,7 +52,11 @@ namespace ConfiguratorHelper.App
 
         [Option("agentVirtualName", Required = false, DefaultValue = "Agent", HelpText = "virtual name for the agent")]
         public string agentVirtualName { get; set; }
-        
+
+
+        [Option("newAppPoolName", Required = false, DefaultValue = "", HelpText = "new name for the application pool")]
+        public string newAppPoolName { get; set; }
+
 
         [HelpOption]
         public string GetUsage()
