@@ -62,6 +62,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ConfiguratorHelperTests\ApplicationPoolHelperTests.cs" />
     <Compile Include="MasterTests\ConfigCompareTests.cs" />
     <Compile Include="DatabaseUpgraderTests\DatabaseUpgraderTests.cs" />
     <Compile Include="InstallFetcherTests\FindInstallationsFromRootFolderTests.cs" />
@@ -72,6 +73,10 @@
     <Compile Include="RoleResolverTests\RoleResolverTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ConfiguratorHelper\ConfiguratorHelper.csproj">
+      <Project>{efa8cc40-0281-40a1-be31-0654a65827e5}</Project>
+      <Name>ConfiguratorHelper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DatabaseUpgrader\DatabaseUpgrader.csproj">
       <Project>{0baf7dea-4340-4175-9592-ca5a6ae8c125}</Project>
       <Name>DatabaseUpgrader</Name>

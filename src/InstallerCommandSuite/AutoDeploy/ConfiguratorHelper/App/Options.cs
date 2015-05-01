@@ -54,8 +54,8 @@ namespace ConfiguratorHelper.App
         public string agentVirtualName { get; set; }
 
 
-        [Option("newAppPoolName", Required = false, DefaultValue = "", HelpText = "new name for the application pool")]
-        public string newAppPoolName { get; set; }
+        [Option("appPoolName", Required = false, DefaultValue = "DefaultAppPool", HelpText = "application pool name")]
+        public string appPoolName { get; set; }
 
 
         [HelpOption]
