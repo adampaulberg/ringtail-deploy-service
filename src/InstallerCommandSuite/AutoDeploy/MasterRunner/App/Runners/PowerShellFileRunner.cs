@@ -41,30 +41,23 @@ namespace MasterRunner.App.Runners
 
         public int RunFile()
         {
-            int errorCode = 0;
             Console.WriteLine("Processing via PowerShellRunner");
 
-            Runspace rs = System.Management.Automation.Runspaces.Runspace.DefaultRunspace;
-            PowerShell ps = PowerShell.Create();
-            
-            if(contents != null)
+            var allowedExits = SimpleFileReader.Read(workingFolder + "allowedExit.config");
+            ProcessExecutorHelper helper = new ProcessExecutorHelper(logger, allowedExits);
+
+            int exitCode = helper.SpawnAndLog("PowerShell.exe -ExecutionPolicy Bypass -File " + filename, workingFolder, username, password);
+            if (exitCode == 0)
             {
-                Runspace runSpace = RunspaceFactory.CreateRunspace();
-                runSpace.Open();
-                Pipeline pipeline = runSpace.CreatePipeline();
-
-                foreach (var x in contents)
-                {
-                    pipeline.Commands.Add(new Command(x));
-                }
-
-                this.Output = pipeline.Invoke();
-
-                errorCode = pipeline.HadErrors ? 1 : 0;
-
+                logger.AddAndWrite("UPGRADE SUCCESSFUL");
             }
+            else
+            {
+                logger.AddAndWrite("UPGRADE FAILED");
+                logger.AddAndWrite("Exit code: " + exitCode);
+            }
+            return exitCode;
 
-            return errorCode;
         }
     }
 }

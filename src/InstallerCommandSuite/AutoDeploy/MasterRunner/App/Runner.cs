@@ -33,6 +33,12 @@ namespace MasterRunner.App
                 return new ExeFileRunner(logger, fileName, workingFolder, username, password);
             }
 
+            if(fileName.Contains(".ps1"))
+            {
+                Console.WriteLine("Spawning: PowerShellFileRunner: " + fileName);
+                return new PowerShellFileRunner(logger, fileName, workingFolder, username, password);
+            }
+
             return new NoOp();
         }
     }
