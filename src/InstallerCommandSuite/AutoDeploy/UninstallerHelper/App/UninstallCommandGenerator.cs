@@ -23,8 +23,7 @@ namespace UninstallerHelper.App
                 if (!isExclusion && (appName.Contains(matchBy) || String.IsNullOrEmpty(matchBy)))
                 {
                     var registryUnintallString = app.GetValue("UninstallString").ToString();
-                    var type = appName.Contains("Configurator") ? "partial" : "complete";
-                    type = appName.Contains("Framework Workers") ? "wmic" : type;
+                    var type = appName.Contains("Configurator") ? "partial" : "complete";                    
                     uninstallString = AddArgumentsToUninstallString(registryUnintallString, type, appName);
                 }
             }
