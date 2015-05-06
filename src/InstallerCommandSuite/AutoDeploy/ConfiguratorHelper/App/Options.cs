@@ -26,8 +26,11 @@ namespace ConfiguratorHelper.App
         [Option("classic", DefaultValue = "Classic", HelpText = "Classic url excl host")]
         public string classicSiteName { get; set; }
 
-        [Option("appPool", DefaultValue = "DefaultAppPool", HelpText = "Application Pool")]
+        [Option("applicationPool", DefaultValue = "DefaultAppPool", HelpText = "applicationPool")]
         public string applicationPool { get; set; }
+
+        [Option("agentApplicationPool", Required = false, DefaultValue = "DefaultAppPool", HelpText = "agentApplicationPool")]
+        public string agentApplicationPool { get; set; }
 
         [Option("dbserver", Required = true, HelpText = "dbserver")]
         public string dbserver { get; set; }
@@ -52,11 +55,6 @@ namespace ConfiguratorHelper.App
 
         [Option("agentVirtualName", Required = false, DefaultValue = "Agent", HelpText = "virtual name for the agent")]
         public string agentVirtualName { get; set; }
-
-
-        [Option("appPoolName", Required = false, DefaultValue = "DefaultAppPool", HelpText = "application pool name")]
-        public string appPoolName { get; set; }
-
 
         [HelpOption]
         public string GetUsage()

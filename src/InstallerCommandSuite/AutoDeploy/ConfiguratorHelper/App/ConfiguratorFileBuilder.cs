@@ -15,7 +15,7 @@ namespace ConfiguratorHelper.App
                 + options.domain + " " + options.username + " " + options.password + " "
                 + "\"selectWeb=1&theWebSite=Default Web Site&virtual_name="
                 + options.classicSiteName + "&CBCBversion=1.0.1&thePoolmode=create&thePool="
-                + options.applicationPool + "&newAppPoolName=" + AppPoolHelper.GetNewApplicationPoolName(options.appPoolName) + "&CBauth=cb_only&IISannon=on&usernamedefault=on&connectCreate=connect&DBserver="
+                + options.applicationPool + "&newAppPoolName=" + AppPoolHelper.GetNewApplicationPoolName(options.applicationPool) + "&CBauth=cb_only&IISannon=on&usernamedefault=on&connectCreate=connect&DBserver="
                 + options.dbserver + "&DBport=" 
                 + options.dbPort + "&SAuser=" + options.dbsauser + "&SApass=" + options.dbsapassword + "&DBnameS=" + options.dbname 
                 + "&DBnameC=&username=" + options.dbusername + "&password=" + options.dbuserpassword + "&adminusername=&adminpassword=&cbversion_modopt=" 
@@ -40,7 +40,7 @@ namespace ConfiguratorHelper.App
                 + options.hostURL + ":10000/create_website.asp "
                 + options.domain + " " + options.username + " " + options.password + " "
                 + "\"selectWeb=1&theWebSite=Default Web Site&virtual_name=" + options.agentVirtualName + "&AGtype=Primary&CBCBversion=1.0.1&thePoolmode=create&thePool="
-                + options.applicationPool + "&newAppPoolName=" + AppPoolHelper.GetNewApplicationPoolName(options.appPoolName) + "&IUSR_username=IUSR&IUSR_password=&IISbasic=on&theFunction=Edit&vdtype=&admin_action=1&agent=true&rpf=&docMapper=";
+                + options.agentApplicationPool + "&newAppPoolName=" + AppPoolHelper.GetNewApplicationPoolName(options.agentApplicationPool) + "&IUSR_username=IUSR&IUSR_password=&IISbasic=on&theFunction=Edit&vdtype=&admin_action=1&agent=true&rpf=&docMapper=";
 
             var list = new List<string>();
             list.Add(agent);
