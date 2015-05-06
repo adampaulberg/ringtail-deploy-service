@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/PR-SVG-20010719/DTD/svg10.dtd">
+<svg width="40cm" height="42cm" viewBox="64 44 789 832" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g>
+    <rect style="fill: #ffffff" x="306.8" y="204" width="293.2" height="183"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="306.8" y="204" width="293.2" height="183"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="453.4" y="300.3">
+      <tspan x="453.4" y="300.3">RoleResolver.exe</tspan>
+    </text>
+  </g>
+  <g>
+    <polygon style="fill: #ffffff" points="453,443.943 637.113,536 453,628.057 268.887,536 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="453,443.943 637.113,536 453,628.057 268.887,536 "/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="453" y="524.8">
+      <tspan x="453" y="524.8">generates list of concrete roles </tspan>
+      <tspan x="453" y="540.8">from the role passed in</tspan>
+      <tspan x="453" y="556.8">against the roles.config</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="453" y1="132" x2="453.346" y2="194.264"/>
+    <polygon style="fill: #000000" points="453.388,201.764 448.332,191.792 453.346,194.264 458.332,191.736 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="453.388,201.764 448.332,191.792 453.346,194.264 458.332,191.736 "/>
+  </g>
+  <g>
+    <path style="fill: #ffffff" d="M 312.375 46 L 593.625,46 L 537.375,132 L 368.625,132 L 312.375,46z"/>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 312.375 46 L 593.625,46 L 537.375,132 L 368.625,132 L 312.375,46"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="453" y="70">
+      <tspan x="453" y="70">invoked by</tspan>
+      <tspan x="453" y="86">parameterizedCommants.bat</tspan>
+      <tspan x="453" y="102"></tspan>
+      <tspan x="453" y="118">params:    ROLE</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="453.4" y1="387" x2="453.068" y2="434.208"/>
+    <polygon style="fill: #000000" points="453.016,441.707 448.086,431.673 453.068,434.208 458.086,431.743 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="453.016,441.707 448.086,431.673 453.068,434.208 458.086,431.743 "/>
+  </g>
+  <g>
+    <path style="fill: #ffffff" d="M 97.5 500 L 168.5,500 L 168.5,574.143 C 154.3,561.786 147.2,561.786 133,574.143 C 118.8,586.5 111.7,586.5 97.5,574.143 L 97.5,500z"/>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 97.5 500 L 168.5,500 L 168.5,574.143 C 154.3,561.786 147.2,561.786 133,574.143 C 118.8,586.5 111.7,586.5 97.5,574.143 L 97.5,500"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="133" y="535.893">
+      <tspan x="133" y="535.893">roles.config</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="168.5" y1="537.071" x2="259.151" y2="536.104"/>
+    <polygon style="fill: #000000" points="266.651,536.024 256.705,541.13 259.151,536.104 256.598,531.131 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="266.651,536.024 256.705,541.13 259.151,536.104 256.598,531.131 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="453" y1="628.057" x2="454.331" y2="663.514"/>
+    <polygon style="fill: #000000" points="454.613,671.009 449.241,661.204 454.331,663.514 459.234,660.828 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="454.613,671.009 449.241,661.204 454.331,663.514 459.234,660.828 "/>
+  </g>
+  <g>
+    <polygon style="fill: #ffffff" points="454.697,673.243 633.907,774.607 454.697,875.971 275.487,774.607 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="454.697,673.243 633.907,774.607 454.697,875.971 275.487,774.607 "/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="454.697" y="747.407">
+      <tspan x="454.697" y="747.407">filters master commands</tspan>
+      <tspan x="454.697" y="763.407">based on role</tspan>
+      <tspan x="454.697" y="779.407">writes it out to master.config,</tspan>
+      <tspan x="454.697" y="795.407">which is the set of commands </tspan>
+      <tspan x="454.697" y="811.407">relevant to the role</tspan>
+    </text>
+  </g>
+  <g>
+    <path style="fill: #ffffff" d="M 65.175 741.5 L 210.825,741.5 L 210.825,812.643 C 181.695,800.786 167.13,800.786 138,812.643 C 108.87,824.5 94.305,824.5 65.175,812.643 L 65.175,741.5z"/>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 65.175 741.5 L 210.825,741.5 L 210.825,812.643 C 181.695,800.786 167.13,800.786 138,812.643 C 108.87,824.5 94.305,824.5 65.175,812.643 L 65.175,741.5"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="138" y="776.143">
+      <tspan x="138" y="776.143">masterCommands.config</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="210.825" y1="777.071" x2="265.758" y2="774.978"/>
+    <polygon style="fill: #000000" points="273.252,774.693 263.45,780.07 265.758,774.978 263.069,770.077 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="273.252,774.693 263.45,780.07 265.758,774.978 263.069,770.077 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="633.907" y1="774.607" x2="707.839" y2="774.039"/>
+    <polygon style="fill: #000000" points="715.339,773.981 705.378,779.058 707.839,774.039 705.301,769.058 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="715.339,773.981 705.378,779.058 707.839,774.039 705.301,769.058 "/>
+  </g>
+  <g>
+    <path style="fill: #ffffff" d="M 717.575 718.25 L 852,718.25 L 852,829.679 C 825.115,811.107 811.673,811.107 784.788,829.679 C 757.903,848.25 744.46,848.25 717.575,829.679 L 717.575,718.25z"/>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 717.575 718.25 L 852,718.25 L 852,829.679 C 825.115,811.107 811.673,811.107 784.788,829.679 C 757.903,848.25 744.46,848.25 717.575,829.679 L 717.575,718.25"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="784.788" y="769.679">
+      <tspan x="784.788" y="769.679">master.config</tspan>
+    </text>
+  </g>
+</svg>

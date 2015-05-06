@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/PR-SVG-20010719/DTD/svg10.dtd">
+<svg width="70cm" height="57cm" viewBox="152 90 1386 1121" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g>
+    <rect style="fill: #ffffff" x="414.526" y="249.1" width="293.2" height="183"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="414.526" y="249.1" width="293.2" height="183"/>
+    <text font-size="12.8" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="561.126" y="345.4">
+      <tspan x="561.126" y="345.4">Deployer.exe</tspan>
+    </text>
+  </g>
+  <g>
+    <polygon style="fill: #ffffff" points="565.79,782.895 760.286,915.148 565.79,1047.4 371.293,915.148 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="565.79,782.895 760.286,915.148 565.79,1047.4 371.293,915.148 "/>
+    <text font-size="12.8" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="565.79" y="871.948">
+      <tspan x="565.79" y="871.948">reads the system registry</tspan>
+      <tspan x="565.79" y="887.948">finds the location of MSDeploy</tspan>
+      <tspan x="565.79" y="903.948">inserts that in a copy </tspan>
+      <tspan x="565.79" y="919.948">of the postDeploy command and</tspan>
+      <tspan x="565.79" y="935.948">writes it out (because of </tspan>
+      <tspan x="565.79" y="951.948">permissions issues)</tspan>
+      <tspan x="565.79" y="967.948">writes a backup of the original</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="560.726" y1="177.1" x2="561.072" y2="239.364"/>
+    <polygon style="fill: #000000" points="561.114,246.864 556.058,236.892 561.072,239.364 566.058,236.836 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="561.114,246.864 556.058,236.892 561.072,239.364 566.058,236.836 "/>
+  </g>
+  <g>
+    <path style="fill: #ffffff" d="M 405.184 91.1 L 716.267,91.1 L 654.051,177.1 L 467.401,177.1 L 405.184,91.1z"/>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 405.184 91.1 L 716.267,91.1 L 654.051,177.1 L 467.401,177.1 L 405.184,91.1"/>
+    <text font-size="12.8" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="560.726" y="106.9">
+      <tspan x="560.726" y="106.9">invoked by</tspan>
+      <tspan x="560.726" y="122.9">parameterizedCommants.bat</tspan>
+      <tspan x="560.726" y="138.9"></tspan>
+      <tspan x="560.726" y="154.9">params:    DEPLOYFILE</tspan>
+      <tspan x="560.726" y="170.9">(default Deploy.config)</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="561.126" y1="432.1" x2="562.274" y2="472.44"/>
+    <polygon style="fill: #000000" points="562.488,479.937 557.205,470.084 562.274,472.44 567.201,469.799 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="562.488,479.937 557.205,470.084 562.274,472.44 567.201,469.799 "/>
+  </g>
+  <g>
+    <path style="fill: #ffffff" d="M 153.425 546.6 L 302.025,546.6 L 302.025,617.743 C 272.305,605.886 257.445,605.886 227.725,617.743 C 198.005,629.6 183.145,629.6 153.425,617.743 L 153.425,546.6z"/>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 153.425 546.6 L 302.025,546.6 L 302.025,617.743 C 272.305,605.886 257.445,605.886 227.725,617.743 C 198.005,629.6 183.145,629.6 153.425,617.743 L 153.425,546.6"/>
+    <text font-size="12.8" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="227.725" y="581.043">
+      <tspan x="227.725" y="581.043">Deploy.config</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="302.025" y1="582.171" x2="434.933" y2="582.407"/>
+    <polygon style="fill: #000000" points="442.433,582.42 432.424,587.402 434.933,582.407 432.442,577.402 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="442.433,582.42 432.424,587.402 434.933,582.407 432.442,577.402 "/>
+  </g>
+  <g>
+    <polygon style="fill: #ffffff" points="562.552,482.172 680.434,582.424 562.552,682.675 444.669,582.424 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="562.552,482.172 680.434,582.424 562.552,682.675 444.669,582.424 "/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="562.552" y="571.224">
+      <tspan x="562.552" y="571.224">opens deploy.config</tspan>
+      <tspan x="562.552" y="587.224">handles each deployment</tspan>
+      <tspan x="562.552" y="603.224">in order</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="760.286" y1="915.148" x2="824.375" y2="914.949"/>
+    <polygon style="fill: #000000" points="831.875,914.926 821.89,919.957 824.375,914.949 821.859,909.957 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="831.875,914.926 821.89,919.957 824.375,914.949 821.859,909.957 "/>
+  </g>
+  <g>
+    <path style="fill: #ffffff" d="M 834.111 897.776 L 927.111,897.776 L 927.111,932.062 C 908.511,926.348 899.211,926.348 880.611,932.062 C 862.011,937.776 852.711,937.776 834.111,932.062 L 834.111,897.776z"/>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 834.111 897.776 L 927.111,897.776 L 927.111,932.062 C 908.511,926.348 899.211,926.348 880.611,932.062 C 862.011,937.776 852.711,937.776 834.111,932.062 L 834.111,897.776"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="880.611" y="917.062">
+      <tspan x="880.611" y="917.062">postDeploy.bak</tspan>
+    </text>
+  </g>
+  <g>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 559.333,681.748 A 149.023,149.023 0 0 0 562.201,773.861"/>
+    <polygon style="fill: #000000" points="564.897,780.845 556.32,773.673 561.902,773.969 565.488,769.68 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="564.897,780.845 556.32,773.673 561.902,773.969 565.488,769.68 "/>
+  </g>
+  <g>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 565.79,782.895 A 248.769,248.769 0 0 0 564.634,692.18"/>
+    <polygon style="fill: #000000" points="563.073,684.85 570.266,693.409 564.821,692.143 560.541,695.74 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="563.073,684.85 570.266,693.409 564.821,692.143 560.541,695.74 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="565.79" y1="1047.4" x2="565.939" y2="1071.47"/>
+    <polygon style="fill: #000000" points="565.986,1078.97 560.924,1069 565.939,1071.47 570.924,1068.94 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="565.986,1078.97 560.924,1069 565.939,1071.47 570.924,1068.94 "/>
+  </g>
+  <g>
+    <polygon style="fill: #ffffff" points="566,1081.21 694.588,1145.5 566,1209.79 437.412,1145.5 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="566,1081.21 694.588,1145.5 566,1209.79 437.412,1145.5 "/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="566" y="1134.3">
+      <tspan x="566" y="1134.3">creates a version</tspan>
+      <tspan x="566" y="1150.3">that does not pause</tspan>
+      <tspan x="566" y="1166.3">at the end</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="694.588" y1="1145.5" x2="813.789" y2="1146.16"/>
+    <polygon style="fill: #000000" points="821.289,1146.2 811.261,1151.15 813.789,1146.16 811.317,1141.15 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="821.289,1146.2 811.261,1151.15 813.789,1146.16 811.317,1141.15 "/>
+  </g>
+  <g>
+    <path style="fill: #ffffff" d="M 823.525 1123.5 L 1020.47,1123.5 L 1020.47,1168.93 C 981.085,1161.36 961.39,1161.36 922,1168.93 C 882.61,1176.5 862.915,1176.5 823.525,1168.93 L 823.525,1123.5z"/>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 823.525 1123.5 L 1020.47,1123.5 L 1020.47,1168.93 C 981.085,1161.36 961.39,1161.36 922,1168.93 C 882.61,1176.5 862.915,1176.5 823.525,1168.93 L 823.525,1123.5"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="922" y="1147.43">
+      <tspan x="922" y="1147.43">NAME_OF_DEPLOY_nopause.cmd</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="562.552" y1="682.675" x2="696.351" y2="682.279"/>
+    <polygon style="fill: #000000" points="703.851,682.257 693.866,687.286 696.351,682.279 693.836,677.286 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="703.851,682.257 693.866,687.286 696.351,682.279 693.836,677.286 "/>
+  </g>
+  <g>
+    <polygon style="fill: #ffffff" points="887,591.793 1067.91,682.25 887,772.707 706.087,682.25 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="887,591.793 1067.91,682.25 887,772.707 706.087,682.25 "/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="887" y="655.05">
+      <tspan x="887" y="655.05">after scrubbing</tspan>
+      <tspan x="887" y="671.05">and writing ALL files</tspan>
+      <tspan x="887" y="687.05">from deploy.config</tspan>
+      <tspan x="887" y="703.05">create runDeployments.bat</tspan>
+      <tspan x="887" y="719.05">and immediately invoke it</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="1067.91" y1="682.25" x2="1219.37" y2="643.654"/>
+    <polygon style="fill: #000000" points="1226.63,641.802 1218.18,649.117 1219.37,643.654 1215.71,639.426 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="1226.63,641.802 1218.18,649.117 1219.37,643.654 1215.71,639.426 "/>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="1228.8" y="622.25" width="136.4" height="38"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="1228.8" y="622.25" width="136.4" height="38"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="1297" y="646.05">
+      <tspan x="1297" y="646.05">runDeployments.bat</tspan>
+    </text>
+  </g>
+  <g>
+    <path style="fill: #ffffff" d="M 1194 689.25 L 1509.46,689.25 L 1446.37,775.25 L 1257.09,775.25 L 1194,689.25z"/>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 1194 689.25 L 1509.46,689.25 L 1446.37,775.25 L 1257.09,775.25 L 1194,689.25"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="1351.73" y="705.25">
+      <tspan x="1351.73" y="705.25">runDeployments.bat</tspan>
+      <tspan x="1351.73" y="721.25"></tspan>
+      <tspan x="1351.73" y="737.25">(This stuff updates </tspan>
+      <tspan x="1351.73" y="753.25">C:\inetpub </tspan>
+      <tspan x="1351.73" y="769.25">after builds are installed)</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="1067.91" y1="682.25" x2="1216.27" y2="729.306"/>
+    <polygon style="fill: #000000" points="1223.41,731.574 1212.37,733.316 1216.27,729.306 1215.39,723.784 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="1223.41,731.574 1212.37,733.316 1216.27,729.306 1215.39,723.784 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="1067.91" y1="682.25" x2="1221.68" y2="542.986"/>
+    <polygon style="fill: #000000" points="1227.24,537.951 1223.19,548.37 1221.68,542.986 1216.47,540.958 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="1227.24,537.951 1223.19,548.37 1221.68,542.986 1216.47,540.958 "/>
+  </g>
+  <g>
+    <path style="fill: #ffffff" d="M 1228.9 513.65 L 1537.1,513.65 L 1537.1,559.25 C 1475.46,551.65 1444.64,551.65 1383,559.25 C 1321.36,566.85 1290.54,566.85 1228.9,559.25 L 1228.9,513.65z"/>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 1228.9 513.65 L 1537.1,513.65 L 1537.1,559.25 C 1475.46,551.65 1444.64,551.65 1383,559.25 C 1321.36,566.85 1290.54,566.85 1228.9,559.25 L 1228.9,513.65"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="1383" y="529.65">
+      <tspan x="1383" y="529.65">DeployLog.txt</tspan>
+      <tspan x="1383" y="545.65">(everything except the output of runDeployments.bat</tspan>
+    </text>
+  </g>
+</svg>

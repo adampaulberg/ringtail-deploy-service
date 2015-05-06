@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/PR-SVG-20010719/DTD/svg10.dtd">
+<svg width="52cm" height="46cm" viewBox="152 90 1036 908" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g>
+    <rect style="fill: #ffffff" x="414.525" y="249.1" width="293.2" height="183"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="414.525" y="249.1" width="293.2" height="183"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="561.125" y="345.4">
+      <tspan x="561.125" y="345.4">GenericInstaller.exe</tspan>
+    </text>
+  </g>
+  <g>
+    <polygon style="fill: #ffffff" points="560.949,470.006 731.361,583.005 560.949,696.003 390.537,583.005 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="560.949,470.006 731.361,583.005 560.949,696.003 390.537,583.005 "/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="560.949" y="571.805">
+      <tspan x="560.949" y="571.805">open installerTemplate.config</tspan>
+      <tspan x="560.949" y="587.805">filter by APPLICATION_NAME parameter</tspan>
+      <tspan x="560.949" y="603.805">the order in the config will be preserved</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="560.725" y1="177.1" x2="561.071" y2="239.364"/>
+    <polygon style="fill: #000000" points="561.113,246.864 556.057,236.892 561.071,239.364 566.057,236.836 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="561.113,246.864 556.057,236.892 561.071,239.364 566.057,236.836 "/>
+  </g>
+  <g>
+    <path style="fill: #ffffff" d="M 405.183 91.1 L 716.267,91.1 L 654.05,177.1 L 467.4,177.1 L 405.183,91.1z"/>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 405.183 91.1 L 716.267,91.1 L 654.05,177.1 L 467.4,177.1 L 405.183,91.1"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="560.725" y="107.1">
+      <tspan x="560.725" y="107.1">invoked by</tspan>
+      <tspan x="560.725" y="123.1">parameterizedCommants.bat</tspan>
+      <tspan x="560.725" y="139.1"></tspan>
+      <tspan x="560.725" y="155.1">params:    APPLICATION_NAME</tspan>
+      <tspan x="560.725" y="171.1">(from commands.config)</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="561.125" y1="432.1" x2="560.994" y2="460.27"/>
+    <polygon style="fill: #000000" points="560.959,467.77 556.006,457.747 560.994,460.27 566.006,457.793 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="560.959,467.77 556.006,457.747 560.994,460.27 566.006,457.793 "/>
+  </g>
+  <g>
+    <path style="fill: #ffffff" d="M 168.875 827.1 L 256.575,827.1 L 256.575,901.243 C 239.035,888.886 230.265,888.886 212.725,901.243 C 195.185,913.6 186.415,913.6 168.875,901.243 L 168.875,827.1z"/>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 168.875 827.1 L 256.575,827.1 L 256.575,901.243 C 239.035,888.886 230.265,888.886 212.725,901.243 C 195.185,913.6 186.415,913.6 168.875,901.243 L 168.875,827.1"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="212.725" y="862.993">
+      <tspan x="212.725" y="862.993">runtime.config</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="256.575" y1="864.171" x2="320.234" y2="865.504"/>
+    <polygon style="fill: #000000" points="327.732,865.661 317.63,870.45 320.234,865.504 317.839,860.452 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="327.732,865.661 317.63,870.45 320.234,865.504 317.839,860.452 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="560.949" y1="696.003" x2="561.303" y2="725.058"/>
+    <polygon style="fill: #000000" points="561.394,732.558 556.273,722.619 561.303,725.058 566.272,722.497 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="561.394,732.558 556.273,722.619 561.303,725.058 566.272,722.497 "/>
+  </g>
+  <g>
+    <polygon style="fill: #ffffff" points="561.422,734.793 792.876,865.707 561.422,996.621 329.968,865.707 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="561.422,734.793 792.876,865.707 561.422,996.621 329.968,865.707 "/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="561.422" y="830.507">
+      <tspan x="561.422" y="830.507">fill in parameters from runtime.config</tspan>
+      <tspan x="561.422" y="846.507">for each line from the previous step.</tspan>
+      <tspan x="561.422" y="862.507">it fills in by 'APPLICATION_NAME' hits first</tspan>
+      <tspan x="561.422" y="878.507">then 'COMMON' second.</tspan>
+      <tspan x="561.422" y="894.507">if there are no hits, it uses the default value</tspan>
+      <tspan x="561.422" y="910.507">from the installerTemplate.config.</tspan>
+    </text>
+  </g>
+  <g>
+    <path style="fill: #ffffff" d="M 153.425 546.6 L 302.025,546.6 L 302.025,617.743 C 272.305,605.886 257.445,605.886 227.725,617.743 C 198.005,629.6 183.145,629.6 153.425,617.743 L 153.425,546.6z"/>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 153.425 546.6 L 302.025,546.6 L 302.025,617.743 C 272.305,605.886 257.445,605.886 227.725,617.743 C 198.005,629.6 183.145,629.6 153.425,617.743 L 153.425,546.6"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="227.725" y="581.243">
+      <tspan x="227.725" y="581.243">installerTemplate.config</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="302.025" y1="582.171" x2="380.801" y2="582.913"/>
+    <polygon style="fill: #000000" points="388.301,582.984 378.254,587.889 380.801,582.913 378.348,577.89 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="388.301,582.984 378.254,587.889 380.801,582.913 378.348,577.89 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="792.876" y1="865.707" x2="890.314" y2="865.973"/>
+    <polygon style="fill: #000000" points="897.814,865.994 887.8,870.967 890.314,865.973 887.828,860.967 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="897.814,865.994 887.8,870.967 890.314,865.973 887.828,860.967 "/>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="900.05" y="776.5" width="286.95" height="179"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="900.05" y="776.5" width="286.95" height="179"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="1043.52" y="862.8">
+      <tspan x="1043.52" y="862.8">install-APPLICATION_NAME.bat</tspan>
+      <tspan x="1043.52" y="878.8">(invoked by master.bat)</tspan>
+    </text>
+  </g>
+</svg>

@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/PR-SVG-20010719/DTD/svg10.dtd">
+<svg width="55cm" height="50cm" viewBox="47 23 1088 988" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g>
+    <rect style="fill: #ffffff" x="141.175" y="24.5215" width="299.825" height="152"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="141.175" y="24.5215" width="299.825" height="152"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="291.088" y="105.321">
+      <tspan x="291.088" y="105.321">Master.exe</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="291.088" y1="176.521" x2="290.366" y2="223.207"/>
+    <polygon style="fill: #000000" points="290.25,230.706 285.405,220.63 290.366,223.207 295.404,220.785 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="290.25,230.706 285.405,220.63 290.366,223.207 295.404,220.785 "/>
+  </g>
+  <g>
+    <polygon style="fill: #ffffff" points="290.216,232.942 367.868,304.186 290.216,375.429 212.564,304.186 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="290.216,232.942 367.868,304.186 290.216,375.429 212.564,304.186 "/>
+    <text font-size="8.73747" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="290.216" y="291.092">
+      <tspan x="290.216" y="291.092">combines &amp;</tspan>
+      <tspan x="290.216" y="302.014">produces</tspan>
+      <tspan x="290.216" y="312.936">(volitleData trumps</tspan>
+      <tspan x="290.216" y="323.858">currentMachine)</tspan>
+    </text>
+  </g>
+  <g>
+    <path style="fill: #ffffff" d="M 60 212.521 L 181.85,212.521 L 181.85,280.521 C 157.48,270.321 145.295,266.921 120.925,266.921 C 96.555,266.921 84.37,263.521 60,253.321 L 60,212.521z"/>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 60 212.521 L 181.85,212.521 L 181.85,280.521 C 157.48,270.321 145.295,266.921 120.925,266.921 C 96.555,266.921 84.37,263.521 60,253.321 L 60,212.521"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="120.925" y="237.921">
+      <tspan x="120.925" y="237.921">volitleData.config</tspan>
+    </text>
+  </g>
+  <g>
+    <path style="fill: #ffffff" d="M 48.525 296.521 L 179.475,296.521 L 179.475,365.521 C 153.285,355.171 140.19,351.721 114,351.721 C 87.81,351.721 74.715,348.271 48.525,337.921 L 48.525,296.521z"/>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 48.525 296.521 L 179.475,296.521 L 179.475,365.521 C 153.285,355.171 140.19,351.721 114,351.721 C 87.81,351.721 74.715,348.271 48.525,337.921 L 48.525,296.521"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="114" y="314.221">
+      <tspan x="114" y="314.221">(optional)</tspan>
+      <tspan x="114" y="330.221">currentMachine.config</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="181.85" y1="246.521" x2="261.078" y2="250.29"/>
+    <polygon style="fill: #000000" points="268.569,250.647 258.343,255.166 261.078,250.29 258.818,245.177 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="268.569,250.647 258.343,255.166 261.078,250.29 258.818,245.177 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="367.868" y1="304.186" x2="517.565" y2="301.997"/>
+    <polygon style="fill: #000000" points="525.064,301.887 515.138,307.033 517.565,301.997 514.992,297.034 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="525.064,301.887 515.138,307.033 517.565,301.997 514.992,297.034 "/>
+  </g>
+  <g>
+    <path style="fill: #ffffff" d="M 527.3 282.855 L 618.7,282.855 L 618.7,346.188 C 600.42,336.688 591.28,333.521 573,333.521 C 554.72,333.521 545.58,330.355 527.3,320.855 L 527.3,282.855z"/>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 527.3 282.855 L 618.7,282.855 L 618.7,346.188 C 600.42,336.688 591.28,333.521 573,333.521 C 554.72,333.521 545.58,330.355 527.3,320.855 L 527.3,282.855"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="573" y="306.855">
+      <tspan x="573" y="306.855">runtime.config</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="290.216" y1="375.429" x2="291.189" y2="439.603"/>
+    <polygon style="fill: #000000" points="291.303,447.102 286.152,437.179 291.189,439.603 296.15,437.028 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="291.303,447.102 286.152,437.179 291.189,439.603 296.15,437.028 "/>
+  </g>
+  <g>
+    <polygon style="fill: #ffffff" points="291.337,449.338 377.969,523.256 291.337,597.174 204.704,523.256 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="291.337,449.338 377.969,523.256 291.337,597.174 204.704,523.256 "/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="291.337" y="520.056">
+      <tspan x="291.337" y="520.056">fills in parameters</tspan>
+      <tspan x="291.337" y="536.056">and produces</tspan>
+    </text>
+  </g>
+  <g>
+    <path style="fill: #ffffff" d="M 66.475 448.521 L 171.525,448.521 L 171.525,488.521 C 150.515,482.521 140.01,480.521 119,480.521 C 97.99,480.521 87.485,478.521 66.475,472.521 L 66.475,448.521z"/>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 66.475 448.521 L 171.525,448.521 L 171.525,488.521 C 150.515,482.521 140.01,480.521 119,480.521 C 97.99,480.521 87.485,478.521 66.475,472.521 L 66.475,448.521"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="119" y="465.521">
+      <tspan x="119" y="465.521">commands.config</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="171.525" y1="468.521" x2="259.943" y2="467.888"/>
+    <polygon style="fill: #000000" points="267.442,467.834 257.479,472.905 259.943,467.888 257.407,462.906 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="267.442,467.834 257.479,472.905 259.943,467.888 257.407,462.906 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="377.969" y1="523.256" x2="520.489" y2="523.036"/>
+    <polygon style="fill: #000000" points="527.989,523.025 517.997,528.04 520.489,523.036 517.981,518.04 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="527.989,523.025 517.997,528.04 520.489,523.036 517.981,518.04 "/>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="530.225" y="457.521" width="254.775" height="131"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="530.225" y="457.521" width="254.775" height="131"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="657.613" y="519.821">
+      <tspan x="657.613" y="519.821">parameterizedCommands.bat</tspan>
+      <tspan x="657.613" y="535.821"></tspan>
+    </text>
+  </g>
+  <g>
+    <polygon style="fill: #ffffff" points="292.567,651.352 411.273,753.915 292.567,856.479 173.862,753.915 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="292.567,651.352 411.273,753.915 292.567,856.479 173.862,753.915 "/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="292.567" y="750.715">
+      <tspan x="292.567" y="750.715">invokes </tspan>
+      <tspan x="292.567" y="766.715">parameterizedCommands.bat</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="291.337" y1="597.174" x2="292.346" y2="641.618"/>
+    <polygon style="fill: #000000" points="292.517,649.116 287.291,639.232 292.346,641.618 297.288,639.005 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="292.517,649.116 287.291,639.232 292.346,641.618 297.288,639.005 "/>
+  </g>
+  <g>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 526.3,306.569 A 207.192,207.192 0 0 0 315.36,458.382"/>
+    <polygon style="fill: #000000" points="313.487,465.637 310.813,454.781 315.139,458.321 320.567,456.984 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="313.487,465.637 310.813,454.781 315.139,458.321 320.567,456.984 "/>
+  </g>
+  <g>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 242.114,266.01 A 54.2155,54.2155 0 0 0 179.475,331.021"/>
+    <polygon style="fill: #000000" points="249.295,267.781 238.178,268.966 242.269,265.157 241.677,259.598 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="249.295,267.781 238.178,268.966 242.269,265.157 241.677,259.598 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="411.273" y1="753.915" x2="508.664" y2="725.783"/>
+    <polygon style="fill: #000000" points="515.87,723.702 507.65,731.28 508.664,725.783 504.875,721.673 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="515.87,723.702 507.65,731.28 508.664,725.783 504.875,721.673 "/>
+  </g>
+  <g>
+    <path style="fill: #ffffff" d="M 518.018 723.081 L 715.185,723.081 L 675.751,749.951 L 557.451,749.951 L 518.018,723.081z"/>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 518.018 723.081 L 715.185,723.081 L 675.751,749.951 L 557.451,749.951 L 518.018,723.081"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="616.601" y="741.516">
+      <tspan x="616.601" y="741.516">GenericInstaller.exe</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="411.273" y1="753.915" x2="516.43" y2="679.895"/>
+    <polygon style="fill: #000000" points="522.563,675.578 517.264,685.422 516.43,679.895 511.508,677.245 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="522.563,675.578 517.264,685.422 516.43,679.895 511.508,677.245 "/>
+  </g>
+  <g>
+    <path style="fill: #ffffff" d="M 524.392 674.291 L 695.058,674.291 L 660.925,696.291 L 558.525,696.291 L 524.392,674.291z"/>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 524.392 674.291 L 695.058,674.291 L 660.925,696.291 L 558.525,696.291 L 524.392,674.291"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="609.725" y="690.291">
+      <tspan x="609.725" y="690.291">RoleResolver.exe</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="411.273" y1="753.915" x2="512.919" y2="766.438"/>
+    <polygon style="fill: #000000" points="520.362,767.355 509.826,771.095 512.919,766.438 511.049,761.17 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="520.362,767.355 509.826,771.095 512.919,766.438 511.049,761.17 "/>
+  </g>
+  <g>
+    <path style="fill: #ffffff" d="M 522.582 767.629 L 699.998,767.629 L 664.515,790.963 L 558.065,790.963 L 522.582,767.629z"/>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 522.582 767.629 L 699.998,767.629 L 664.515,790.963 L 558.065,790.963 L 522.582,767.629"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="611.29" y="784.296">
+      <tspan x="611.29" y="784.296">InstallFetcher.exe</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="411.273" y1="753.915" x2="490.63" y2="804.141"/>
+    <polygon style="fill: #000000" points="496.967,808.152 485.844,807.029 490.63,804.141 491.192,798.579 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="496.967,808.152 485.844,807.029 490.63,804.141 491.192,798.579 "/>
+  </g>
+  <g>
+    <path style="fill: #ffffff" d="M 498.857 809.348 L 726.857,809.348 L 681.257,831.348 L 544.457,831.348 L 498.857,809.348z"/>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 498.857 809.348 L 726.857,809.348 L 681.257,831.348 L 544.457,831.348 L 498.857,809.348"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="612.857" y="825.348">
+      <tspan x="612.857" y="825.348">ConfiguratorHelper.exe</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="411.273" y1="753.915" x2="496.675" y2="847.414"/>
+    <polygon style="fill: #000000" points="501.733,852.952 491.297,848.94 496.675,847.414 498.681,842.196 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="501.733,852.952 491.297,848.94 496.675,847.414 498.681,842.196 "/>
+  </g>
+  <g>
+    <path style="fill: #ffffff" d="M 503.241 854.603 L 727.824,854.603 L 682.908,876.603 L 548.158,876.603 L 503.241,854.603z"/>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 503.241 854.603 L 727.824,854.603 L 682.908,876.603 L 548.158,876.603 L 503.241,854.603"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="615.533" y="870.603">
+      <tspan x="615.533" y="870.603">DatabaseUpgrader.exe</tspan>
+    </text>
+  </g>
+  <g>
+    <path style="fill: #ffffff" d="M 517.495 901.272 L 690.992,901.272 L 656.293,923.272 L 552.194,923.272 L 517.495,901.272z"/>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 517.495 901.272 L 690.992,901.272 L 656.293,923.272 L 552.194,923.272 L 517.495,901.272"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="604.243" y="917.272">
+      <tspan x="604.243" y="917.272">Composer.exe</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="411.273" y1="753.915" x2="511.802" y2="893.374"/>
+    <polygon style="fill: #000000" points="516.187,899.458 506.284,894.27 511.802,893.374 514.396,888.422 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="516.187,899.458 506.284,894.27 511.802,893.374 514.396,888.422 "/>
+  </g>
+  <g>
+    <path style="fill: #ffffff" d="M 501.141 939.719 L 749.308,939.719 L 699.675,1009.72 L 550.775,1009.72 L 501.141,939.719z"/>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 501.141 939.719 L 749.308,939.719 L 699.675,1009.72 L 550.775,1009.72 L 501.141,939.719"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="625.225" y="955.719">
+      <tspan x="625.225" y="955.719">future installation steps </tspan>
+      <tspan x="625.225" y="971.719">needing parameter fill-in </tspan>
+      <tspan x="625.225" y="987.719">go into commands.config</tspan>
+      <tspan x="625.225" y="1003.72">and get invoked here.</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="411.273" y1="753.915" x2="496.902" y2="930.954"/>
+    <polygon style="fill: #000000" points="500.168,937.706 491.312,930.881 496.902,930.954 500.315,926.527 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="500.168,937.706 491.312,930.881 496.902,930.954 500.315,926.527 "/>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="783.831" y="893.686" width="350.1" height="38"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="783.831" y="893.686" width="350.1" height="38"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="958.881" y="917.486">
+      <tspan x="958.881" y="917.486">master.bat  (the thing you call at the end to actuall do it!)</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="673.642" y1="912.272" x2="774.095" y2="912.65"/>
+    <polygon style="fill: #000000" points="781.595,912.678 771.577,917.64 774.095,912.65 771.614,907.64 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="781.595,912.678 771.577,917.64 774.095,912.65 771.614,907.64 "/>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="785.152" y="847.724" width="176.95" height="38"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="785.152" y="847.724" width="176.95" height="38"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="873.627" y="871.524">
+      <tspan x="873.627" y="871.524">dbUp.bat (calls DataCamel)</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="705.366" y1="865.603" x2="775.417" y2="866.587"/>
+    <polygon style="fill: #000000" points="782.916,866.693 772.847,871.552 775.417,866.587 772.987,861.553 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="782.916,866.693 772.847,871.552 775.417,866.587 772.987,861.553 "/>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="783.598" y="801.762" width="328.55" height="38"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="783.598" y="801.762" width="328.55" height="38"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="947.873" y="825.562">
+      <tspan x="947.873" y="825.562">runConfigurator.bat (calls ConfiguratorAutomator.exe)</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="704.057" y1="820.348" x2="773.862" y2="820.712"/>
+    <polygon style="fill: #000000" points="781.362,820.751 771.336,825.698 773.862,820.712 771.388,815.699 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="781.362,820.751 771.336,825.698 773.862,820.712 771.388,815.699 "/>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="785.851" y="760.75" width="185.45" height="38"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="785.851" y="760.75" width="185.45" height="38"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="878.576" y="784.55">
+      <tspan x="878.576" y="784.55">fetch-APP_NAME.bat (xcopy)</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="682.257" y1="779.296" x2="776.116" y2="779.707"/>
+    <polygon style="fill: #000000" points="783.615,779.74 773.594,784.696 776.116,779.707 773.637,774.696 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="783.615,779.74 773.594,784.696 776.116,779.707 773.637,774.696 "/>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="695.468" y1="736.516" x2="775.108" y2="735.976"/>
+    <polygon style="fill: #000000" points="782.608,735.925 772.642,740.992 775.108,735.976 772.574,730.993 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="782.608,735.925 772.642,740.992 775.108,735.976 772.574,730.993 "/>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="784.844" y="716.909" width="340.2" height="38"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="784.844" y="716.909" width="340.2" height="38"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="954.944" y="740.709">
+      <tspan x="954.944" y="740.709">install-APP_NAME.bat  (silent installshield, and uninstall)</tspan>
+    </text>
+  </g>
+  <g>
+    <line style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x1="677.992" y1="685.291" x2="778.029" y2="685.269"/>
+    <polygon style="fill: #000000" points="785.529,685.268 775.53,690.27 778.029,685.269 775.528,680.27 "/>
+    <polygon style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="785.529,685.268 775.53,690.27 778.029,685.269 775.528,680.27 "/>
+  </g>
+  <g>
+    <path style="fill: #ffffff" d="M 787.765 669.105 L 1047.62,669.105 L 1047.62,701.43 C 995.645,696.042 969.66,696.042 917.69,701.43 C 865.72,706.818 839.735,706.818 787.765,701.43 L 787.765,669.105z"/>
+    <path style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" d="M 787.765 669.105 L 1047.62,669.105 L 1047.62,701.43 C 995.645,696.042 969.66,696.042 917.69,701.43 C 865.72,706.818 839.735,706.818 787.765,701.43 L 787.765,669.105"/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="917.69" y="687.574">
+      <tspan x="917.69" y="687.574">master.config  (consumed by Composer.exe)</tspan>
+    </text>
+  </g>
+</svg>
