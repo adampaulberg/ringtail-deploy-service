@@ -18,7 +18,15 @@ namespace ConfiguratorHelper.App
         /// <returns></returns>
         public static string GetNewApplicationPoolName(string applicationPoolName)
         {
-            return AppPoolAlreadyExists(applicationPoolName) ? string.Empty : applicationPoolName;
+            try
+            {
+                return AppPoolAlreadyExists(applicationPoolName) ? string.Empty : applicationPoolName;
+            }
+            catch
+            {
+                // probably failed because IIS isn't installed yet, so assume we need to add an app pool.
+                return applicationPoolName;
+            }
         }
 
         public static int GetIisMajorVersion()
