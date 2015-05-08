@@ -73,6 +73,10 @@
     <Compile Include="RoleResolverTests\RoleResolverTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Composer\Composer.csproj">
+      <Project>{b7d2d4e4-7fae-40f0-9dbd-bbbb1be3167e}</Project>
+      <Name>Composer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ConfiguratorHelper\ConfiguratorHelper.csproj">
       <Project>{efa8cc40-0281-40a1-be31-0654a65827e5}</Project>
       <Name>ConfiguratorHelper</Name>
@@ -81,15 +85,39 @@
       <Project>{0baf7dea-4340-4175-9592-ca5a6ae8c125}</Project>
       <Name>DatabaseUpgrader</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DataCamel\DataCamel.csproj">
+      <Project>{cbcc64ca-4d3a-43a8-a7f6-43952218fec9}</Project>
+      <Name>DataCamel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Deployer\Deployer.csproj">
+      <Project>{f6b403c9-9712-451b-8b48-638f12f7eb37}</Project>
+      <Name>Deployer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FileCleaner\FileCleaner.csproj">
+      <Project>{a28e7347-1aba-4f32-b7ea-2bf9d6f091b9}</Project>
+      <Name>FileCleaner</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GenericInstaller\GenericInstaller.csproj">
+      <Project>{9f607336-f0b9-4421-8858-172268d0872a}</Project>
+      <Name>GenericInstaller</Name>
+    </ProjectReference>
     <ProjectReference Include="..\InstallFetcher\InstallFetcher.csproj">
       <Project>{8308311f-c693-4da5-9c67-c8f42b04d0bf}</Project>
       <Name>InstallFetcher</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InstallNameTruncator\InstallNameTruncator.csproj">
+      <Project>{c75e28d3-ba85-4cbf-b3a8-6e0c5b7de98d}</Project>
+      <Name>InstallNameTruncator</Name>
     </ProjectReference>
     <ProjectReference Include="..\MasterRunner\MasterRunner.csproj">
       <Project>{0c42661b-a8fa-49e6-bdd9-58ef68fa1636}</Project>
       <Name>MasterRunner</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RegCleaner\RegistryReader.csproj">
+    <ProjectReference Include="..\Master\Master.csproj">
+      <Project>{5ee3c323-77e6-44f3-9fa5-096e40837d3c}</Project>
+      <Name>Master</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RegistryReader\RegistryReader.csproj">
       <Project>{bc440277-0249-4bbe-9d58-5c41eaca2418}</Project>
       <Name>RegistryReader</Name>
     </ProjectReference>
@@ -97,13 +125,17 @@
       <Project>{b6cc9f23-007d-47ba-8f49-236fba118442}</Project>
       <Name>RequiredConfigurationsGenerator</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RingtailAutoInstaller\Master.csproj">
-      <Project>{5ee3c323-77e6-44f3-9fa5-096e40837d3c}</Project>
-      <Name>Master</Name>
+    <ProjectReference Include="..\RingtailCertificate\RingtailCertificate.csproj">
+      <Project>{a6fa4c7b-dc28-4b52-94a2-a47205455137}</Project>
+      <Name>RingtailCertificate</Name>
     </ProjectReference>
     <ProjectReference Include="..\RoleResolver\RoleResolver.csproj">
       <Project>{1dbb10f2-5070-419c-b6d4-b0847ad097f0}</Project>
       <Name>RoleResolver</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UninstallerHelper\UninstallerHelper.csproj">
+      <Project>{daa7b640-3e08-430c-ab98-917597ce3601}</Project>
+      <Name>UninstallerHelper</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
