@@ -50,6 +50,7 @@
     </Compile>
     <Compile Include="App\RegistryHelper.cs" />
     <Compile Include="App\UninstallCommandGenerator.cs" />
+    <Compile Include="App\Prioritizer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\Util.cs" />

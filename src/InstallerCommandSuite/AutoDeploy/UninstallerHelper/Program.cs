@@ -45,6 +45,8 @@ namespace UninstallerHelper
 
                 ringtailKeys.ForEach(z => allUninstallStrings.Add(UninstallCommandGenerator.CreateUninstallString(z, matchBy, exclusions)));
 
+                allUninstallStrings = new Prioritizer().OrderCommands(allUninstallStrings).ToList();
+
                 if (allUninstallStrings.Count == 0)
                 {
                     allUninstallStrings.Add("@echo Nothing to uninstall");
