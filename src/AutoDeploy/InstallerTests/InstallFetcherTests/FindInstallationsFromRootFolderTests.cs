@@ -63,13 +63,25 @@ namespace InstallerTests
         }
 
         [TestMethod]
+        public void Test_FindInstallationVerionFromFile_OldOptions()
+        {
+            var options = new Options();
+            options.Output = "test";
+            options.BranchName = "build";
+            options.FolderRoot = @"D:\";
+            var version = FindInstallationsFromRootFolder.CreateFetchCommand(options);
+
+            Assert.IsNotNull(version);
+        }
+
+        [TestMethod]
         public void Test_FindInstallationVerionFromFile_Options()
         {
             var options = new Options();
-            options.ApplicationName = "Classic";
+            //options.ApplicationName = "Classic";
             options.Output = "RingtailLegalApplicationServer";
-            options.BranchName = "RESULTGRID";
-            options.FolderRoot = @"\\sea550devbld04\builds\Ringtail\Dev";
+            options.BranchName = "Build";
+            options.FolderRoot = @"D:\";
             options.FolderSuffix = @"Deployment";
             var version = FindInstallationsFromRootFolder.CreateFetchCommand(options);
 
@@ -77,7 +89,7 @@ namespace InstallerTests
         }
 
 
-        [TestMethod]
+        [TestMethod, Ignore]
         public void Test_FindInstallationVerionFromFile_Recursive()
         {
             var versions = VersionByPath.GetLatestPathForSubfolder(@"D:\build");

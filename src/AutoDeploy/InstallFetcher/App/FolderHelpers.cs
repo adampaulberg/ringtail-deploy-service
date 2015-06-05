@@ -35,7 +35,10 @@ namespace InstallFetcher.App
                 {
                     var realPath = root;
                     var orderedFolders = folders.ToList().OrderBy(x => x.CreationTimeUtc).ToList();
-                    if (di.GetFiles().Length == 0)
+
+                    var files = di.GetFiles().ToList();
+
+                    if (!files.Any(x => x.Extension == "exe"))
                     {
                         var specificBuildFolder = orderedFolders[orderedFolders.Count - 1];
                         realPath += @"\" + specificBuildFolder;
