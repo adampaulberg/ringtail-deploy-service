@@ -22,6 +22,8 @@ namespace RequiredConfigurationsGenerator
             l.AddToLog(" About:");
             l.AddToLog("  this tool scans for the configurations you'll need based on ");
             l.AddAndWrite("  the role that you've set in volitleData.config");
+            l.AddAndWrite(" ");
+            l.AddAndWrite("...starting.... ");
             try
             {
                 var configs = RequiredConfigurationGeneratorRunner.GenerateAllRequiredConfigurations(Environment.CurrentDirectory);

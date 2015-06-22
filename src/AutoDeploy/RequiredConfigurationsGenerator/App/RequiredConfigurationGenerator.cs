@@ -30,7 +30,14 @@ namespace RequiredConfigurationsGenerator.App
 
         private static string GetRoleFromUserData(List<string> userData)
         {
-            var role = userData.Find(x => x.ToLower().StartsWith("roleresolver|role"));
+            var key = "roleresolver|role";
+            var role = userData.Find(x => x.ToLower().StartsWith(key));
+
+            if (role == null)
+            {
+                throw new ApplicationException("Error: Expected to find a key in volitleData.config of the form  '" + key + "' (not case sensitive)");
+            }
+
             role = role.Split('\"')[1];
             return role;
         }
