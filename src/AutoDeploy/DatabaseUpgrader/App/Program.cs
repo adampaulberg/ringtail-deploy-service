@@ -13,6 +13,8 @@ namespace DatabaseUpgrader
         static int Main(string[] args)
         {
             int exit = 0;
+            Console.WriteLine("Database Upgrader starting!");
+
             try
             {
                 var options = new Options();
@@ -21,11 +23,17 @@ namespace DatabaseUpgrader
                 {
                     if (args.Length == 0 || options.ValidateIsDefaultAction())
                     {
+                        Console.WriteLine(options.GetUsage());
+                        if (!new FileInfo("dbUp.bat").Exists)
+                        {
+                            Console.WriteLine("DID NOT CREATE dbUp.bat!");
+                        }
                         return 0;
                     }
                     if (!options.ValidateActions())
                     {
                         Console.WriteLine(options.GetUsage());
+                        Console.WriteLine("...failed to write dbUp.bat!");
                         return 1;
                     }
 
@@ -40,7 +48,15 @@ namespace DatabaseUpgrader
 
                     if (!new FileInfo("dbUp.bat").Exists)
                     {
+                        Console.WriteLine("...failed to write dbUp.bat!");
                         exit = 1;
+                    }
+                }
+                else
+                {
+                    if (!new FileInfo("dbUp.bat").Exists)
+                    {
+                        Console.WriteLine("...failed to write dbUp.bat!");
                     }
                 }
             }

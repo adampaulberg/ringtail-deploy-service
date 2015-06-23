@@ -42,7 +42,8 @@ namespace InstallerTests
             existingConfigs.Add("RingtailConfigurator|JUNK_KEY=\"junkValue\"");
 
 
-            var x = new KeyValueConfigDictionary(existingConfigs);
+            var x = new KeyValueConfigDictionary();
+            x.Read(existingConfigs);
 
             foreach (var z in x.GetCommonKeys())
             {
@@ -67,14 +68,14 @@ namespace InstallerTests
             existingConfigs.Add("Common|HOST=\"badHost\"");
 
             var problems = new List<string>();
-            var isValid = ConfigurationValidator.ValidateConfiguration(existingConfigs, out problems);
+            var isValid = ConfigurationValidator.ValidateConfiguration(existingConfigs, 0, out problems);
 
             problems.ForEach(x => Console.Write(x));
             Assert.IsFalse(isValid);
             Assert.IsTrue(problems.Exists(x => x.Contains("RoleResolver|Role")));
 
             existingConfigs.Add("RoleResolver|ROLE=\"SKYTAP-ALLINONE\"");
-            isValid = ConfigurationValidator.ValidateConfiguration(existingConfigs, out problems);
+            isValid = ConfigurationValidator.ValidateConfiguration(existingConfigs, 0, out problems);
 
             problems.ForEach(x => Console.Write(x));
             Assert.IsTrue(isValid);
@@ -90,7 +91,7 @@ namespace InstallerTests
 
 
             var problems = new List<string>();
-            var isValid = ConfigurationValidator.ValidateConfiguration(existingConfigs, out problems);
+            var isValid = ConfigurationValidator.ValidateConfiguration(existingConfigs, 0, out problems);
 
             problems.ForEach(x => Console.Write(x));
 
@@ -98,7 +99,7 @@ namespace InstallerTests
             Assert.IsTrue(problems.Count == 0);
 
             existingConfigs.Add("Common|URL2=\"http://someUrlThatDoesNotExist_REALLY_REALLY_NOT_VALID/Ringtail\"");
-            isValid = ConfigurationValidator.ValidateConfiguration(existingConfigs, out problems);
+            isValid = ConfigurationValidator.ValidateConfiguration(existingConfigs, 0, out problems);
             problems.ForEach(x => Console.Write(x));
             Assert.IsFalse(isValid);
             Assert.IsTrue(problems.Count == 1);
@@ -113,7 +114,7 @@ namespace InstallerTests
 
 
             var problems = new List<string>();
-            var isValid = ConfigurationValidator.ValidateConfiguration(existingConfigs, out problems);
+            var isValid = ConfigurationValidator.ValidateConfiguration(existingConfigs, 0, out problems);
 
             problems.ForEach(x => Console.Write(x));
 
@@ -121,7 +122,7 @@ namespace InstallerTests
             Assert.IsTrue(problems.Count == 0);
 
             existingConfigs.Add("Common|Network2=\"" + @"\\thisisaUncPathThatDoesNotExist_REALLY" + "\"");
-            isValid = ConfigurationValidator.ValidateConfiguration(existingConfigs, out problems);
+            isValid = ConfigurationValidator.ValidateConfiguration(existingConfigs, 0, out problems);
             problems.ForEach(x => Console.Write(x));
             Assert.IsFalse(isValid);
             Assert.IsTrue(problems.Count == 1);

@@ -68,19 +68,26 @@ namespace Master.App
 
     public class ConfigurationValidator
     {
-        public static bool ValidateConfiguration(List<string> configuration, out List<string> problems)
+        public static bool ValidateConfiguration(List<string> configuration, int toleranceLevel, out List<string> problems)
         {
             var okay = true;
             problems = new List<string>();
+            var errorMessages = new List<string>();
+
+            KeyValueConfigDictionary configDictionary = new KeyValueConfigDictionary(); 
+
 
             try
             {
-                var configDictionary = new KeyValueConfigDictionary(configuration);
+                configDictionary.Read(configuration);
             }
             catch (Exception ex)
             {
                 problems.Add("ERROR: Could not parse the configuration data.");
                 problems.Add("     " + ex.Message);
+                problems.AddRange(configDictionary.ErrorMessages);
+
+
                 return false;
             }
 
@@ -94,7 +101,7 @@ namespace Master.App
             okay = okay ? rolesOk : okay;
 
             var networkOk = ValidateNetworkConnectivity(configuration, problems);
-            okay = okay ? networkOk : okay;
+            okay = okay ? networkOk || toleranceLevel > 0 : okay;
 
             return okay;
         }
@@ -264,11 +271,11 @@ namespace Master.App
                 problems.Add("ERROR: There is no Common|BUILD_FOLDER_ROOT key defined....");
                 okay = false;
             }
-            if (!KeyValueConfigDictionary.DoesConfigContainKey("Common|BUILD_FOLDER_SUFFIX", configuration))
-            {
-                problems.Add("ERROR: There is no Common|BUILD_FOLDER_SUFFIX key defined....");
-                okay = false;
-            }
+            //if (!KeyValueConfigDictionary.DoesConfigContainKey("Common|BUILD_FOLDER_SUFFIX", configuration))
+            //{
+            //    problems.Add("ERROR: There is no Common|BUILD_FOLDER_SUFFIX key defined....");
+            //    okay = false;
+            //}
 
             return okay;
         }

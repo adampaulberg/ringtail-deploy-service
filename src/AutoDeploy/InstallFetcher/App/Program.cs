@@ -13,10 +13,15 @@ namespace InstallFetcher.App
             try
             {
                 var options = new Options();
+
                 if (CommandLine.Parser.Default.ParseArguments(args, options))
                 {
                     var fetchFileContents = FindInstallationsFromRootFolder.CreateFetchCommand(options);
                     exitCode = WriteFetchFile(options, fetchFileContents);
+                }
+                else
+                {
+                    Console.WriteLine("NO FETCH FILE WRITTEN");
                 }
             }
             catch( Exception ex)

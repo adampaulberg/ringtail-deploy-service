@@ -156,7 +156,7 @@ namespace Master
 
                 List<string> configFileIssues = new List<string>();
                 logger.AddAndWrite("Validating configuration....");
-                var isValid = ConfigurationValidator.ValidateConfiguration(masterConfig, out configFileIssues);
+                var isValid = ConfigurationValidator.ValidateConfiguration(masterConfig, 1, out configFileIssues);
                 configFileIssues.ForEach(x => logger.AddToLog(x));
 
                 if (isValid)
@@ -164,7 +164,8 @@ namespace Master
                     CompareConfigurations(userDataFile, machineDataFile);
                     SimpleFileWriter.Write("runtime.config", masterConfig);
 
-                    var lookupKeys = new KeyValueConfigDictionary(masterConfig);
+                    var lookupKeys = new KeyValueConfigDictionary();
+                    lookupKeys.Read(masterConfig);
                     var commands = SimpleFileReader.Read(commandData);                
 
                     logger.AddAndWrite("Validation ok....");

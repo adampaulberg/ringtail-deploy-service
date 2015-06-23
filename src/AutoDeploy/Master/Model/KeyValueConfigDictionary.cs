@@ -10,11 +10,15 @@ namespace Master.Model
     public class KeyValueConfigDictionary
     {
         private Dictionary<string, Dictionary<string, string>> lookupKeys = new Dictionary<string, Dictionary<string, string>>();
+        public List<string> ErrorMessages = new List<string>();
 
-
-        public KeyValueConfigDictionary(List<string> config)
+        public KeyValueConfigDictionary()
         {
-            lookupKeys = BuildConfigDictionary(config);
+        }
+
+        public void Read(List<string> config)
+        {
+            lookupKeys = BuildConfigDictionary(config, out ErrorMessages);
         }
 
         public Dictionary<string, string> GetCommonKeys()
@@ -177,10 +181,11 @@ namespace Master.Model
         }
 
 
-        private static Dictionary<string, Dictionary<string, string>> BuildConfigDictionary(List<string> config)
+        private static Dictionary<string, Dictionary<string, string>> BuildConfigDictionary(List<string> config, out List<string> errorMessages)
         {
             var lookupKeys = new Dictionary<string, Dictionary<string, string>>();
 
+            errorMessages = new List<string>();
             foreach (var x in config)
             {
                 if (x.Length > 0)
@@ -201,7 +206,15 @@ namespace Master.Model
                             lookupKeys.Add(applicationKey, new Dictionary<string, string>());
                         }
 
-                        lookupKeys[applicationKey].Add(variableKeyValue[0], variableKeyValue[1]);
+                        try
+                        {
+                            lookupKeys[applicationKey].Add(variableKeyValue[0], variableKeyValue[1]);
+                        }
+                        catch(Exception ex)
+                        {
+                            errorMessages.Add("Duplicate Key Found: " + applicationKey + "|" + variableKeyValue[0]);
+                            throw ex;
+                        }
                     }
                 }
             }

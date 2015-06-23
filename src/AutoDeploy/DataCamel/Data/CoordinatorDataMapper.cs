@@ -20,6 +20,9 @@ namespace DataCamel.Data
             var coordinator = portal.GetCoordinator(server, database, username, password);
 
             var uri = coordinator.CoordinatorUrl + "/GetRPFConnectionString";
+
+            Console.WriteLine("  ....camel - RPF database uri: " + uri);
+
             HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(uri);
             request.UseDefaultCredentials = false;
             request.Credentials = WebRequestHelper.GetWebServiceCredentials(coordinator.Username, coordinator.Password, uri, true);

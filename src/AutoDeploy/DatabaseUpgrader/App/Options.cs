@@ -100,7 +100,9 @@ namespace DatabaseUpgrader.App
             var normalized = action.ToLower();
 
             if (normalized != "upgrade" && normalized != "upgradeportal")
+            {
                 return false;
+            }
 
             if (normalized == "upgrade")
             {
