@@ -106,7 +106,7 @@
     </Compile>
     <Compile Include="ApiLogger.cs" />
     <Compile Include="ControllerHelpers\ApiLoggerActionFilterAttribute.cs" />
-    <Compile Include="ControllerHelpers\OptionalAuthorizeAttribute.cs" />
+    <Compile Include="ControllerHelpers\LocalAdminAuthorizeAttribute.cs" />
     <Compile Include="Daemon\Controllers\BaseController.cs" />
     <Compile Include="Daemon\Controllers\ExistingConfigurationController.cs" />
     <Compile Include="Daemon\Controllers\HelpController.cs" />

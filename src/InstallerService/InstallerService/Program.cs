@@ -86,6 +86,7 @@ namespace InstallerService
             var config = new HttpSelfHostConfiguration(address);
             var envConfig = EnvironmentInfo.InstallerServiceConfig();
 
+            // apply basic authorization if configured
             if(envConfig.ContainsKey(EnvironmentInfo.KeyAuthMode) && envConfig[EnvironmentInfo.KeyAuthMode] == "Basic")
                 config.ClientCredentialType = HttpClientCredentialType.Basic;
 

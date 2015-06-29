@@ -12,7 +12,7 @@ using System.Web.Http.SelfHost;
 
 namespace InstallerService.Daemon.Controllers
 {
-    [OptionalAuthorize]
+    [AuthorizeLocalAdmin]
     [ApiLoggerActionFilter]
     public class BaseController : ApiController
     {        
