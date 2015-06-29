@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http.Filters;
 
-namespace InstallerService
+namespace InstallerService.ControllerHelpers
 {
     public class ApiLoggerActionFilterAttribute : ActionFilterAttribute
     {

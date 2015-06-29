@@ -6,10 +6,13 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.SelfHost;
+using System.Web.Http.SelfHost.Channels;
 using System.Web.Script.Serialization;
 
 
@@ -30,12 +33,22 @@ namespace InstallerService
 
     public class EnvironmentInfo
     {
-        public static string INSTALLER_SERVICE_WORKING_FOLDER = @"C:\Upgrade\InstallerService\";
-        public static string CONFIG_LOCATION = @"C:\Upgrade\InstallerService\config.config";
+        static EnvironmentInfo()
+        {
+            // use AppDomain.CurrentDomain.BaseDirectory instead of Environment.CurrentDirectory
+            // since this can be running from a Windows Service which will change the current directory
+            // to c:\windows\system32.  
+            INSTALLER_SERVICE_WORKING_FOLDER = AppDomain.CurrentDomain.BaseDirectory;
+            CONFIG_LOCATION = Path.Combine(INSTALLER_SERVICE_WORKING_FOLDER, "config.config");            
+        }
+
+        public static string INSTALLER_SERVICE_WORKING_FOLDER;
+        public static string CONFIG_LOCATION;
 
         public static string KeyDeployPath = "DeployPath";
         public static string KeyMasterRunnerUser = "MasterRunnerUser";
         public static string KeyMasterRunnerPass = "MasterRunnerPass";
+        public static string KeyAuthMode = "AuthMode";
 
         public static string GetAutoDeploySuiteFolder()
         {
@@ -71,6 +84,11 @@ namespace InstallerService
             Log("Binding to " + address);
 
             var config = new HttpSelfHostConfiguration(address);
+            var envConfig = EnvironmentInfo.InstallerServiceConfig();
+
+            if(envConfig.ContainsKey(EnvironmentInfo.KeyAuthMode) && envConfig[EnvironmentInfo.KeyAuthMode] == "Basic")
+                config.ClientCredentialType = HttpClientCredentialType.Basic;
+
             config.Properties["Options"] = options;
 
             var logger = new ApiLogger(EnvironmentInfo.INSTALLER_SERVICE_WORKING_FOLDER + "apilog.txt");
