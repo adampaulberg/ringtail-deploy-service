@@ -48,7 +48,7 @@ namespace InstallerService
         public static string KeyDeployPath = "DeployPath";
         public static string KeyMasterRunnerUser = "MasterRunnerUser";
         public static string KeyMasterRunnerPass = "MasterRunnerPass";
-        public static string KeyAuthMode = "AuthMode";
+        public static string KeySecurityEnabled = "SecurityEnabled";
 
         public static string GetAutoDeploySuiteFolder()
         {
@@ -79,16 +79,19 @@ namespace InstallerService
 
             if (options.Port == default(uint))
                 GetPort(options);
-            
-            var address = "http://" + options.Host + ":" + options.Port.ToString();
+
+            var envConfig = EnvironmentInfo.InstallerServiceConfig();
+            var useSecurity = envConfig.ContainsKey(EnvironmentInfo.KeySecurityEnabled) && envConfig[EnvironmentInfo.KeySecurityEnabled] == "true";
+                        
+            var address = (useSecurity ? "https": "http") + "://" + options.Host + ":" + options.Port.ToString();
             Log("Binding to " + address);
 
-            var config = new HttpSelfHostConfiguration(address);
-            var envConfig = EnvironmentInfo.InstallerServiceConfig();
+            var config = new HttpSelfHostConfiguration(address);                        
 
-            // apply basic authorization if configured
-            if(envConfig.ContainsKey(EnvironmentInfo.KeyAuthMode) && envConfig[EnvironmentInfo.KeyAuthMode] == "Basic")
+            config.Properties["SecurityEnabled"] = useSecurity;                        
+            if(useSecurity) {
                 config.ClientCredentialType = HttpClientCredentialType.Basic;
+            }
 
             config.Properties["Options"] = options;
 

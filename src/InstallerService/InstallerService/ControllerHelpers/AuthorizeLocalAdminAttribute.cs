@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InstallerService.Daemon.Controllers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
@@ -20,21 +21,23 @@ namespace InstallerService.ControllerHelpers
     {
         public override void OnAuthorization(HttpActionContext actionContext)
         {
-            if (IsAuthenticationEnabled(actionContext) && IsLocalAdmin(actionContext))
-                base.OnAuthorization(actionContext);
-            else
-                base.HandleUnauthorizedRequest(actionContext);
+            if (IsAuthenticationEnabled(actionContext))
+            {
+                if (IsLocalAdmin(actionContext))
+                    base.OnAuthorization(actionContext);
+                else
+                    base.HandleUnauthorizedRequest(actionContext);
+            }                
         }
 
         public bool IsAuthenticationEnabled(HttpActionContext actionContext)
         {
-            var config = actionContext.ControllerContext.Configuration as HttpSelfHostConfiguration;
-            return config != null && config.ClientCredentialType != HttpClientCredentialType.None;
+            var controller = actionContext.ControllerContext.Controller as BaseController;
+            return controller.IsSecurityEnabled;
         }
 
         public bool IsLocalAdmin(HttpActionContext actionContext)
-        {
-            
+        {            
             var controller = actionContext.ControllerContext.Controller as ApiController;
             var windowsUser = controller.User as WindowsPrincipal;
             var result = windowsUser.IsInRole(WindowsBuiltInRole.Administrator);

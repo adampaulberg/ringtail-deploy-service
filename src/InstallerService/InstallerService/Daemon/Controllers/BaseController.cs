@@ -26,9 +26,14 @@ namespace InstallerService.Daemon.Controllers
             get { return this.Configuration.Properties["ApiLogger"] as ApiLogger; }
         }
 
+        public bool IsSecurityEnabled
+        {
+            get { return (bool)this.Configuration.Properties["SecurityEnabled"]; }
+        }
+
         public override Task<HttpResponseMessage> ExecuteAsync(HttpControllerContext controllerContext, CancellationToken cancellationToken)
         {            
             return base.ExecuteAsync(controllerContext, cancellationToken);
-        }
+        }        
     }
 }
