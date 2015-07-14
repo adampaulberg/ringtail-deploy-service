@@ -23,8 +23,11 @@ namespace ConfiguratorHelper.App
         [Option("ntPassword", Required = true, HelpText = "NT password")]
         public string password { get; set; }
 
-        [Option("classic", DefaultValue = "Classic", HelpText = "Classic url excl host")]
-        public string classicSiteName { get; set; }
+        [Option("classicVirtualName", DefaultValue = "Classic", HelpText = "Classic url excl host")]
+        public string classicVirtualName { get; set; }
+
+        [Option("classicWebSiteName", DefaultValue = "Default Web Site", HelpText = "Classic url excl host")]
+        public string classicWebsiteName { get; set; }
 
         [Option("applicationPool", DefaultValue = "DefaultAppPool", HelpText = "applicationPool")]
         public string applicationPool { get; set; }
