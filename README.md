@@ -86,7 +86,7 @@ You can enable security by following these steps:
 4. Install the Certficate (detailed instructions below)
 5. Bind the SSL Certificate to port 8080 (detailed instructions below)
 
-#####3. Generate a self-signed PKCS12 cert using OpenSSL
+#####Detailed 3. Generate a self-signed PKCS12 cert using OpenSSL
 
 For testing, I used a self-signed cert in PKCS12 format (.pkcs12 .pfx .p12). This format includes the Private Key as well as the Public Key. The following steps can be taken to generate a PKCS12 certificate using OpenSSL:
 
@@ -104,7 +104,7 @@ For testing, I used a self-signed cert in PKCS12 format (.pkcs12 .pfx .p12). Thi
 
 You can then install the certificate and bind it to the port using `netsh`
 
-#####4. Installing the Certificate
+#####Detailed 4. Installing the Certificate
 
 To install the Certificate:
 
@@ -112,13 +112,15 @@ To install the Certificate:
 2. Add the Certificates Snap-In for the Computer Account for the Local Computer.
 3. Import the .pfx file into the Personal\Certificates path.
 
-#####5. Bind the SSL Certificate to port 8080
+#####Detailed 5. Bind the SSL Certificate to port 8080
 
-    ```
-    netsh http add sslcert ipport=0.0.0.0:8080 certhash=e7ef4595e00fd4f46de23c1f0bc83d105df48405 appid="{b308a154-cfd1-443a-a47d-3008f12370c6}"
-    ```
+Binding the SSL Certificate is necessary so that the service can properly establish HTTPS connections. Once security is enabled, it will only accept HTTPS connections.  You can attach a certificate to the port by using `netsh`.
+
+```
+netsh http add sslcert ipport=0.0.0.0:8080 certhash=e7ef4595e00fd4f46de23c1f0bc83d105df48405 appid="{b308a154-cfd1-443a-a47d-3008f12370c6}"
+```
   
-    The `certhash` property should match the Thumbprint of your certificate which can be obtained by viewing the properties of the Cert and removing the spaces. The `appid` property should be `{b308a154-cfd1-443a-a47d-3008f12370c6}`.
+The `certhash` property should match the Thumbprint of your certificate which can be obtained by viewing the properties of the Cert and removing the spaces. The `appid` property should be `{b308a154-cfd1-443a-a47d-3008f12370c6}`.
 
 ###Making secure network request to the service
 Once security is enabled, you need to connect to endpoints with HTTPS.  You will also need to supply Basic Auth headers.  An example in cURL looks like:
