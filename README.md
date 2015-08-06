@@ -80,7 +80,7 @@ The above measures secure connectivity to the API endpoints. The `AutoDeploy` an
 
 You can enable security by following these steps:
 
-1. Modify `InstallerService\config.config` and set the `EnableSecurity|true`
+1. Modify `InstallerService\config.config` and set the `SecurityEnabled|true`
 2. Restart the RingtailDeployService
 3. Generate a self-signed PKCS12 cert using OpenSSL (detailed instructions below)
 4. Install the Certficate (detailed instructions below)
