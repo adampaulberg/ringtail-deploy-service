@@ -91,7 +91,139 @@ namespace InstallFetcher.App
             return s;
         }
 
-        public static List<string> CreateFetchCommand(Options options)
+        public static List<string> CreateFetchCommand_SingleDropFolder(Options options, IExiter exiter)
+        {
+            List<string> copyCommands = null;
+            List<string> log = new List<string>();
+
+            string applicationName = options.ApplicationName;
+            options.ApplicationName = null;
+            string root = BuildRootFolderFromOptions(options);
+            options.ApplicationName = applicationName;
+            DirectoryInfo rootFolder = new DirectoryInfo(root);
+
+            Console.WriteLine("Looking in root folder: " + rootFolder.FullName);
+
+            if (rootFolder.Exists)
+            {
+                Console.WriteLine("    ....folder exists: " + root);
+                var folders = rootFolder.GetDirectories();
+                var files = rootFolder.GetFiles();
+
+                Console.WriteLine("Looking in root folder: " + rootFolder.FullName);
+
+                if (folders.Length > 0 || files.Length > 0)
+                {
+                    DirectoryInfo finalFolder = GetFirstFolderWithFiles(rootFolder, options.FolderSuffix);
+
+                    Console.WriteLine("Looking in final folder: " + finalFolder.FullName);
+
+                    if (finalFolder != null)
+                    {
+                        copyCommands = new List<string>();
+
+                        var installerName = options.ApplicationName;
+                        var folderFiles = finalFolder.GetFiles().ToArray();
+                        if (!folderFiles.Any(x => x.Name.StartsWith(installerName)))
+                        {
+                            Console.WriteLine("Could not find a build for: " + finalFolder.FullName + " - " + installerName);
+                            exiter.OnExit(1);
+                        }
+
+                        string realPath = finalFolder.FullName;
+                        string iName = installerName + "*.exe";
+                        var command = "robocopy \"" + realPath + "\"" + " . " + "\"" + iName + "\"" + " /V /NFL";
+                        copyCommands.Add(command);
+                        copyCommands.Add("IF ERRORLEVEL 1 SET ERRORLEV=0");
+                        copyCommands.Add("IF ERRORLEVEL 2 SET ERRORLEV=0");
+                        copyCommands.Add("IF ERRORLEVEL 3 SET ERRORLEV=0");
+                        copyCommands.Add("IF ERRORLEVEL 4 SET ERRORLEV=0");
+                        copyCommands.Add("IF ERRORLEVEL 4 SET ERRORLEV=0");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Could not find a build folder with builds in this location:" + root);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("The target folder was accessible, but no builds have been made yet: " + root);
+                    exiter.OnExit(1);
+                }
+            }
+            else
+            {
+                Console.WriteLine("The target folder was not accessible or not found: " + root);
+                exiter.OnExit(1);
+            }
+
+            return copyCommands;
+        }
+  
+        public static List<string> CreateFetchCommand(Options options, List<string> mapFile, IExiter exiter)
+        {
+            List<string> copyCommands = new List<string>();
+
+            List<string> applications = new List<string>();
+
+            foreach (var x in mapFile)
+            {
+                applications.Add(x.Split('|')[1]);
+            }
+
+            foreach(var application in applications.Distinct())
+            {
+                Options o = new Options();
+                o.ApplicationName = application;
+                o.BranchName = options.BranchName;
+                o.FolderRoot = options.FolderRoot;
+                string root = BuildRootFolderFromOptions(o);
+                DirectoryInfo rootFolder = new DirectoryInfo(root);
+
+                if (!rootFolder.Exists)
+                {
+                    Console.WriteLine("The target folder was accessible, but no builds have been made yet: " + root);
+                    exiter.OnExit(1);
+                }
+
+                Console.WriteLine("    ....folder exists: " + root);
+                var folders = rootFolder.GetDirectories();
+                var files = rootFolder.GetFiles();
+
+                if (folders.Length > 0 || files.Length > 0)
+                {
+                    DirectoryInfo finalFolder = GetFirstFolderWithFiles(rootFolder, options.FolderSuffix);
+
+                    if (finalFolder == null)
+                    {
+                        Console.WriteLine("Could not find a build folder with builds in this location:" + root);
+                        exiter.OnExit(1);
+                    }
+
+                    string realPath = finalFolder.FullName;
+
+                    foreach (var installer in mapFile)
+                    {
+                        var items = installer.Split('|');
+                        if (items[1] == application)
+                        {
+                            var command = "robocopy \"" + realPath + "\"" + items[2] + "*.exe" + " . /V /NFL";
+                            copyCommands.Add(command);
+                        }
+                    }
+                }
+            }
+
+            copyCommands.Add("IF ERRORLEVEL 1 SET ERRORLEV=0");
+            copyCommands.Add("IF ERRORLEVEL 2 SET ERRORLEV=0");
+            copyCommands.Add("IF ERRORLEVEL 3 SET ERRORLEV=0");
+            copyCommands.Add("IF ERRORLEVEL 4 SET ERRORLEV=0");
+            copyCommands.Add("IF ERRORLEVEL 4 SET ERRORLEV=0");
+
+            return copyCommands;
+        }
+
+        public static List<string> CreateFetchCommand(Options options, IExiter exiter)
         {
             List<string> copyCommands = null;
             List<string> log = new List<string>();
@@ -103,10 +235,10 @@ namespace InstallFetcher.App
             {
                 Console.WriteLine("    ....folder exists: " + root);
                 var folders = rootFolder.GetDirectories();
-                var files = rootFolder.GetFiles(); 
+                var files = rootFolder.GetFiles();
 
                 if (folders.Length > 0 || files.Length > 0)
-                {                       
+                {
                     DirectoryInfo finalFolder = GetFirstFolderWithFiles(rootFolder, options.FolderSuffix);
 
                     if (finalFolder != null)
@@ -132,16 +264,48 @@ namespace InstallFetcher.App
                 else
                 {
                     Console.WriteLine("The target folder was accessible, but no builds have been made yet: " + root);
-                    Environment.Exit(1);
+                    exiter.OnExit(1);
                 }
             }
             else
             {
                 Console.WriteLine("The target folder was not accessible or not found: " + root);
-                Environment.Exit(1);
+                exiter.OnExit(1);
             }
 
             return copyCommands;
+        }
+
+        public static List<string> CreateFetchCommand(Options options)
+        {
+            var fetchFile = new List<string>();
+           
+            if (options.Version == "1")
+            {
+                Console.WriteLine("...v1");
+                fetchFile = CreateFetchCommand(options, new Exiter());
+            }
+            else if (options.Version == "2")
+            {
+                Console.WriteLine("...v2");
+
+                var x = SimpleFileReader.Read("master.config");
+                if (x.Contains("fetch-" + options.Output + ".bat"))
+                {
+                    fetchFile = CreateFetchCommand_SingleDropFolder(options, new Exiter());
+                }
+                else
+                {
+                    Console.WriteLine("This application isn't being used by the chosen role, so no fetch will be performed.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Version not supported: " + options.Version);
+                new Exiter().OnExit(1);
+            }
+
+            return fetchFile;
         }
 
         #region Subroutines
@@ -189,5 +353,19 @@ namespace InstallFetcher.App
         }
 
         #endregion
+    }
+
+
+    public interface IExiter
+    {
+        void OnExit(int exitCode);
+    }
+
+    internal class Exiter : IExiter
+    {
+        public void OnExit(int exitCode)
+        {
+            Environment.Exit(1);
+        }
     }
 }

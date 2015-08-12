@@ -24,6 +24,9 @@ namespace InstallFetcher.App
         [Option('a', "appName", HelpText = "Application Name")]
         public string ApplicationName { get; set; }
 
+        [Option('v', "version", Required = false, DefaultValue="1", HelpText = "Application Name")]
+        public string Version { get; set; }
+
         [Option('o', "output", Required = true, HelpText = "Output file suffix")]
         public string Output { get; set; }
 

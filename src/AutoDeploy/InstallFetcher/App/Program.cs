@@ -38,13 +38,12 @@ namespace InstallFetcher.App
         private static int WriteFetchFile(Options options, List<string> fetchFileContents)
         {
             int exitCode = 0;
-            if (fetchFileContents != null)
+            if (fetchFileContents != null && fetchFileContents.Count > 0)
             {
                 var outFile = "fetch.bat";
 
                 if (!String.IsNullOrEmpty(options.Output))
                 {
-
                     outFile = "fetch-" + options.Output + ".bat";
                 }
 
@@ -55,6 +54,8 @@ namespace InstallFetcher.App
                     Console.WriteLine("Failed to write " + outFile);
                     exitCode = 1;
                 }
+
+                Console.WriteLine("Wrote out: " + outFile);
             }
 
             return exitCode;
