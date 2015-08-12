@@ -99,53 +99,17 @@ namespace InstallerTests
         }
 
         [TestMethod]
-        public void HARNESS_2()
-        {
-            try
-            {
-                var options = new Options();
-                //options.ApplicationName = "Classic";
-                options.Output = "RingtailLegalApplicationServer";
-                options.BranchName = "MAIN";
-                options.ApplicationName = "Classic";
-                options.FolderRoot = @"\\seadrop.dev.tech.local\builds\Ringtail";
-                options.FolderSuffix = @"Deployment";
-
-
-                List<string> mapFile = new List<string>();
-                mapFile.Add("DATABASE|DB Utility|RingtailDatabaseUtility");
-                mapFile.Add("DATABASE|Classic|RingtailSQLComponent");
-
-                var version = FindInstallationsFromRootFolder.CreateFetchCommand(options, mapFile, new TestExiter());
-
-                version.ForEach(x => Console.WriteLine(x));
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                Assert.Fail();
-            }
-
-            //Assert.IsNotNull(version);
-        }
-
-        [TestMethod]
         public void HARNESS_3()
         {
             try
             {
                 var options = new Options();
-                //options.ApplicationName = "Classic";
+
                 options.Output = "DATABASE";
                 options.BranchName = "MAIN";
                 options.ApplicationName = "RingtailSqlComponent";
                 options.FolderRoot = @"\\pghdevfs01\Builds\Deploy";
-                //options.FolderSuffix = @"Deployment";
-
-
-                //List<string> mapFile = new List<string>();
-                //mapFile.Add("DATABASE|RingtailDatabaseUtility");
-                //mapFile.Add("DATABASE|RingtailSQLComponent");
+                options.Version = "2";
 
                 var version = FindInstallationsFromRootFolder.CreateFetchCommand_SingleDropFolder(options, new TestExiter());
 

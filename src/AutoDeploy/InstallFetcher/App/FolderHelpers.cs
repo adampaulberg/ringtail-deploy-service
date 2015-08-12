@@ -160,69 +160,6 @@ namespace InstallFetcher.App
             return copyCommands;
         }
   
-        public static List<string> CreateFetchCommand(Options options, List<string> mapFile, IExiter exiter)
-        {
-            List<string> copyCommands = new List<string>();
-
-            List<string> applications = new List<string>();
-
-            foreach (var x in mapFile)
-            {
-                applications.Add(x.Split('|')[1]);
-            }
-
-            foreach(var application in applications.Distinct())
-            {
-                Options o = new Options();
-                o.ApplicationName = application;
-                o.BranchName = options.BranchName;
-                o.FolderRoot = options.FolderRoot;
-                string root = BuildRootFolderFromOptions(o);
-                DirectoryInfo rootFolder = new DirectoryInfo(root);
-
-                if (!rootFolder.Exists)
-                {
-                    Console.WriteLine("The target folder was accessible, but no builds have been made yet: " + root);
-                    exiter.OnExit(1);
-                }
-
-                Console.WriteLine("    ....folder exists: " + root);
-                var folders = rootFolder.GetDirectories();
-                var files = rootFolder.GetFiles();
-
-                if (folders.Length > 0 || files.Length > 0)
-                {
-                    DirectoryInfo finalFolder = GetFirstFolderWithFiles(rootFolder, options.FolderSuffix);
-
-                    if (finalFolder == null)
-                    {
-                        Console.WriteLine("Could not find a build folder with builds in this location:" + root);
-                        exiter.OnExit(1);
-                    }
-
-                    string realPath = finalFolder.FullName;
-
-                    foreach (var installer in mapFile)
-                    {
-                        var items = installer.Split('|');
-                        if (items[1] == application)
-                        {
-                            var command = "robocopy \"" + realPath + "\"" + items[2] + "*.exe" + " . /V /NFL";
-                            copyCommands.Add(command);
-                        }
-                    }
-                }
-            }
-
-            copyCommands.Add("IF ERRORLEVEL 1 SET ERRORLEV=0");
-            copyCommands.Add("IF ERRORLEVEL 2 SET ERRORLEV=0");
-            copyCommands.Add("IF ERRORLEVEL 3 SET ERRORLEV=0");
-            copyCommands.Add("IF ERRORLEVEL 4 SET ERRORLEV=0");
-            copyCommands.Add("IF ERRORLEVEL 4 SET ERRORLEV=0");
-
-            return copyCommands;
-        }
-
         public static List<string> CreateFetchCommand(Options options, IExiter exiter)
         {
             List<string> copyCommands = null;
