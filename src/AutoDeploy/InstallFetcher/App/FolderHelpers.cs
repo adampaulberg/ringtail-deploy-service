@@ -234,6 +234,7 @@ namespace InstallFetcher.App
                 else
                 {
                     Console.WriteLine("This application isn't being used by the chosen role, so no fetch will be performed.");
+                    Console.WriteLine("      If you think you got this in error, check to see if master.config has a line for this fetch-" + options.Output + ".bat");
                 }
             }
             else
