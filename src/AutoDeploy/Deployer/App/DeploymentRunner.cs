@@ -75,12 +75,23 @@ namespace Deployer.App
 
                     foreach (var x in di.GetFiles())
                     {
-                        if (x.Name.Contains("postDeploy"))
+                        if (x.Name.Contains("postDeploy") && x.Name.Contains(".bak"))
                         {
-                            FileInfo info = new FileInfo(x.FullName + ".bak");
-                            if (!info.Exists)
+                            x.Delete();
+                        }
+                        else if (x.Name.Contains("postDeploy"))
+                        {
+                            try
                             {
-                                x.CopyTo(x.FullName + ".bak", false);
+                                FileInfo info = new FileInfo(x.FullName + ".bak");
+                                if (!info.Exists)
+                                {
+                                    x.CopyTo(x.FullName + ".bak", false);
+                                }
+                            }
+                            catch
+                            {
+                                log.Add(" couldn't create a postDeploy backup file, but continuing anyway");
                             }
                             RegistryReaderScrubber.EndToEnd(x.FullName, x.Name);
                         }
