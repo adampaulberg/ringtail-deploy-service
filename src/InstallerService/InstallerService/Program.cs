@@ -49,6 +49,8 @@ namespace InstallerService
         public static string KeyMasterRunnerUser = "MasterRunnerUser";
         public static string KeyMasterRunnerPass = "MasterRunnerPass";
         public static string KeySecurityEnabled = "SecurityEnabled";
+        public static string KeySecurityMode = "SecurityMode";
+        public static string KeySSLEnabled = "SSLEnabled";
 
         public static string GetAutoDeploySuiteFolder()
         {
@@ -68,6 +70,7 @@ namespace InstallerService
         }
     }
 
+
     public class Runner
     {
         static HttpSelfHostServer ServiceHandle;
@@ -81,16 +84,16 @@ namespace InstallerService
                 GetPort(options);
 
             var envConfig = EnvironmentInfo.InstallerServiceConfig();
-            var useSecurity = envConfig.ContainsKey(EnvironmentInfo.KeySecurityEnabled) && envConfig[EnvironmentInfo.KeySecurityEnabled] == "true";
-                        
-            var address = (useSecurity ? "https": "http") + "://" + options.Host + ":" + options.Port.ToString();
+            var securityModel = SecurityModel.Create(envConfig);
+
+            var address = (securityModel.UseSSL ? "https" : "http") + "://" + options.Host + ":" + options.Port.ToString();
             Log("Binding to " + address);
 
-            var config = new HttpSelfHostConfiguration(address);                        
+            var config = new HttpSelfHostConfiguration(address); 
 
-            config.Properties["SecurityEnabled"] = useSecurity;                        
-            if(useSecurity) {
-                config.ClientCredentialType = HttpClientCredentialType.Basic;
+            config.Properties["SecurityEnabled"] = securityModel.UseSecurity;
+            if(securityModel.UseSecurity) {
+                config.ClientCredentialType = securityModel.SecurityMode;
             }
 
             config.Properties["Options"] = options;
@@ -146,7 +149,6 @@ namespace InstallerService
         {
             System.Diagnostics.EventLog.WriteEntry("RingtailDeployService", message);
         }
-
 
     }
 }

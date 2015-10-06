@@ -122,6 +122,7 @@
     <Compile Include="Helpers\FileHelpers.cs" />
     <Compile Include="Helpers\InstalledBuildHelpers.cs" />
     <Compile Include="Helpers\ProcessHelpers.cs" />
+    <Compile Include="Helpers\SecurityModel.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
