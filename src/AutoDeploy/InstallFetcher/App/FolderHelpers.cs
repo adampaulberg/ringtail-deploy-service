@@ -130,6 +130,13 @@ namespace InstallFetcher.App
                             exiter.OnExit(1);
                         }
 
+                        if (options.Version == "2")  
+                        {
+                            // Not a great solution.... this works around some naming problems, but its horribly hard-coded and specific.
+                            // TODO: Consider replacing with a check to find a file where the Product Details name matches, minus whitespace?
+                            installerName += "_";
+                        }
+
                         string realPath = finalFolder.FullName;
                         string iName = installerName + "*.exe";
                         var command = "robocopy \"" + realPath + "\"" + " . " + "\"" + iName + "\"" + " /V /NFL";
