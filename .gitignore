@@ -17,6 +17,7 @@ build/
 bld/
 [Bb]in/
 [Oo]bj/
+!src/bin
 
 # Roslyn cache directories
 *.ide/
@@ -34,6 +35,8 @@ TestResult.xml
 [Rr]eleasePS/
 dlldata.c
 
+*.exe.config
+*.manifest
 *_i.c
 *_p.c
 *_i.h
@@ -75,6 +78,11 @@ ipch/
 *.vsp
 *.vspx
 
+# Files with private data
+src/bin/*.json
+regKeys.config
+currentMachine.config
+
 # TFS 2012 Local Workspace
 $tf/
 
@@ -86,28 +94,8 @@ _ReSharper*/
 *.[Rr]e[Ss]harper
 *.DotSettings.user
 
-# JustCode is a .NET coding addin-in
-.JustCode
-
-# TeamCity is a build add-in
-_TeamCity*
-
-# DotCover is a Code Coverage Tool
-*.dotCover
-
-# NCrunch
-_NCrunch_*
-.*crunch*.local.xml
-
-# MightyMoose
-*.mm.*
-AutoTest.Net/
-
 # Web workbench (sass)
 .sass-cache/
-
-# Installshield output folder
-[Ee]xpress/
 
 # DocProject is a documentation generator add-in
 DocProject/buildhelp/
@@ -138,10 +126,6 @@ publish/
 !**/packages/build/
 # If using the old MSBuild-Integrated Package Restore, uncomment this:
 #!**/packages/repositories.config
-
-# Windows Azure Build Output
-csx/
-*.build.csdef
 
 # Windows Store app package directory
 AppPackages/
