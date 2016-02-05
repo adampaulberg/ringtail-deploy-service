@@ -63,6 +63,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="ConfiguratorHelperTests\ApplicationPoolHelperTests.cs" />
+    <Compile Include="GenericInstallerTests\GenericInstallerTests.cs" />
     <Compile Include="MasterTests\ConfigCompareTests.cs" />
     <Compile Include="DatabaseUpgraderTests\DatabaseUpgraderTests.cs" />
     <Compile Include="InstallFetcherTests\FindInstallationsFromRootFolderTests.cs" />
@@ -139,6 +140,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="GenericInstallerTests\installerTemplate.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="GenericInstallerTests\volitleData.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

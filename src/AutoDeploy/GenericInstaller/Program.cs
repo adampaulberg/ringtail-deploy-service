@@ -16,8 +16,8 @@ namespace GenericInstaller
 
             try
             {
-                
-                RunIt(args[0]);
+
+                GenericInstallerHelper.RunIt(args[0]);
                 List<string> s = new List<string>();
                 s.Add(args[0]);
                 s.Add("Ok");
@@ -39,6 +39,10 @@ namespace GenericInstaller
             return exitCode;
         }
 
+    }
+
+    public class GenericInstallerHelper
+    {
         public static void RunIt(string appName)
         {
             string configFile = "installerTemplate.config";
@@ -54,10 +58,14 @@ namespace GenericInstaller
             List<string> volitileDataList = new List<string>();
             volitileDataList = SimpleFileReader.Read(volitileData);
 
-            DoIt(installerTemplate, volitileDataList, applicationName);
+            var filledInParameters = DoIt(installerTemplate, volitileDataList, applicationName);
+
+            Console.WriteLine("GenericInstaller Writing to file.... " + "install-" + applicationName + ".bat");
+
+            SimpleFileWriter.Write("install-" + applicationName + ".bat", filledInParameters);
         }
 
-        private static void DoIt(List<string> installerTemplate, List<string> volitileData, string applicationName)
+        public static List<string> DoIt(List<string> installerTemplate, List<string> volitileData, string applicationName)
         {
             List<string> filledInParameters = new List<string>();
 
@@ -69,7 +77,7 @@ namespace GenericInstaller
 
             foreach (var x in installerTemplate)
             {
-                var templateAppName = x.Split('|')[0];                
+                var templateAppName = x.Split('|')[0];
                 if (templateAppName == applicationName)
                 {
                     commands.Add(x);
@@ -120,9 +128,7 @@ namespace GenericInstaller
                 }
             }
 
-            Console.WriteLine("GenericInstaller Writing to file.... " + "install-" + applicationName + ".bat");
-
-            SimpleFileWriter.Write("install-" + applicationName + ".bat", filledInParameters);
+            return filledInParameters;
         }
 
         private static string ReplaceParameter(string workingcommand, string replacementKey, string replacementValue)
@@ -142,7 +148,7 @@ namespace GenericInstaller
                     for (int i = 1; i < rightSide.Length; i++)
                     {
                         buffer = rightSide.Substring(i - 1, 2);
-                        if (buffer == "/v" || buffer == "/S")
+                        if (buffer == "/v" || buffer == "/S" || buffer == "--")
                         {
                             right = rightSide.Substring(i - 1, rightSide.Length - i + 1);
                             break;
@@ -152,7 +158,19 @@ namespace GenericInstaller
 
                 string left = workingcommand.Substring(0, indexOfThisCommand);
 
-                string newString = left + replacementKey + "=" + replacementValue + "\" " + right;
+                string finalizer = "\" ";
+                Console.WriteLine("     left is: " + left);
+                if (left.EndsWith("--"))
+                {
+                    finalizer = " ";
+                    left = left.Substring(0, left.Length - 1);
+                }
+
+                string newString = left + replacementKey + "=" + replacementValue + finalizer + right;
+
+                Console.WriteLine("     replacing: " + replacementKey + " with " + replacementValue);
+                Console.WriteLine("     new is: " + newString);
+
                 workingcommand = newString;
             }
             return workingcommand;
@@ -260,35 +278,35 @@ namespace GenericInstaller
             return lookupKeys;
 
         }
+    }
 
-        public class SimpleFileReader
+    public class SimpleFileReader
+    {
+        public static List<string> Read(string fileName)
         {
-            public static List<string> Read(string fileName)
+            List<string> s = new List<string>();
+            using (StreamReader stream = new StreamReader(fileName))
             {
-                List<string> s = new List<string>();
-                using (StreamReader stream = new StreamReader(fileName))
+                string input = null;
+                while ((input = stream.ReadLine()) != null)
                 {
-                    string input = null;
-                    while ((input = stream.ReadLine()) != null)
-                    {
-                        s.Add(input);
-                    }
+                    s.Add(input);
                 }
-
-                return s;
             }
-        }
 
-        public class SimpleFileWriter
+            return s;
+        }
+    }
+
+    public class SimpleFileWriter
+    {
+        public static void Write(string fileName, List<string> s)
         {
-            public static void Write(string fileName, List<string> s)
+            using (StreamWriter wr = new StreamWriter(fileName))
             {
-                using (StreamWriter wr = new StreamWriter(fileName))
+                foreach (string str in s)
                 {
-                    foreach (string str in s)
-                    {
-                        wr.WriteLine(str);
-                    }
+                    wr.WriteLine(str);
                 }
             }
         }

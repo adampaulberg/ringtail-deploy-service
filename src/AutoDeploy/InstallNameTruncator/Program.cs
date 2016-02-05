@@ -31,7 +31,7 @@ namespace InstallNameTruncator
 
                 foreach (var x in di.GetFiles())
                 {
-                    if (x.Name.StartsWith("Ringtail"))
+                    if (x.Name.StartsWith("Ringtail") || x.Name.StartsWith("NativeFileService"))
                     {
                         string newName = x.Name.Split('_')[0] + ".exe";
 
