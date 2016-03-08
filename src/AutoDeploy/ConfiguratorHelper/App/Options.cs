@@ -53,6 +53,12 @@ namespace ConfiguratorHelper.App
         [Option("dbuserpassword", Required = true, HelpText = "portal database password")]
         public string dbuserpassword { get; set; }
 
+        [Option("cbVersion", Required = false, DefaultValue = "8.5.000.0", HelpText = "cb version")]
+        public string cbVersion { get; set; }
+
+        [Option("dbVersion", Required = false, DefaultValue = "08.0439.0009", HelpText = "db version")]
+        public string dbVersion { get; set; }
+
         [Option("dbPort", Required = false, DefaultValue="1433", HelpText = "database port")]
         public string dbPort { get; set; }
 

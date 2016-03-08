@@ -21,7 +21,7 @@ namespace ConfiguratorHelper.App
                 + options.dbserver + "&DBport="
                 + options.dbPort + "&SAuser=" + options.dbsauser + "&SApass=" + options.dbsapassword + "&DBnameS=" + options.dbname
                 + "&DBnameC=&username=" + options.dbusername + "&password=" + options.dbuserpassword + "&adminusername=&adminpassword=&cbversion_modopt="
-                + "8.5.000.31&DBsessions_modopt=true&dbversion_modopt=08.0439.0009&EnableCaseMap_modopt=on&EnableDocMapper_modopt=on&EnableOCRProcessing_modopt=on&StaticCache_modopt=on"
+                + options.cbVersion + "&DBsessions_modopt=true&dbversion_modopt=" + options.dbVersion + "&EnableCaseMap_modopt=on&EnableDocMapper_modopt=on&EnableOCRProcessing_modopt=on&StaticCache_modopt=on"
                 + "&Advanced+Search=on&Advanced+Search_mcbv=2.0.0&Advanced_Fulltext_modopt=on&Advanced_Fulltext_Tran_modopt=on&AFTversion_modopt=2.0.12&Analytics+Module=on&Analytics+Module_mcbv=1.0.1"
                 + "&Analyticsversion_modopt=1.0.1&Analytics_Module_modopt=true&Content+Compare=on&Content+Compare_mcbv=1.0.1&TextCompare_Module_modopt=false&Court+Module=on"
                 + "&Court+Module_mcbv=1.0.1&Courtversion_modopt=1.0.6&court_enable_modopt=true&DocMapper=on&DocMapper_mcbv=1.0.0&DMClientVersion_modopt=5.2.0.0&Master+Dups=on&Master+Dups_mcbv=1.0.1"
@@ -40,7 +40,7 @@ namespace ConfiguratorHelper.App
                + options.dbserver + "&DBport="
                + options.dbPort + "&SAuser=" + options.dbsauser + "&SApass=" + options.dbsapassword + "&DBnameS=" + options.dbname
                + "&DBnameC=&username=" + options.dbusername + "&password=" + options.dbuserpassword + "&adminusername=&adminpassword=&cbversion_modopt="
-               + "8.5.000.31&DBsessions_modopt=true&dbversion_modopt=08.0439.0009&EnableCaseMap_modopt=on&EnableDocMapper_modopt=on&EnableOCRProcessing_modopt=on&StaticCache_modopt=on"
+               + options.cbVersion + "&DBsessions_modopt=true&dbversion_modopt=" + options.dbVersion + "&EnableCaseMap_modopt=on&EnableDocMapper_modopt=on&EnableOCRProcessing_modopt=on&StaticCache_modopt=on"
                + "&Advanced+Search=on&Advanced+Search_mcbv=2.0.0&Advanced_Fulltext_modopt=on&Advanced_Fulltext_Tran_modopt=on&AFTversion_modopt=2.0.12&Analytics+Module=on&Analytics+Module_mcbv=1.0.1"
                + "&Analyticsversion_modopt=1.0.1&Analytics_Module_modopt=true&Content+Compare=on&Content+Compare_mcbv=1.0.1&TextCompare_Module_modopt=false&Court+Module=on"
                + "&Court+Module_mcbv=1.0.1&Courtversion_modopt=1.0.6&court_enable_modopt=true&DocMapper=on&DocMapper_mcbv=1.0.0&DMClientVersion_modopt=5.2.0.0&Master+Dups=on&Master+Dups_mcbv=1.0.1"
