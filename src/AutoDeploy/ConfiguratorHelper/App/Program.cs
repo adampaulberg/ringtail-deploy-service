@@ -21,6 +21,8 @@ namespace ConfiguratorHelper
             {
                 if (CommandLine.Parser.Default.ParseArguments(args, options))
                 {
+                    options.dbVersion = RegistryHelper.GetDBVersion();
+                    options.cbVersion = RegistryHelper.GetCBVersion();
                     var configuratorFile = ConfiguratorFileBuilder.CreateConfiguratorFile_Agent(options);
 
                     SimpleFileWriter.Write("runConfigurator-Agent.bat", configuratorFile);
