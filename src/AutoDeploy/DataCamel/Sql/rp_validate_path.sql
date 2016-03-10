@@ -1,10 +1,3 @@
--- Written by Greg (Lord Duffcakes) Duffie
---
-
---C# will automatically connect to master, no need for this
---use master
---go
-
 if object_id('dbo.rp_validate_path') is not null
 begin
     drop procedure dbo.rp_validate_path

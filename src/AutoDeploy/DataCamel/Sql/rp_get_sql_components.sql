@@ -1,10 +1,3 @@
--- Written by Greg (Lord Duffcakes) Duffie
---
-
---C# will automatically connect to master, no need for this
---use master
---go
-
 if object_id('dbo.rp_get_sql_components') is not null
 begin
     drop procedure dbo.rp_get_sql_components
@@ -28,7 +21,7 @@ set transaction isolation level read uncommitted
 /* Suggested @debug values
 1 = Simple print statements
 2 = Simple select statements (e.g. select @variable_1 as variable_1, @variable_2 as variable_2)
-3 = Result sets from temp tables (e.g. select '#temp_table_name' as '#temp_table_name' from #temp_table_name where ...)
+3 = Result sets from temp tables (e.g. select '#temp_table_name' as '#temp_table_name', * from #temp_table_name where ...)
 4 = @sql statements from exec() or sp_executesql
 */
 

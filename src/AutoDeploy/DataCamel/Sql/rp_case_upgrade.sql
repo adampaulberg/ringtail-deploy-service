@@ -1,10 +1,3 @@
--- Written by Greg (Lord Duffcakes) Duffie
---
-
---C# will automatically connect to master, no need for this
---use master
---go
-
 if object_id('dbo.rp_case_upgrade') is not null
 begin
     drop procedure dbo.rp_case_upgrade
@@ -155,16 +148,14 @@ go
 /* DEV TESTING
 
 exec master.dbo.rp_case_upgrade
-     @database_name = 'eyjnhdgcn szadfadfsazdf'
+     @database_name = 'Case01'
     ,@username = 'webuser'
-    ,@password = 'brnnUSA'
-    ,@ringtail_app_version = '8.4.000.58'
+    ,@ringtail_app_version = '8.5.001.54' -- exec xp_cmdshell 'dir "C:\Program Files\Ringtail"'
     ,@debug = 9
 
 exec master.dbo.rp_case_upgrade
-     @database_name = 'eyjnhdgcn szadfadfsazdf'
+     @database_name = 'Case01'
     ,@username = 'webuser'
-    ,@password = 'brnnUSA'
     ,@debug = 9
 
 */

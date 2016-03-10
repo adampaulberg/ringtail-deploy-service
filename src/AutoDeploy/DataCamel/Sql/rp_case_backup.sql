@@ -1,10 +1,3 @@
--- Written by Greg (Lord Duffcakes) Duffie
---
-
---C# will automatically connect to master, no need for this
---use master
---go
-
 if object_id('dbo.rp_case_backup') is not null
 begin
     drop procedure dbo.rp_case_backup
@@ -111,12 +104,10 @@ if nullif(@full_path, '') is null -- The .bak name wasn't supplied either
 begin
     if @debug >= 1 print '[' + convert(varchar(23), getdate(), 121) + '] [rp_case_backup] @full_path was empty. Checking registry for default location.'
 
-    exec master.dbo.xp_instance_regread N'HKEY_LOCAL_MACHINE', N'Software\Microsoft\MSSQLServer\MSSQLServer', N'BackupDirectory', @full_path output, 'no_output'
-
-    set @directory = @full_path
+    exec master.dbo.xp_instance_regread N'HKEY_LOCAL_MACHINE', N'Software\Microsoft\MSSQLServer\MSSQLServer', N'BackupDirectory', @directory output, 'no_output'
 
     -- Now add @database_name and .bak to the @full_path
-    set @full_path = @full_path + N'\' + @database_name + N'.bak'
+    set @full_path = @directory + N'\' + @database_name + N'.bak'
 end
 else
 begin
@@ -163,7 +154,7 @@ exec master.dbo.rp_case_backup
     ,@full_path = 'D:\SQL\Backup\foo.bak'
     ,@overwrite = 0
     ,@name = N'Longford'
-    ,@description = N'I said, Longford!'
+    ,@description = N'Backup Longford to foo'
     ,@debug = 3
 
 -- Restore "foo.bak" as "asfubjghhaifuvbh"

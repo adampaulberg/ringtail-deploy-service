@@ -1,10 +1,3 @@
--- Written by Greg (Lord Duffcakes) Duffie
---
-
---C# will automatically connect to master, no need for this
---use master
---go
-
 if object_id('dbo.rp_case_drop') is not null
 begin
     drop procedure dbo.rp_case_drop
@@ -42,12 +35,13 @@ begin
 
     set @sql = 'ALTER DATABASE [' + @database_name + '] SET SINGLE_USER WITH ROLLBACK IMMEDIATE'
 
-    if @debug >= 3 print '[' + convert(varchar(23), getdate(), 121) + '] [rp_case_drop] @sql: ' + isnull(@sql, '{null}')
+    if @debug >= 4 print '[' + convert(varchar(23), getdate(), 121) + '] [rp_case_drop] @sql: ' + isnull(@sql, '{null}')
 
     begin try
         exec @return = sp_executesql @sql
     end try
     begin catch
+        print error_message()
         raiserror('Error setting SINGLE_USER mode.', 16, 1)
         return @return
     end catch
@@ -56,7 +50,7 @@ begin
 
     set @sql = 'DROP DATABASE [' + @database_name + ']'
 
-    if @debug >= 3 print '[' + convert(varchar(23), getdate(), 121) + '] [rp_case_drop] @sql: ' + isnull(@sql, '{null}')
+    if @debug >= 4 print '[' + convert(varchar(23), getdate(), 121) + '] [rp_case_drop] @sql: ' + isnull(@sql, '{null}')
 
     begin try
         exec @return = sp_executesql @sql
@@ -66,6 +60,7 @@ begin
 
         exec @return = sp_executesql @sql
 
+        print error_message()
         raiserror('Error dropping database.', 16, 1)
         return @return
     end catch

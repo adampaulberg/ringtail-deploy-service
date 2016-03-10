@@ -1,10 +1,3 @@
--- Written by Greg (Lord Duffcakes) Duffie
---
-
---C# will automatically connect to master, no need for this
---use master
---go
-
 if object_id('dbo.rp_install_bootstrap') is not null
 begin
     drop procedure dbo.rp_install_bootstrap
@@ -123,7 +116,7 @@ go
 /* DEV TESTING
 
 exec master.dbo.rp_install_bootstrap
-     @database_name = 'Longford'
+     @database_name = 'Case01'
     ,@ringtail_app_version = null
     ,@sql_component_path = null
     ,@debug = 1

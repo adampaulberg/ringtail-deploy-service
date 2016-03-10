@@ -1,10 +1,3 @@
--- Written by Greg (Lord Duffcakes) Duffie
---
-
---C# will automatically connect to master, no need for this
---use master
---go
-
 if object_id('dbo.rp_case_restore') is not null
 begin
     drop procedure dbo.rp_case_restore
@@ -14,7 +7,7 @@ go
 create procedure dbo.rp_case_restore
 (
      @database_name nvarchar(128)               -- [Required] Does not have to be the same name as the backup. You can restore a Longford.bak file as a database named "PaulHogan" if you want.
-    ,@full_path nvarchar(4000)                  -- [Required] The full path to the .bak file (e.g., D:\SQL\Backups\Longford.bak)
+    ,@full_path nvarchar(4000) = null           -- [Optional] The full path to the .bak file (e.g., D:\SQL\Backups\Longford.bak). If not supplied we will look in the default location.
     ,@sql_data_directory nvarchar(500) = null   -- [Optional] Will use server default if not passed in.
     ,@sql_log_directory nvarchar(500) = null    -- [Optional] Will use server default if not passed in.
     ,@sql_ft_directory nvarchar(500) = null     -- [Optional] Will use server default if not passed in.
@@ -48,6 +41,7 @@ declare
     ,@sql_version varchar(20) = convert(varchar(20), serverproperty('productversion'))
     ,@multi_path bit = 0
     ,@first_full_path nvarchar(4000)
+    ,@directory nvarchar(4000) -- Directory only
 
 create table #headeronly
 (
@@ -159,15 +153,26 @@ select
 
 --====================================================================================================
 
-if @debug >= 1 print '[' + convert(varchar(23), getdate(), 121) + '] [rp_case_restore] Running rp_case_drop on [' + @database_name + ']'
+if @debug >= 1 print '[' + convert(varchar(23), getdate(), 121) + '] [rp_case_restore] Validating restore path'
 
--- By setting @debug to 255 you can skip the drop. Useful when you want to spit out the SQL at the bottom without actually running anything.
-if @debug <> 255
+if nullif(@full_path, '') is null -- The .bak name wasn't supplied either
 begin
-    exec master.dbo.rp_case_drop
-         @database_name = @database_name
-        ,@debug = @debug
+    if @debug >= 1 print '[' + convert(varchar(23), getdate(), 121) + '] [rp_case_restore] @full_path was empty. Checking registry for default location.'
+
+    exec master.dbo.xp_instance_regread N'HKEY_LOCAL_MACHINE', N'Software\Microsoft\MSSQLServer\MSSQLServer', N'BackupDirectory', @directory output, 'no_output'
+
+    -- Now add @database_name and .bak to @directory to create the @full_path
+    set @full_path = @directory + N'\' + @database_name + N'.bak'
 end
+else
+begin
+    -- Remove the database name and extension (since they won't exist on the first backup) and just validate the directory. If @full_path wasn't supplied then this step isn't necessary.
+    set @directory = substring(@full_path, 1, len(@full_path) - charindex('\', reverse(@full_path)))
+end
+
+exec @return = master.dbo.rp_validate_path
+     @path = @directory
+    ,@debug = @debug
 
 --====================================================================================================
 
@@ -298,6 +303,16 @@ if @restore_sql is null
 begin
     raiserror('@restore_sql is null', 16, 1)
     return -1
+end
+
+if @debug >= 1 print '[' + convert(varchar(23), getdate(), 121) + '] [rp_case_restore] Running rp_case_drop on [' + @database_name + ']'
+
+-- By setting @debug to 255 you can skip the drop. Useful when you want to spit out the SQL at the bottom without actually running anything.
+if @debug <> 255
+begin
+    exec master.dbo.rp_case_drop
+         @database_name = @database_name
+        ,@debug = @debug
 end
 
 if @debug >= 1 print '[' + convert(varchar(23), getdate(), 121) + '] [rp_case_restore] Restoring database [' + @database_name + ']'

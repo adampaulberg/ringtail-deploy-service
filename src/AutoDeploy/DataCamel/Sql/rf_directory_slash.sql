@@ -1,10 +1,3 @@
--- Written by Greg (Lord Duffcakes) Duffie
---
-
---C# will automatically connect to master, no need for this
---use master
---go
-
 if exists (select 1 from information_schema.routines where routine_name = 'rf_directory_slash' and routine_schema = 'dbo')
 begin
     drop function dbo.rf_directory_slash

@@ -1,10 +1,3 @@
--- Written by Greg (Lord Duffcakes) Duffie
---
-
---C# will automatically connect to master, no need for this
---use master
---go
-
 if exists (select 1 from information_schema.routines where routine_name = 'rf_split_8k_string_single_delimiter' and routine_schema = 'dbo')
 begin
     drop function dbo.rf_split_8k_string_single_delimiter
@@ -16,7 +9,7 @@ create function dbo.rf_split_8k_string_single_delimiter
      @string varchar(8000)
     ,@delimiter char(1) = ','
 )
---WARNING!!! DO NOT USE MAX DATA-TYPES HERE!  IT WILL KILL PERFORMANCE!
+--WARNING!!! DO NOT USE MAX DATA-TYPES HERE! IT WILL KILL PERFORMANCE!
 returns table with schemabinding as
 return
 

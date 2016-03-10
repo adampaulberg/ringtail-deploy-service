@@ -1,10 +1,3 @@
--- Written by Greg (Lord Duffcakes) Duffie
---
-
---C# will automatically connect to master, no need for this
---use master
---go
-
 if object_id('dbo.rp_case_custom_scripts') is not null
 begin
     drop procedure dbo.rp_case_custom_scripts
@@ -22,7 +15,7 @@ create procedure dbo.rp_case_custom_scripts
     ,@enable_ingestions bit = 0                     -- [Optional] Enables the Ingestions list_variable
     ,@rollback_version_numbers bit = 0              -- [Optional] Will rollback the database version numbers to 8.000.0000 for you.
     ,@rebuild_fulltext_indexes bit = 0              -- [Optional] Fixes problems with full-text population
-    ,@reset_all_passwords_to varchar(25) = null     -- [Optional] Resets everyone's password, sets password_changed and last_login_attempt to getdate(), 
+    ,@reset_all_passwords_to varchar(25) = null     -- [Optional] Resets everyone's password, sets password_changed and last_login_attempt to getdate(), last_login to getdate()
     ,@debug tinyint = 0
 )
 with encryption
@@ -245,7 +238,7 @@ begin
     if @debug >= 1 print '[' + convert(varchar(23), getdate(), 121) + '] [rp_case_custom_scripts] Reset all passwords on database [' + @database_name + '] to [' + @reset_all_passwords_to + ']'
 
     select
-         @sql = 'use [<<@database_name>>]; if exists (select 1 from sys.tables where name = ''list_users'') update dbo.list_users set password = pwdencrypt(<<@reset_all_passwords_to>>), login_attempts = 0, password_changed = getdate(), last_login_attempt = getdate();'
+         @sql = 'use [<<@database_name>>]; if exists (select 1 from sys.tables where name = ''list_users'') update dbo.list_users set password = pwdencrypt(''<<@reset_all_passwords_to>>''), login_attempts = 0, password_changed = getdate(), last_login_attempt = getdate();'
         ,@sql = replace(@sql, '<<@database_name>>', @database_name)
         ,@sql = replace(@sql, '<<@reset_all_passwords_to>>', @reset_all_passwords_to)
 
