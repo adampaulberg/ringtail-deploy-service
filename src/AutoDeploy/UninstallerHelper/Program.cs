@@ -32,18 +32,19 @@ namespace UninstallerHelper
 
                 string outputFile = "uninstall.bat";
 
-                string[] exclusions = null;
+
+                var exclusions = new List<string>();
+                exclusions.Add("native");
                 if (args.Length > 1)
                 {
                     var exclusionStrings = args[1];
                     var exclusionParts = exclusionStrings.Split(',');
                     exclusions = exclusionParts
                         .Select(p => p.Trim())
-                        .Where(p => !string.IsNullOrEmpty(p))
-                        .ToArray();
+                        .Where(p => !string.IsNullOrEmpty(p)).ToList();
                 }
 
-                ringtailKeys.ForEach(z => allUninstallStrings.Add(UninstallCommandGenerator.CreateUninstallString(z, matchBy, exclusions)));
+                ringtailKeys.ForEach(z => allUninstallStrings.Add(UninstallCommandGenerator.CreateUninstallString(z, matchBy, exclusions.ToArray())));
 
                 allUninstallStrings = new Prioritizer().OrderCommands(allUninstallStrings).ToList();
 

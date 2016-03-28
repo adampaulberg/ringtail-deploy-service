@@ -13,6 +13,12 @@ namespace ConfiguratorHelper.App
         {
             var base32keys = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey("SOFTWARE");
             var subKey = base32keys.OpenSubKey("Ringtail Solutions\\CodeBase\\Casebook\\1.0.1\\ApplicationOptions\\cbversion");
+
+            if (subKey == null)
+            {
+                return "8.6.0";
+            }
+
             return (string)subKey.GetValue("value");
         }
 
@@ -20,6 +26,12 @@ namespace ConfiguratorHelper.App
         {
             var base32keys = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey("SOFTWARE");
             var subKey = base32keys.OpenSubKey("Ringtail Solutions\\CodeBase\\Casebook\\1.0.1");
+
+            if (subKey == null)
+            {
+                return "8.6.0";
+            }
+
             return (string) subKey.GetValue("currentDBModel");
         }
     }

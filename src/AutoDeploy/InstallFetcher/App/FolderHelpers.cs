@@ -126,8 +126,17 @@ namespace InstallFetcher.App
                         var folderFiles = finalFolder.GetFiles().ToArray();
                         if (!folderFiles.Any(x => x.Name.StartsWith(installerName)))
                         {
-                            Console.WriteLine("Could not find a build for: " + finalFolder.FullName + " - " + installerName);
-                            exiter.OnExit(1);
+                            
+                            if (options.GetErrorLevel() > 0)
+                            {
+                                Console.WriteLine("Could not find a build for: " + finalFolder.FullName + " - " + installerName);
+                                exiter.OnExit(1);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Build not found - but this build marked as optional: " + finalFolder.FullName + " - " + installerName);
+                                return copyCommands;
+                            }
                         }
 
                         if (options.Version == "2")  

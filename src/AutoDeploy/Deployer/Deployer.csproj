@@ -68,6 +68,7 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="App\DeploymentRunner.cs" />
+    <Compile Include="App\ProcessUtilities.cs" />
     <Compile Include="App\RegistryReaderScrubber.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="Program.cs" />

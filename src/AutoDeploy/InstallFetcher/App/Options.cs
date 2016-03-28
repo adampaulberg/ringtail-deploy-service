@@ -30,6 +30,16 @@ namespace InstallFetcher.App
         [Option('o', "output", Required = true, HelpText = "Output file suffix")]
         public string Output { get; set; }
 
+        [Option('e', "errorLevel", Required = false, DefaultValue="1", HelpText = "Error level.")]
+        public string ErrorLevel { get; set; }
+
+        internal int GetErrorLevel()
+        {
+            int val = 0;
+            Int32.TryParse(ErrorLevel, out val);
+            return val;
+        }
+
         [HelpOption]
         public string GetUsage()
         {

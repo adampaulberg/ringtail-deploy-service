@@ -23,7 +23,7 @@ namespace Deployer
             {
                 try
                 {
-                    DeploymentRunner.ReadFromFile(log, options);
+                    exit = DeploymentRunner.ReadFromFile(log, options);
                 }
                 catch (Exception ex)
                 {

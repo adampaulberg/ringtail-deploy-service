@@ -23,6 +23,12 @@ namespace Deployer.App
                 int end = GetEndingBlockOfIndex(data, getIndexOfHKey);
                 string key = @"SOFTWARE\Microsoft\IIS Extensions\MSDeploy\2";
                 string value = "InstallPath_x86";
+
+                if (!DoesKeyExist(key))
+                {
+                    key = @"SOFTWARE\Microsoft\IIS Extensions\MSDeploy\3"; 
+                }
+
                 string replacement = GetPathForRegKey(key, value);
                 if (replacement == string.Empty)
                 {
@@ -41,11 +47,17 @@ namespace Deployer.App
             }
         }
 
+        public static bool DoesKeyExist(string key)
+        {
+            var baseRegistryKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32);
+            RegistryKey keys = baseRegistryKey.OpenSubKey(key, true);
+            return keys != null;
+        }
+
         public static string GetPathForRegKey(string key, string value)
         {
             var baseRegistryKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32);
             RegistryKey keys = baseRegistryKey.OpenSubKey(key, true);
-
 
             var asLinst = keys.GetValueNames().ToList();
 

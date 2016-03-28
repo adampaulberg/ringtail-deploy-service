@@ -10,9 +10,12 @@ namespace Deployer.App
 {
     public class DeploymentRunner
     {
-        internal static void ReadFromFile(Logger log, Options options)
+        internal static int ReadFromFile(Logger log, Options options)
         {
+            int exit = 0;
             FileInfo fi = new FileInfo(options.DeployFile);
+
+            string logFileName = "log-" + options.DeployFile.Split('.')[0] + ".txt";
 
             if (fi.Exists)
             {
@@ -26,35 +29,89 @@ namespace Deployer.App
                 foreach (var x in filesToDeploy)
                 {
                     log.AddToLog("About to deploy: " + x);
-                    log.Write("DeployLog.txt");
+                    log.Write(logFileName);
                     log.AddToLog(RunDeployment(x, myBatch));
-                    log.Write("DeployLog.txt");
+                    log.Write(logFileName);
 
 
                     i++;
                 }
                 SimpleFileWriter.Write(batchPath, myBatch);
 
-                RunFile(batchPath);
+                exit = RunFile(batchPath, log);
+                log.Write(logFileName);
             }
             else
             {
                 log.AddToLog(fi.FullName + " not found");
+                exit = 1;
             }
+
+            return exit;
         }
 
-        private static void RunFile(string file)
+        private static string RunFile_Legacy(string file)
         {
             Console.WriteLine(file);
             var process = new System.Diagnostics.Process();
             process.StartInfo.FileName = "cmd.exe";
             process.StartInfo.Arguments = " /c " + file;
-            process.StartInfo.WorkingDirectory = @"C:\upgrade\autodeploy";
+            process.StartInfo.WorkingDirectory = Environment.CurrentDirectory;
             process.StartInfo.CreateNoWindow = false;
 
             process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
             process.Start();
             process.WaitForExit();
+
+            return "Ok";
+        }
+
+        private static int RunFile(string file, Logger log)
+        {
+            int exitCode = 0;
+            Console.WriteLine(file);
+            var process = new System.Diagnostics.Process();
+            process.StartInfo.FileName = "cmd.exe";
+            process.StartInfo.Arguments = " /c " + file;
+
+            process.StartInfo.WorkingDirectory = Environment.CurrentDirectory;
+            process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = true;
+            process.StartInfo.UseShellExecute = false;
+            process.Start();
+            string output = process.StandardOutput.ReadToEnd();
+            string error = process.StandardError.ReadToEnd();
+
+
+            Console.WriteLine("*ran with exit code: " + process.ExitCode);
+
+            if (!String.IsNullOrEmpty(output))
+            {
+                var x = output.Split(new string[] { "Total changes" }, StringSplitOptions.None);
+                foreach (var outputLine in x.ToList())
+                {
+                    int len = outputLine.Length > 100 ? 100 : outputLine.Length;
+                    Console.WriteLine("Total changes" + outputLine.Substring(0, len) + " ...");
+                }
+            }
+
+            Console.WriteLine(error);
+            log.AddToLog("* Output: " + output);
+
+            if (error.Length > 0)
+            {
+                string helpText = "Tip: This often hapens when you try to deploy when the coordinator version does not match the database version.";
+                log.AddToLog("* Errors: " + error);
+                log.AddToLog(helpText);
+                exitCode = 1;
+            }
+            else
+            {
+                exitCode = process.ExitCode;
+            }
+
+            return exitCode;
         }
 
         public static List<string> RunDeployment(string file, List<string> myBatch)
@@ -130,6 +187,22 @@ namespace Deployer.App
 
             return log;
 
+        }
+    }
+
+    public class ProcessOutcome
+    {
+        public int ExitCode { get; private set; }
+        public string Output { get; private set; }
+        public string Error { get; private set; }
+        public bool ExitOk { get; private set; }
+
+        public ProcessOutcome(string error, string output, int exitCode, bool exitOk)
+        {
+            this.ExitCode = exitCode;
+            this.Error = error;
+            this.Output = output;
+            this.ExitOk = exitOk;
         }
     }
 }
