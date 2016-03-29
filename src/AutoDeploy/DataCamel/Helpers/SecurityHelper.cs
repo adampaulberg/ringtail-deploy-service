@@ -10,32 +10,32 @@ namespace DataCamel.Helpers
     // Code taken from Ringtail.Legal.Common.Security
     public class SecurityHelper
     {
-        private const string RingtailPrivateKey = "ps2XSoN2Y";
+        private const string Initializer = "ps2XSoN2Y";
 
         public static string Decrypt(string encryptedString)
         {
-            return Decrypt(encryptedString, RingtailPrivateKey);
+            return Decrypt(encryptedString, Initializer);
         }
 
         /// <summary>
         /// Decodes a given string using a "Rollover" algorithm and using the given key
         /// </summary>
         /// <param name="encryptedString">String encrypted using the private key</param>
-        /// <param name="privateKey">private key used for Ringtal encoding</param>
+        /// <param name="initializer">Value used for Ringtal encoding</param>
         /// <returns>Decoded string</returns>
-        public static string Decrypt(string encryptedString, string privateKey)
+        public static string Decrypt(string encryptedString, string initializer)
         {
             char[] unscrambledbuffer = new char[0];
             if (!string.IsNullOrEmpty(encryptedString))
             {
-                if (string.IsNullOrEmpty(privateKey))
+                if (string.IsNullOrEmpty(initializer))
                 {
-                    privateKey = RingtailPrivateKey;
+                    initializer = Initializer;
                 }
                 unscrambledbuffer = new char[encryptedString.Length];
                 for (int i = 0; i < unscrambledbuffer.Length; i++)
                 {
-                    int keyCode = Strings.Asc(encryptedString[i]) - (Strings.Asc(privateKey[(i + 1) % privateKey.Length]) - 0x40);
+                    int keyCode = Strings.Asc(encryptedString[i]) - (Strings.Asc(initializer[(i + 1) % initializer.Length]) - 0x40);
                     if (keyCode < 0x20)
                     {
                         keyCode += 0x5b;
@@ -51,23 +51,23 @@ namespace DataCamel.Helpers
 
         public static string Decode(string encryptedString)
         {
-            return Decode(encryptedString, RingtailPrivateKey);
+            return Decode(encryptedString, Initializer);
         }
 
 
-        public static string Decode(string encryptedString, string privateKey)
+        public static string Decode(string encryptedString, string initializer)
         {
             char[] unscrambledbuffer = new char[0];
             if (!string.IsNullOrEmpty(encryptedString))
             {
-                if (string.IsNullOrEmpty(privateKey))
+                if (string.IsNullOrEmpty(initializer))
                 {
-                    privateKey = RingtailPrivateKey;
+                    initializer = Initializer;
                 }
                 unscrambledbuffer = new char[encryptedString.Length];
                 for (int i = 0; i < unscrambledbuffer.Length; i++)
                 {
-                    int keyCode = Strings.Asc(encryptedString[i]) - (Strings.Asc(privateKey[(i + 1) % privateKey.Length]) - 0x40);
+                    int keyCode = Strings.Asc(encryptedString[i]) - (Strings.Asc(initializer[(i + 1) % initializer.Length]) - 0x40);
                     if (keyCode < 0x20)
                     {
                         keyCode += 0x5b;
