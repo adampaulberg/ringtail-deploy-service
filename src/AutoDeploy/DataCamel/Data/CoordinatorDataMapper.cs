@@ -19,10 +19,28 @@ namespace DataCamel.Data
             var portal = new PortalDataMapper();
             var coordinator = portal.GetCoordinator(server, database, username, password);
 
-            var uri = coordinator.CoordinatorUrl + "/GetRPFConnectionString";
+            var uri = coordinator.CoordinatorUrl + "/GetUpgradeRPFConnectionString";
 
             Console.WriteLine("  ....camel - RPF database uri: " + uri);
 
+            string connString = string.Empty;
+
+            try
+            {
+                connString = GetConnStringFromUri(coordinator, uri, server, database, username, password);
+            }
+            catch
+            {
+                uri = coordinator.CoordinatorUrl + "/GetRPFConnectionString";
+                Console.WriteLine("  ....camel - backup RPF database uri: " + uri);
+                connString = GetConnStringFromUri(coordinator, uri, server, database, username, password);
+            }
+
+            return connString;
+        }
+
+        private string GetConnStringFromUri(Models.Coordinator coordinator, string uri, string server, string database, string username, string password)
+        {
             HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(uri);
             request.UseDefaultCredentials = false;
             request.Credentials = WebRequestHelper.GetWebServiceCredentials(coordinator.Username, coordinator.Password, uri, true);
@@ -31,6 +49,11 @@ namespace DataCamel.Data
             using (var stream = response.GetResponseStream())
             using (var sr = new StreamReader(stream))
             {
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
+                {
+                    Console.WriteLine(" ...camel - got a 500 error trying to connect to the RPF server");
+                }
+
                 var output = sr.ReadToEnd();
 
                 XElement el = XElement.Parse(output);

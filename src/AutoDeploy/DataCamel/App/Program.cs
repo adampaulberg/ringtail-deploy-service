@@ -13,8 +13,9 @@ namespace DataCamel
 {
     class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
+            int exitCode = 0;
             try
             {
                 var options = new Options();
@@ -25,8 +26,9 @@ namespace DataCamel
                     if(!options.ValidateActions())
                     {
                         Console.WriteLine(options.GetUsage());
-                        return;
+                        return 1;
                     }
+
 
                     // Step 0. Camels yo
                     Console.WriteLine(options.GetHeading());
@@ -42,14 +44,14 @@ namespace DataCamel
                     else
                     {
                         Console.WriteLine(string.Format("Sql Components version {0} could not be found", options.Version));
-                        return;
+                        return 2;
                     }
 
 
                     if (string.IsNullOrEmpty(options.Version))
                     {
                         Console.WriteLine("Version could not be found. Ensure SQL Components is installed");
-                        return;
+                        return 3;
                     }
 
                     // Step 2. Create the upgrade script
@@ -57,15 +59,25 @@ namespace DataCamel
 
 
                     // Step 3. Upgrade the 
-                    upgrader.UpgradeDatabases(options);
+                    exitCode = upgrader.UpgradeDatabases(options);
 
-                    Console.WriteLine("Database upgrade complete!");
+                    if (exitCode == 0)
+                    {
+                        Console.WriteLine("\r\nDatabase upgrade complete!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("\r\nDatabase upgrade finished with errors!");
+                    }
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine("\r\nUnhandled Exception:\r\n{0}", ex);
+                exitCode = 4;
             }
+
+            return exitCode;
         }
     }
 }
