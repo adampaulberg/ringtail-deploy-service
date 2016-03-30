@@ -31,9 +31,16 @@ namespace DataCamel.Data
             }
             catch
             {
-                uri = coordinator.CoordinatorUrl + "/GetRPFConnectionString";
-                Console.WriteLine("  ....camel - backup RPF database uri: " + uri);
-                connString = GetConnStringFromUri(coordinator, uri, server, database, username, password);
+                try
+                {
+                    uri = coordinator.CoordinatorUrl + "/GetRPFConnectionString";
+                    Console.WriteLine("  ....camel - backup RPF database uri: " + uri);
+                    connString = GetConnStringFromUri(coordinator, uri, server, database, username, password);
+                }
+                catch
+                {
+                    Console.WriteLine("  ....camel could not get connection string to the RPF database server.  It may have been actively refused because of a Database / Coordinator Website version mistmatch.");
+                }
             }
 
             return connString;
@@ -49,11 +56,6 @@ namespace DataCamel.Data
             using (var stream = response.GetResponseStream())
             using (var sr = new StreamReader(stream))
             {
-                if (response.StatusCode == HttpStatusCode.InternalServerError)
-                {
-                    Console.WriteLine(" ...camel - got a 500 error trying to connect to the RPF server");
-                }
-
                 var output = sr.ReadToEnd();
 
                 XElement el = XElement.Parse(output);
