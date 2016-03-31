@@ -40,6 +40,7 @@ namespace DataCamel.Data
                 catch
                 {
                     Console.WriteLine("  ....camel could not get connection string to the RPF database server.  It may have been actively refused because of a Database / Coordinator Website version mistmatch.");
+                    throw;
                 }
             }
 

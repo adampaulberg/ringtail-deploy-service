@@ -17,6 +17,8 @@ namespace Deployer.App
 
             string logFileName = "log-" + options.DeployFile.Split('.')[0] + ".txt";
 
+            Console.WriteLine("Verbose logs can be found here: " + logFileName);
+
             if (fi.Exists)
             {
                 var filesToDeploy = SimpleFileReader.Read(options.DeployFile);
@@ -101,10 +103,20 @@ namespace Deployer.App
 
             if (error.Length > 0)
             {
-                string helpText = "Tip: This often hapens when you try to deploy when the coordinator version does not match the database version.";
-                log.AddToLog("* Errors: " + error);
-                log.AddToLog(helpText);
-                exitCode = 1;
+                string okError = "The system cannot find the path specified.";
+                okError = okError.ToLower();
+                if (error.TrimStart().TrimEnd().ToLower() == okError)
+                {
+                    log.AddToLog("* Warning: " + error);
+
+                }
+                else
+                {
+                    string helpText = "...tip: This often hapens when you try to deploy when the coordinator version does not match the database version.";
+                    log.AddToLog("* Errors: " + error);
+                    log.AddToLog(helpText);
+                    exitCode = 1;
+                }
             }
             else
             {
