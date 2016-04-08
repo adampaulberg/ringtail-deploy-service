@@ -21,13 +21,30 @@ namespace ConfiguratorHelper
             {
                 if (CommandLine.Parser.Default.ParseArguments(args, options))
                 {
+                    var exclusions = DynamicExclusionDetector.DetectExclusions();
+
                     options.dbVersion = RegistryHelper.GetDBVersion();
                     options.cbVersion = RegistryHelper.GetCBVersion();
                     var configuratorFile = ConfiguratorFileBuilder.CreateConfiguratorFile_Agent(options);
 
+                    if (exclusions.Contains("RingtailLegalAgentServer"))
+                    {
+                        configuratorFile = new List<string>();
+                        configuratorFile.Add("@echo SKIPPING");
+                    }
+
                     SimpleFileWriter.Write("runConfigurator-Agent.bat", configuratorFile);
 
-                    configuratorFile = ConfiguratorFileBuilder.CreateConfiguratorFile_Classic(options);
+                    if (exclusions.Contains("RingtailLegalApplicationServer"))
+                    {
+                        configuratorFile = new List<string>();
+                        configuratorFile.Add("@echo SKIPPING");
+                    }
+                    else
+                    {
+                        configuratorFile = ConfiguratorFileBuilder.CreateConfiguratorFile_Classic(options);
+                    }
+
                     SimpleFileWriter.Write("runConfigurator-Classic.bat", configuratorFile);
 
                     if (!new FileInfo("runConfigurator-Agent.bat").Exists)
@@ -67,6 +84,40 @@ namespace ConfiguratorHelper
                         wr.WriteLine(str);
                     }
                 }
+            }
+        }
+
+        internal class DynamicExclusionDetector
+        {
+            public static List<string> DetectExclusions()
+            {
+                var list = new List<string>();
+
+                var di = new DirectoryInfo(Environment.CurrentDirectory);
+
+                var files = di.GetFiles();
+
+                foreach (var f in files.ToList())
+                {
+                    try
+                    {
+                        var fileName = f.Name;
+                        if (fileName.StartsWith("omit-"))
+                        {
+                            var omission = fileName.Split('-')[1];
+                            omission = omission.Split('.')[0];
+
+                            list.Add(omission);
+                            Console.WriteLine("found omission: " + omission);
+                        }
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Minor problem reading omission files.  Continuing.");
+                    }
+                }
+
+                return list;
             }
         }
 

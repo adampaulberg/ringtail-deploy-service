@@ -35,6 +35,7 @@ namespace UninstallerHelper
 
                 var exclusions = new List<string>();
                 exclusions.Add("native");
+                exclusions.AddRange(DynamicExclusionDetector.DetectExclusions());
                 if (args.Length > 1)
                 {
                     var exclusionStrings = args[1];
@@ -42,6 +43,12 @@ namespace UninstallerHelper
                     exclusions = exclusionParts
                         .Select(p => p.Trim())
                         .Where(p => !string.IsNullOrEmpty(p)).ToList();
+                }
+
+                Console.WriteLine(" Found the following exclusions: ");
+                foreach (var x in exclusions)
+                {
+                    Console.WriteLine("     " + x);
                 }
 
                 ringtailKeys.ForEach(z => allUninstallStrings.Add(UninstallCommandGenerator.CreateUninstallString(z, matchBy, exclusions.ToArray())));

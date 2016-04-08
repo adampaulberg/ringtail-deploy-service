@@ -10,87 +10,6 @@ namespace InstallFetcher.App
 {
     public class FindInstallationsFromRootFolder
     {
-        public static List<string> CreateFetchFile_OLD(Options options)
-        {
-            List<string> s = new List<string>();
-
-            var root = options.FolderRoot;
-            if (!String.IsNullOrEmpty(options.BranchName))
-            {
-                root += @"\" + options.BranchName;
-            }
-
-            if (!String.IsNullOrEmpty(options.ApplicationName))
-            {
-                root += @"\" + options.ApplicationName;
-            }
-
-            DirectoryInfo di = new DirectoryInfo(root);
-
-            if (di.Exists)
-            {
-                Console.WriteLine("    ....folder exists: " + root);
-                var folders = di.GetDirectories();
-                if (folders.Length > 0)
-                {
-                    var realPath = root;
-                    var orderedFolders = folders.ToList().OrderBy(x => x.CreationTimeUtc).ToList();
-
-                    var files = di.GetFiles().ToList();
-
-                    if (!files.Any(x => x.Extension == "exe"))
-                    {
-                        var specificBuildFolder = orderedFolders[orderedFolders.Count - 1];
-                        realPath += @"\" + specificBuildFolder;
-                    }
-
-                    if (!String.IsNullOrEmpty(options.FolderSuffix))
-                    {
-                        realPath += @"\" + options.FolderSuffix;
-                    }
-
-                    di = new DirectoryInfo(realPath);
-                    if (!di.Exists || di.GetFiles().Length == 0)
-                    {
-                        var specificBuildFolder = orderedFolders[orderedFolders.Count - 2];
-                        realPath = root + @"\" + specificBuildFolder;
-
-                        if (!String.IsNullOrEmpty(options.FolderSuffix))
-                        {
-                            realPath += @"\" + options.FolderSuffix;
-                        }
-                    }
-
-                    di = new DirectoryInfo(realPath);
-                    if (!di.Exists || di.GetFiles().Length == 0)
-                    {
-                        Console.WriteLine("Could not find a build folder with builds in this location:" + root);
-                        //Environment.Exit(1);
-                        return null;
-                    }
-
-                    realPath += @"\" + "*.exe";
-                    var command = "xcopy \"" + realPath + "\"" + " /d";
-                    s.Add(command);
-
-                    return s;
-
-                }
-                else
-                {
-                    Console.WriteLine("The target folder was accessible, but no builds have been made yet: " + options.FolderRoot);
-                    Environment.Exit(1);
-                }
-            }
-            else
-            {
-                Console.WriteLine("The target folder was not accessible or not found: " + options.FolderRoot);
-                Environment.Exit(1);
-            }
-
-            return s;
-        }
-
         public static List<string> CreateFetchCommand_SingleDropFolder(Options options, IExiter exiter)
         {
             List<string> copyCommands = null;
@@ -135,6 +54,8 @@ namespace InstallFetcher.App
                             else
                             {
                                 Console.WriteLine("Build not found - but this build marked as optional: " + finalFolder.FullName + " - " + installerName);
+                                Console.WriteLine("Writing out omission file so that later steps know to ignore this optional installer: " +  "omit-" + installerName);
+                                SimpleFileWriter.Write("omit-" + installerName + ".log", new List<string>());
                                 return copyCommands;
                             }
                         }
@@ -164,13 +85,32 @@ namespace InstallFetcher.App
                 else
                 {
                     Console.WriteLine("The target folder was accessible, but no builds have been made yet: " + root);
-                    exiter.OnExit(1);
+                    if (options.GetErrorLevel() == 0)
+                    {
+                        Console.WriteLine("Writing out omission file so that later steps know to ignore this optional installer: " + "omit-" + options.ApplicationName);
+                        SimpleFileWriter.Write("omit-" + options.ApplicationName + ".log", new List<string>());
+                        exiter.OnExit(0);
+                    }
+                    else
+                    {
+                        exiter.OnExit(1);
+                    }
                 }
             }
             else
             {
                 Console.WriteLine("The target folder was not accessible or not found: " + root);
-                exiter.OnExit(1);
+
+                if (options.GetErrorLevel() == 0)
+                {
+                    Console.WriteLine("Writing out omission file so that later steps know to ignore this optional installer: " + "omit-" + options.ApplicationName);
+                    SimpleFileWriter.Write("omit-" + options.ApplicationName + ".log", new List<string>());
+                    exiter.OnExit(0);
+                }
+                else
+                {
+                    exiter.OnExit(1);
+                }
             }
 
             return copyCommands;
@@ -249,6 +189,8 @@ namespace InstallFetcher.App
                 }
                 else
                 {
+                    Console.WriteLine("Writing out omission file so that later steps know to ignore this optional installer: " + "omit-" + options.ApplicationName);
+                    SimpleFileWriter.Write("omit-" + options.ApplicationName + ".log", new List<string>());
                     Console.WriteLine("This application isn't being used by the chosen role, so no fetch will be performed.");
                     Console.WriteLine("      If you think you got this in error, check to see if master.config has a line for this fetch-" + options.Output + ".bat");
                 }
@@ -319,7 +261,7 @@ namespace InstallFetcher.App
     {
         public void OnExit(int exitCode)
         {
-            Environment.Exit(1);
+            Environment.Exit(exitCode);
         }
     }
 }

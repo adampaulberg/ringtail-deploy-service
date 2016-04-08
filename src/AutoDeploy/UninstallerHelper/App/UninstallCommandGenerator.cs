@@ -18,7 +18,21 @@ namespace UninstallerHelper.App
             if (hasUninstallString && hasAppName)
             {
                 var appName = app.GetValue("DisplayName").ToString();
+                var altAppName = RemoveWhiteSpaceFromString(appName);
                 var isExclusion = exclusions != null ? exclusions.Any(p => appName.Contains(p)) : false;
+
+                if (!isExclusion)
+                {
+                    isExclusion = exclusions != null ? exclusions.Any(p => altAppName.Contains(p)) : false;
+                }
+                if (!isExclusion)
+                {
+                    if (altAppName.StartsWith("Ringtail"))
+                    {
+                        altAppName = altAppName.Replace("Ringtail", "RingtailLegal");
+                    }
+                    isExclusion = exclusions != null ? exclusions.Any(p => altAppName.Contains(p)) : false;
+                }
 
                 if (!isExclusion && (appName.Contains(matchBy) || String.IsNullOrEmpty(matchBy)))
                 {
@@ -26,10 +40,20 @@ namespace UninstallerHelper.App
                     var type = appName.Contains("Configurator") ? "partial" : "complete";                    
                     uninstallString = AddArgumentsToUninstallString(registryUnintallString, type, appName);
                 }
+
+                if (!isExclusion)
+                {
+                    Console.WriteLine(" going to uninstall: " + appName);
+                }
             }
 
             return uninstallString;
-        }        
+        }
+
+        private static string RemoveWhiteSpaceFromString(string str)
+        {
+            return str.Replace(" ", string.Empty);
+        }
 
         private static string AddArgumentsToUninstallString(string uninstall, string type, string appName)
         {

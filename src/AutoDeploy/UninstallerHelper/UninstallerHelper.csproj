@@ -48,6 +48,7 @@
     <Compile Include="..\..\Shared\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="App\DynamicExclusionDetector.cs" />
     <Compile Include="App\RegistryHelper.cs" />
     <Compile Include="App\UninstallCommandGenerator.cs" />
     <Compile Include="App\Prioritizer.cs" />

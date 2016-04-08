@@ -41,10 +41,55 @@ namespace GenericInstaller
 
     }
 
+    internal class DynamicExclusionDetector
+    {
+        public static List<string> DetectExclusions()
+        {
+            var list = new List<string>();
+
+            var di = new DirectoryInfo(Environment.CurrentDirectory);
+
+            var files = di.GetFiles();
+
+            foreach (var f in files.ToList())
+            {
+                try
+                {
+                    var fileName = f.Name;
+                    if (fileName.StartsWith("omit-"))
+                    {
+                        var omission = fileName.Split('-')[1];
+                        omission = omission.Split('.')[0];
+
+                        list.Add(omission);
+                        Console.WriteLine("found omission: " + omission);
+                    }
+                }
+                catch
+                {
+                    Console.WriteLine("Minor problem reading omission files.  Continuing.");
+                }
+            }
+
+            return list;
+        }
+    }
+
     public class GenericInstallerHelper
     {
         public static void RunIt(string appName)
         {
+            List<string> exclusions = DynamicExclusionDetector.DetectExclusions();
+
+            if (exclusions.Contains(appName))
+            {
+                Console.WriteLine("GenericInstaller found exclusion for: " + appName);
+                var noOpFile = new List<string>();
+                noOpFile.Add("@echo SKIPPING");
+                SimpleFileWriter.Write("install-" + appName + ".bat", noOpFile);
+                return;
+            }
+
             string configFile = "installerTemplate.config";
             string volitileData = "volitleData.config";
 
@@ -57,7 +102,8 @@ namespace GenericInstaller
 
             List<string> volitileDataList = new List<string>();
             volitileDataList = SimpleFileReader.Read(volitileData);
-
+            
+            
             var filledInParameters = DoIt(installerTemplate, volitileDataList, applicationName);
 
             Console.WriteLine("GenericInstaller Writing to file.... " + "install-" + applicationName + ".bat");

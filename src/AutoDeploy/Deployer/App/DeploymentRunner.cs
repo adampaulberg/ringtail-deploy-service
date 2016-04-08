@@ -115,7 +115,7 @@ namespace Deployer.App
                     string helpText = "...tip: This often hapens when you try to deploy when the coordinator version does not match the database version.";
                     log.AddToLog("* Errors: " + error);
                     log.AddToLog(helpText);
-                    exitCode = 1;
+                    //exitCode = 1;
                 }
             }
             else
