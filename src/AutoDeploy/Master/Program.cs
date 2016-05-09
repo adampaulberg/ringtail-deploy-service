@@ -127,6 +127,8 @@ namespace Master
                 files.AddRange(main.GetFiles("parameterizedCommands.bat").ToList());
                 files.AddRange(main.GetFiles("master.bat").ToList());
 
+                files.AddRange(main.GetFiles("build*.txt").ToList());
+                files.AddRange(main.GetFiles("omit*.log").ToList());
                 files.AddRange(main.GetFiles("i-*.log").ToList());
                 files.AddRange(main.GetFiles("u-*.log").ToList());
 

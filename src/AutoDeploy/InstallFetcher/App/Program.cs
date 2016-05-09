@@ -16,6 +16,7 @@ namespace InstallFetcher.App
 
                 if (CommandLine.Parser.Default.ParseArguments(args, options))
                 {
+                    Cleanup(options);
                     var fetchFileContents = FindInstallationsFromRootFolder.CreateFetchCommand(options);
                     exitCode = WriteFetchFile(options, fetchFileContents);
                 }
@@ -33,6 +34,15 @@ namespace InstallFetcher.App
             }
 
             return exitCode;
+        }
+
+        private static void Cleanup(Options options)
+        {
+            FileInfo fi = new FileInfo("omit-" + options.ApplicationName + ".log");
+            if (fi.Exists)
+            {
+                fi.Delete();
+            }
         }
 
         private static int WriteFetchFile(Options options, List<string> fetchFileContents)

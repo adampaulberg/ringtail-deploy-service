@@ -13,7 +13,7 @@ namespace UninstallerHelper.App
         {
             var list = new List<string>();
 
-            var di = new DirectoryInfo(Environment.CurrentDirectory);
+            var di = new DirectoryInfo(@"C:\Upgrade\AutoDeploy\");
 
             var files = di.GetFiles();
 

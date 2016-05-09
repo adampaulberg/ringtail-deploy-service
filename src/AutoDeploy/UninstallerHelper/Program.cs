@@ -20,7 +20,7 @@ namespace UninstallerHelper
             try
             {
                 l.AddAndWrite("-- UninstallerHelper --");
-                var ringtailKeys = RegistryHelper.GetAllRingtailKeys();
+                var ringtailKeys = RegistryHelper.GetAllRingtailKeys(l);
 
                 var allUninstallStrings = new List<string>();
 
@@ -35,7 +35,6 @@ namespace UninstallerHelper
 
                 var exclusions = new List<string>();
                 exclusions.Add("native");
-                exclusions.AddRange(DynamicExclusionDetector.DetectExclusions());
                 if (args.Length > 1)
                 {
                     var exclusionStrings = args[1];
@@ -44,6 +43,7 @@ namespace UninstallerHelper
                         .Select(p => p.Trim())
                         .Where(p => !string.IsNullOrEmpty(p)).ToList();
                 }
+                exclusions.AddRange(DynamicExclusionDetector.DetectExclusions());
 
                 Console.WriteLine(" Found the following exclusions: ");
                 foreach (var x in exclusions)
@@ -51,7 +51,7 @@ namespace UninstallerHelper
                     Console.WriteLine("     " + x);
                 }
 
-                ringtailKeys.ForEach(z => allUninstallStrings.Add(UninstallCommandGenerator.CreateUninstallString(z, matchBy, exclusions.ToArray())));
+                ringtailKeys.ForEach(z => allUninstallStrings.Add(UninstallCommandGenerator.CreateUninstallString(l, z, matchBy, exclusions.ToArray())));
 
                 allUninstallStrings = new Prioritizer().OrderCommands(allUninstallStrings).ToList();
 

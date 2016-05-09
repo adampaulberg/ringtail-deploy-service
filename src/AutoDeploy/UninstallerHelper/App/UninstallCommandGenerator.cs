@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UninstallerHelper.Util;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,21 +10,27 @@ namespace UninstallerHelper.App
 {
     public class UninstallCommandGenerator
     {
-        internal static string CreateUninstallString(RegistryKey app, string matchBy, string[] exclusions)
+        internal static string CreateUninstallString(Logger l, RegistryKey app, string matchBy, string[] exclusions)
         {
             var uninstallString = string.Empty;
             var hasUninstallString = !String.IsNullOrEmpty(app.GetValueNames().ToList().Find(x => x == "UninstallString"));
             var hasAppName = !String.IsNullOrEmpty(app.GetValueNames().ToList().Find(x => x == "DisplayName"));
 
+
+
             if (hasUninstallString && hasAppName)
             {
                 var appName = app.GetValue("DisplayName").ToString();
                 var altAppName = RemoveWhiteSpaceFromString(appName);
-                var isExclusion = exclusions != null ? exclusions.Any(p => appName.Contains(p)) : false;
+                var isExclusion = exclusions != null ? exclusions.Any(p => appName == p) : false;
+
+                l.AddAndWrite("  Creating uninstall string for:");
+                l.AddAndWrite("        " + "app:" + appName + "|alt:" + altAppName + "|" + isExclusion.ToString());
 
                 if (!isExclusion)
                 {
-                    isExclusion = exclusions != null ? exclusions.Any(p => altAppName.Contains(p)) : false;
+                    isExclusion = exclusions != null ? exclusions.Any(p => altAppName == p) : false;
+                    l.AddAndWrite("        " + "after altAppName == p|" + isExclusion.ToString());
                 }
                 if (!isExclusion)
                 {
@@ -31,7 +38,8 @@ namespace UninstallerHelper.App
                     {
                         altAppName = altAppName.Replace("Ringtail", "RingtailLegal");
                     }
-                    isExclusion = exclusions != null ? exclusions.Any(p => altAppName.Contains(p)) : false;
+                    isExclusion = exclusions != null ? exclusions.Any(p => altAppName == p) : false;
+                    l.AddAndWrite("        " + "after altAppName == p|altAppName:" + altAppName + "|" + isExclusion.ToString());
                 }
 
                 if (!isExclusion && (appName.Contains(matchBy) || String.IsNullOrEmpty(matchBy)))
