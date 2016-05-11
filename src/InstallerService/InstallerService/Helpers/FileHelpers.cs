@@ -117,36 +117,42 @@ namespace InstallerService.Helpers
             return results;
         }
 
-        public static string ChangeConfigItem(string fileName, string key, string value)
+        //public static string ChangeConfigItem(string fileName, string key, string value)
+        //{
+        //    string result = "Unknown";
+        //    var filePath = string.Empty;
+        //    FileInfo fi = new FileInfo(EnvironmentInfo.CONFIG_LOCATION);
+        //    if (fi.Exists)
+        //    {
+        //        var x = SimpleFileReader.Read(EnvironmentInfo.CONFIG_LOCATION);
+        //        filePath = EnvironmentInfo.GetAutoDeploySuiteFolder() + fileName;
+
+        //        fi = new FileInfo(filePath);
+
+        //        if (fi.Exists)
+        //        {
+        //            result = RAW_UpdateFileAtPath(filePath, key, value);
+        //        }
+        //        else
+        //        {
+        //            result = "File not found: " + filePath;
+        //        }
+        //    }
+
+        //    return result;
+        //}
+
+        public static string ChangeConfigItemWithWildcards(string fileName, string key, string value, bool deleteAllowed = false)
         {
             string result = "Unknown";
             var filePath = string.Empty;
             FileInfo fi = new FileInfo(EnvironmentInfo.CONFIG_LOCATION);
-            if (fi.Exists)
+
+            if (deleteAllowed == false && key.StartsWith("&&"))
             {
-                var x = SimpleFileReader.Read(EnvironmentInfo.CONFIG_LOCATION);
-                filePath = EnvironmentInfo.GetAutoDeploySuiteFolder() + fileName;
-
-                fi = new FileInfo(filePath);
-
-                if (fi.Exists)
-                {
-                    result = RAW_UpdateFileAtPath(filePath, key, value);
-                }
-                else
-                {
-                    result = "File not found: " + filePath;
-                }
+                throw new InvalidOperationException("Deleting configuration is not allowed via this API");
             }
 
-            return result;
-        }
-
-        public static string ChangeConfigItemWithWildcards(string fileName, string key, string value)
-        {
-            string result = "Unknown";
-            var filePath = string.Empty;
-            FileInfo fi = new FileInfo(EnvironmentInfo.CONFIG_LOCATION);
             if (fi.Exists)
             {
                 var x = SimpleFileReader.Read(EnvironmentInfo.CONFIG_LOCATION);
@@ -344,13 +350,21 @@ namespace InstallerService.Helpers
             }
             else
             {
-                if (contents.FindAll(x => x.Contains(keyOrPattern)).Count == 0)
+                var deleteMode = keyOrPattern.StartsWith("&&");
+                if (deleteMode)
                 {
-                    return new Insert();
+                    return new Delete();
                 }
                 else
                 {
-                    return new Change();
+                    if (contents.FindAll(x => x.Contains(keyOrPattern)).Count == 0)
+                    {
+                        return new Insert();
+                    }
+                    else
+                    {
+                        return new Change();
+                    }
                 }
             }
 
@@ -364,6 +378,35 @@ namespace InstallerService.Helpers
                 var newFile = new List<string>();
                 newFile.AddRange(contents);
                 newFile.Add(keyOrPattern + "=\"" + value + "\"");
+                return newFile;
+            }
+        }
+
+
+        private class Delete : IReplacementRule
+        {
+            public List<string> RunRule(List<string> contents, string keyOrPattern, string value)
+            {
+
+                if (keyOrPattern.Length <= 2)
+                {
+                    return contents;
+                }
+                
+                var newFile = new List<string>();
+
+                foreach (var x in contents)
+                {
+                    string modified = x;
+
+                    var matchKey = keyOrPattern.Substring(2, keyOrPattern.Length - 2);
+                    if (!x.ToLower().Contains(matchKey.ToLower()))
+                    {
+                        newFile.Add(modified);
+                    }
+                }
+
+
                 return newFile;
             }
         }
@@ -412,7 +455,6 @@ namespace InstallerService.Helpers
             }
         }
 
-        //public List<string> OldFile { get; set; }
         public List<string> NewFile { get; set; }
         public List<string> Messages { get; set; }
         public bool IsSuccessful { get; set; }

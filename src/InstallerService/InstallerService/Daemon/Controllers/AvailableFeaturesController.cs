@@ -7,11 +7,21 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace InstallerService.Daemon.Controllers
 {
     public class AvailableFeaturesController : BaseController
     {
+        [HttpGet]
+        public string GetInstalledKeys()
+        {
+            var x = FileHelpers.ReadConfigAsData("volitleData.config");
+            var filtered = x.Where(z => z.StartsWith("LaunchKey"));
+            return FileHelpers.ConvertToString(filtered.ToList());
+        }
+
+
         [HttpGet]
         public HttpResponseMessage GetKeys(string dropLocation)
         {
