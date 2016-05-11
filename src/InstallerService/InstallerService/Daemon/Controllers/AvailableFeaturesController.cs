@@ -5,13 +5,18 @@ using System.Linq;
 using System.Web.Http;
 using System.IO;
 using System.Collections.Generic;
+using System.Web;
+using System.Net.Http;
+using System.Net;
+using System.Threading.Tasks;
+using System.Net.Http.Headers;
 
 namespace InstallerService.Daemon.Controllers
 {
     public class AvailableFeaturesController : BaseController
     {
         [HttpGet]
-        public string GetKeys(string dropLocation)
+        public HttpResponseMessage GetKeys(string dropLocation)
         {
             // returns a list of available keys given the drop location.
             string keys = "";
@@ -90,10 +95,43 @@ namespace InstallerService.Daemon.Controllers
                 log.Add(ex.Message);
                 log.Add(ex.StackTrace);
                 FileHelpers.SimpleFileWriter.Write(@"C:\Upgrade\InstallerService\availableFeaturesLogError.txt", log);
-                return "ERROR: " + ex.Message;
+
+                //return keys;
             }
 
-            return keys;
+            HttpResponseMessage hr = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
+            try
+            {
+                hr.Content = new StringContent(keys, System.Text.Encoding.Default, "application/json");
+
+                //hr.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                //hr.ContentEncoding = System.Text.Encoding.UTF8;
+                //hr.ContentType = "application/json";
+                //hr.StatusCode = 200;
+                //hr.Write(keys);
+            }
+            catch (Exception ex)
+            {
+                log.Add(ex.Message);
+                log.Add(ex.StackTrace);
+                FileHelpers.SimpleFileWriter.Write(@"C:\Upgrade\InstallerService\availableFeaturesLogError.txt", log);
+            }
+            log.Add("Made it");
+            FileHelpers.SimpleFileWriter.Write(@"C:\Upgrade\InstallerService\availableFeatures-Diagnostic.txt", log);
+            return hr;
+        }
+
+        private class JunkContent : HttpContent
+        {
+            protected override Task SerializeToStreamAsync(Stream stream, TransportContext context)
+            {
+                throw new NotImplementedException();
+            }
+
+            protected override bool TryComputeLength(out long length)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         private static void CopyFilesLocally(string dropLocation)
