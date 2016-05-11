@@ -1,15 +1,12 @@
 ﻿using InstallerService.Helpers;
 using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Web.Http;
 using System.IO;
 using System.Collections.Generic;
-using System.Web;
 using System.Net.Http;
 using System.Net;
 using System.Threading.Tasks;
-using System.Net.Http.Headers;
 
 namespace InstallerService.Daemon.Controllers
 {
@@ -83,12 +80,10 @@ namespace InstallerService.Daemon.Controllers
 
                 FileHelpers.SimpleFileWriter.Write(@"C:\Upgrade\InstallerService\availableFeaturesLog.txt", log);
 
-
                 if (exitCode == 0)
                 {
                     keys = output;
                 }
-
             }
             catch (Exception ex)
             {
@@ -96,27 +91,27 @@ namespace InstallerService.Daemon.Controllers
                 log.Add(ex.StackTrace);
                 FileHelpers.SimpleFileWriter.Write(@"C:\Upgrade\InstallerService\availableFeaturesLogError.txt", log);
 
-                //return keys;
+                var errorResponse = new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
+                errorResponse.Content = new StringContent("Error - see logs on server", System.Text.Encoding.Default, "application/text");
+                return errorResponse;
             }
 
             HttpResponseMessage hr = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
             try
             {
                 hr.Content = new StringContent(keys, System.Text.Encoding.Default, "application/json");
-
-                //hr.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                //hr.ContentEncoding = System.Text.Encoding.UTF8;
-                //hr.ContentType = "application/json";
-                //hr.StatusCode = 200;
-                //hr.Write(keys);
             }
             catch (Exception ex)
             {
                 log.Add(ex.Message);
                 log.Add(ex.StackTrace);
                 FileHelpers.SimpleFileWriter.Write(@"C:\Upgrade\InstallerService\availableFeaturesLogError.txt", log);
+
+                var errorResponse = new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
+                errorResponse.Content = new StringContent("Error - see logs on server", System.Text.Encoding.Default, "application/text");
+                return errorResponse;
             }
-            log.Add("Made it");
+
             FileHelpers.SimpleFileWriter.Write(@"C:\Upgrade\InstallerService\availableFeatures-Diagnostic.txt", log);
             return hr;
         }
