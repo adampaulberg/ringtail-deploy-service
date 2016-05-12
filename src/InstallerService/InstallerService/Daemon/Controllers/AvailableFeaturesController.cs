@@ -126,19 +126,6 @@ namespace InstallerService.Daemon.Controllers
             return hr;
         }
 
-        private class JunkContent : HttpContent
-        {
-            protected override Task SerializeToStreamAsync(Stream stream, TransportContext context)
-            {
-                throw new NotImplementedException();
-            }
-
-            protected override bool TryComputeLength(out long length)
-            {
-                throw new NotImplementedException();
-            }
-        }
-
         private static void CopyFilesLocally(string dropLocation)
         {
             var fi = new FileInfo(dropLocation + "RingtailFeatureUtility.exe");
