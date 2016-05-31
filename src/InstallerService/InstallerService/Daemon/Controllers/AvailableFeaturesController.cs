@@ -36,6 +36,23 @@ namespace InstallerService.Daemon.Controllers
             string username = null, password = null;
 
 
+            if (!dropLocation.StartsWith("\\"))
+            {
+                // open volitle data.
+                var volitleData = FileHelpers.ReadConfigAsData("volitleData.config");
+                var folderRoot = volitleData.Find(x => x.Contains("BUILD_FOLDER_ROOT"));
+                folderRoot = folderRoot.Substring(folderRoot.IndexOf(@"\"));
+                folderRoot = folderRoot.Replace("\"", "");
+                log.Add("....checking volitleData for build folder root ");
+                dropLocation = folderRoot + @"\" + dropLocation;
+                if (!dropLocation.EndsWith(@"\"))
+                {
+                    dropLocation = dropLocation + @"\";
+                }
+            }
+
+            log.Add(" reading from: " + dropLocation);
+
             // needs to call the exe at the drop location and get the possible keys.
             try
             {
@@ -49,7 +66,7 @@ namespace InstallerService.Daemon.Controllers
 
                 CopyFilesLocally(dropLocation);
 
-                fileName = @"C:\Upgrade\InstallerService\Test\" + "RingtailFeatureUtility.exe";
+                fileName = LOCAL_PATH + PARSER_FILE;
                 string cmd = "/c " + fileName;
                 var processInfo = new ProcessStartInfo("cmd.exe", cmd);
 
@@ -61,7 +78,7 @@ namespace InstallerService.Daemon.Controllers
                 process.StartInfo.RedirectStandardOutput = true;
                 process.StartInfo.RedirectStandardError = true;
                 process.StartInfo.UseShellExecute = false;
-                process.StartInfo.Arguments = "-g";
+                process.StartInfo.Arguments = "-gk";
 
                 log.Add(" start info...");
                 log.Add(" WorkingDir: " + dropLocation);
@@ -126,13 +143,18 @@ namespace InstallerService.Daemon.Controllers
             return hr;
         }
 
+        private static string PARSER_FILE = "ringtail-deploy-feature-utility.exe";
+        private static string DATA_FILE = "ringtail-static-feature-data.csv";
+        private static string LOCAL_PATH = @"C:\upgrade\autodeploy\";
+
         private static void CopyFilesLocally(string dropLocation)
         {
-            var fi = new FileInfo(dropLocation + "RingtailFeatureUtility.exe");
-            fi.CopyTo(@"C:\upgrade\InstallerService\test\RingtailFeatureUtility.exe", true);
 
-            fi = new FileInfo(dropLocation + "RingtailDarkKeys.csv");
-            fi.CopyTo(@"C:\upgrade\InstallerService\test\RingtailDarkKeys.csv", true);
+            var fi = new FileInfo(dropLocation + PARSER_FILE);
+            fi.CopyTo(LOCAL_PATH + PARSER_FILE, true);
+
+            fi = new FileInfo(dropLocation + DATA_FILE);
+            fi.CopyTo(LOCAL_PATH + DATA_FILE, true);
         }
     }
 }

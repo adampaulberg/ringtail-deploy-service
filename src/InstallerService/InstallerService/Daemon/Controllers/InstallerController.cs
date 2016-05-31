@@ -34,10 +34,10 @@ namespace InstallerService.Daemon.Controllers
                 }
 
                 FileInfo lockFile = new FileInfo(LOCKFILE);
-                if (lockFile.Exists)
+                if (lockFile.Exists || IsMasterRunnerAlreadyRunning())
                 {
                     var x = SimpleFileReader.Read(LOCKFILE);
-                    results = "There is a build currently running.....";
+                    results = "There is already a deployment in progress.....";
 
                     foreach (var str in x)
                     {
@@ -48,17 +48,6 @@ namespace InstallerService.Daemon.Controllers
 
                 
                 buildLog.Add("Build started: " + DateTime.Now);
-
-                //if (Request != null)
-                //{
-                //    if (Request.Properties != null)
-                //    {
-                //        foreach (var x in Request.Properties.Keys)
-                //        {
-                //            buildLog.Add("K: " + x + " v: " + Request.Properties[x].ToString());
-                //        }
-                //    }
-                //}
 
                 buildLog.Add("Invoking Master.exe at: " + autoDeployFolder + "Master.exe" + DateTime.Now);
                 FileHelpers.SimpleFileWriter.Write(LOCKFILE, buildLog);
@@ -275,6 +264,12 @@ namespace InstallerService.Daemon.Controllers
             {
                 // meh... we're screwed
             }
+        }
+
+        private static bool IsMasterRunnerAlreadyRunning()
+        {
+            var filtered = Process.GetProcesses().ToList().Where(x => x.ProcessName.ToLower().StartsWith("masterrunner"));
+            return filtered.ToList().Count > 0;
         }
     }
 }
