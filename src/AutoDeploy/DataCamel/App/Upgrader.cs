@@ -3,9 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -60,7 +62,23 @@ namespace DataCamel.App
             if (primaryAction == "upgrade")
             {
                 databases.AddRange(options.Databases);
-                return RunUpgradeDatabases(options, databases);
+                foreach (var x in databases)
+                {
+                    Logger("\r\nPreparing feature launch keys prior to portal upgrade.\r\n");
+                    result = InsertLaunchKeysPriorToUpgrade(options, x);
+
+                    if(result != 0)
+                    {
+                        break;
+                    }
+                }
+
+                if (result == 0)
+                {
+                    result = RunUpgradeDatabases(options, databases);
+                }
+                return result;
+
             }
             else if (primaryAction == "upgradeportal")
             {
@@ -71,8 +89,17 @@ namespace DataCamel.App
                     return fetchPortalDatabasesResult.ErrorCode;
                 }
 
-                Logger("\r\nStarting portal upgrade.\r\n");
-                result = RunUpgradeDatabases(options, fetchPortalDatabasesResult.PortalDatabases);
+                foreach (var x in fetchPortalDatabasesResult.PortalDatabases)
+                {
+                    Logger("\r\nPreparing feature launch keys prior to portal upgrade.\r\n");
+                    result = InsertLaunchKeysPriorToUpgrade(options, x);
+                }
+
+                if (result == 0)
+                {
+                    Logger("\r\nStarting portal upgrade.\r\n");
+                    result = RunUpgradeDatabases(options, fetchPortalDatabasesResult.PortalDatabases);
+                }
 
                 if (result == 0)
                 {
@@ -108,7 +135,32 @@ namespace DataCamel.App
             }
 
             return result;
-            
+
+        }
+
+        int InsertLaunchKeysPriorToUpgrade(Options options, string dbName)
+        {
+            int resultCode = 0;
+            try
+            {
+                Logger(string.Format("Attempting to write out Launch Keys\r\n"));
+
+
+                string keyfileDropLocation = options.InstallPath + @"\" + "SQL Component_v" + options.Version +  @"\Scripts\Portal\PostProcessing\" + dbName + "_generated_feature_keys.txt";
+                string keyFile = @"C:\Upgrade\AutoDeploy\launchKeys.json";
+                var helper = new LaunchKeyRunnerHelper();
+                resultCode = helper.RunFile(Logger, keyfileDropLocation, keyFile);
+            }
+            catch(Exception ex)
+            {
+                Logger(string.Format("\r\n"));
+                Logger(ex.Message);
+                Logger(ex.StackTrace);
+                Logger(string.Format("ERROR: failed to add launch keys to database.  See above.\r\n"));
+                resultCode = 7;
+            }
+
+            return resultCode;
         }
 
         int RunUpgradeDatabases(Options options, List<string> databases)
@@ -157,7 +209,6 @@ namespace DataCamel.App
 
         }
 
-
         void RunUpgradeDatabase2(Options options, string database)
         {
             try
@@ -179,7 +230,7 @@ namespace DataCamel.App
                     command.ExecuteNonQuery();
                 }
                 Logger(string.Format("Update for '{0}' Complete\r\n", database));
-                
+
             }
             catch (Exception ex)
             {
@@ -187,41 +238,6 @@ namespace DataCamel.App
                 throw ex;
             }
         }
-
-        bool RunUpgradeDatabase(Options options, string database, bool async = false)
-        {
-            try
-            {
-                if (!async) Logger(string.Format("Updating database '{0}'... ", database));
-                else Logger(string.Format("Starting update for database '{0}'\r\n", database));
-
-                string connStr = string.Format("Data Source={0};Initial Catalog={1};User Id={2};Password={3}", options.Server, "master", options.Username, options.Password);
-
-                using (SqlConnection conn = new SqlConnection(connStr))
-                using (SqlCommand command = new SqlCommand("rp_case_upgrade", conn))
-                {
-                    conn.Open();
-
-                    command.CommandTimeout = 0;
-                    command.CommandType = System.Data.CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("@database_name", database);
-                    command.Parameters.AddWithValue("@username", options.Username);
-                    command.Parameters.AddWithValue("@ringtail_app_version", options.Version);
-                    command.ExecuteNonQuery();
-                }
-                if (!async) Logger("Complete\r\n");
-                else Logger(string.Format("Update for '{0}' Complete\r\n", database));
-                return true;
-            }
-            catch (Exception ex)
-            {
-                if (!async) Logger(string.Format("Failed ({0})\r\n", ex.Message));
-                else Logger(string.Format("Update for '{0}' Failed ({1})\r\n", database, ex.Message));
-                return false;
-            }
-        }
-
-
 
         GetDatabaseResult GetPortalDatabases(Options options)
         {
@@ -262,6 +278,148 @@ namespace DataCamel.App
                 return new GetDatabaseResult(null, null, null, 6);
             }
             return new GetDatabaseResult(portalDbs, rpfDbs, caseDbs, 0);
+        }
+    }
+
+
+    public class LaunchKeyRunnerHelper
+    {
+
+        public int RunFile(Action<string> Logger, string targetFilePath, string keys)
+        {
+            string filename = "ringtail-deploy-feature-utility.exe --bulkdatapath=\"" + targetFilePath + "\" --keysfile=\"" + keys + "\"";
+            string workingFolder = @"C:\upgrade\autodeploy\";
+
+            FileInfo fi = new FileInfo(workingFolder + "ringtail-deploy-feature-utility.exe");
+            if (!fi.Exists)
+            {
+                Logger("Skipping Launch Keys - this build may be prior to Launch Keys.\r\n");
+                return 0;
+            }
+
+            fi = new FileInfo(keys);
+            if (!fi.Exists)
+            {
+                Logger("Skipping Launch Keys - this build may be prior to Launch Keys.\r\n");
+                return 0;
+            }
+
+
+            int exitCode = SpawnAndLog(Logger, filename, workingFolder, null, null);
+            if (exitCode == 0)
+            {
+                Logger("Launch Keys: SUCCESSFUL\r\n");
+            }
+            else
+            {
+                Logger("Launch Keys: FAILED\r\n");
+                Logger("Exit code: " + exitCode + "\r\n");
+            }
+            return exitCode;
+
+        }
+
+        public int SpawnAndLog(Action<string> Logger, string command, string workingFolder, string username, string password)
+        {
+            int exitCode = 0;
+            try
+            {
+                Logger("*starting: " + workingFolder + command + "\r\n");
+                var result = SpawnProcess(command, workingFolder, username, password);
+
+                Logger("*Output text: ");
+                Logger(result.Output + "\r\n");
+
+                if (result.ExitCode != 0 && !result.ExitOk)
+                {
+                    Logger("*Error text: ");
+                    Logger(result.Error + "\r\n");
+                    Logger("*Exited with code " + result.ExitCode + "\r\n");
+                    exitCode = result.ExitCode;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger("*RunFile error - trying to run the process threw an exception." + "\r\n");
+                Logger(ex.Message);
+                Logger(ex.StackTrace);
+                exitCode = 2;
+            }
+
+            Logger("*finished: " + workingFolder + command + "\r\n");
+            Logger(" *time: " + DateTime.Now + "\r\n");
+
+            return exitCode;
+        }
+
+
+        public class ProcessOutcome
+        {
+            public int ExitCode { get; private set; }
+            public string Output { get; private set; }
+            public string Error { get; private set; }
+            public bool ExitOk { get; private set; }
+
+            public ProcessOutcome(string error, string output, int exitCode, bool exitOk)
+            {
+                this.ExitCode = exitCode;
+                this.Error = error;
+                this.Output = output;
+                this.ExitOk = exitOk;
+            }
+        }
+
+        private ProcessOutcome SpawnProcess(string commandName, string workingDirectory, string username, string password)
+        {
+            var index = commandName.IndexOf(' ');
+
+            string file = commandName;
+            string args = string.Empty;
+            if (index != -1)
+            {
+                file = commandName.Substring(0, index);
+                args = commandName.Substring(index + 1, commandName.Length - index - 1);
+            }
+
+            string cmd = "/c " + workingDirectory + commandName;
+            var processInfo = new ProcessStartInfo("cmd.exe", cmd);
+
+            var process = new System.Diagnostics.Process();
+            process.StartInfo.FileName = file;
+            process.StartInfo.WorkingDirectory = workingDirectory;
+            process.StartInfo.Arguments = args;
+            process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = true;
+            process.StartInfo.UseShellExecute = false;
+
+            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
+            {
+                var nameParts = username.Split('\\');
+                string domain = null;
+                string user = null;
+                if (nameParts.Length == 2)
+                {
+                    domain = nameParts[0];
+                    user = nameParts[1];
+                }
+                else
+                {
+                    user = username;
+                }
+
+                process.StartInfo.Domain = domain;
+                process.StartInfo.UserName = user;
+                SecureString securePassword = new SecureString();
+                foreach (char c in password.ToCharArray()) securePassword.AppendChar(c);
+                process.StartInfo.Password = securePassword;
+            }
+
+            process.Start();
+            string output = process.StandardOutput.ReadToEnd();
+            string error = process.StandardError.ReadToEnd();
+
+            return new ProcessOutcome(error, output, process.ExitCode, false);
         }
     }
 
