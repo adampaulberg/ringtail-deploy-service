@@ -14,11 +14,10 @@ namespace InstallerService.Daemon.Controllers
     public class AvailableFeaturesController : BaseController
     {
         [HttpGet]
-        public string GetInstalledKeys()
+        public string GetInstalledKeys(string dropLocation, string connectionString)
         {
-            var x = FileHelpers.ReadConfigAsData("volitleData.config");
-            var filtered = x.Where(z => z.StartsWith("LaunchKey"));
-            return FileHelpers.ConvertToString(filtered.ToList());
+            // TODO - change this to call up the ringtail-deploy-feature-utility.exe with a connection string, and return the response.
+            throw new NotImplementedException();
         }
 
 
@@ -149,7 +148,6 @@ namespace InstallerService.Daemon.Controllers
 
         private static void CopyFilesLocally(string dropLocation)
         {
-
             var fi = new FileInfo(dropLocation + PARSER_FILE);
             fi.CopyTo(LOCAL_PATH + PARSER_FILE, true);
 
