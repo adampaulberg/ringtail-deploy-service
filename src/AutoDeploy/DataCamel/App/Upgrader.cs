@@ -147,9 +147,8 @@ namespace DataCamel.App
 
 
                 string keyfileDropLocation = options.InstallPath + @"\" + "SQL Component_v" + options.Version +  @"\Scripts\Portal\PostProcessing\" + dbName + "_generated_feature_keys.txt";
-                string keyFile = @"C:\Upgrade\AutoDeploy\launchKeys.json";
                 var helper = new LaunchKeyRunnerHelper();
-                resultCode = helper.RunFile(Logger, keyfileDropLocation, keyFile);
+                resultCode = helper.RunFile(Logger, keyfileDropLocation);
             }
             catch(Exception ex)
             {
@@ -285,8 +284,9 @@ namespace DataCamel.App
     public class LaunchKeyRunnerHelper
     {
 
-        public int RunFile(Action<string> Logger, string targetFilePath, string keys)
+        public int RunFile(Action<string> Logger, string targetFilePath)
         {
+            string keys = @"C:\Upgrade\AutoDeploy\launchKeys.json";
             string filename = "ringtail-deploy-feature-utility.exe --bulkdatapath=\"" + targetFilePath + "\" --keysfile=\"" + keys + "\"";
             string workingFolder = @"C:\upgrade\autodeploy\";
 
@@ -297,12 +297,7 @@ namespace DataCamel.App
                 return 0;
             }
 
-            fi = new FileInfo(keys);
-            if (!fi.Exists)
-            {
-                Logger("Skipping Launch Keys - this build may be prior to Launch Keys.\r\n");
-                return 0;
-            }
+            Helpers.ConfigHelper.WriteLaunchKeysAsJson(keys);
 
 
             int exitCode = SpawnAndLog(Logger, filename, workingFolder, null, null);

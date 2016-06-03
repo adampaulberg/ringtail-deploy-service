@@ -38,5 +38,23 @@ namespace InstallerTests
                 Assert.Fail();
             }
         }
+
+        [TestMethod]
+        public void WriteLaunchKeyJson()
+        {
+            DataCamel.Helpers.ConfigHelper.WriteLaunchKeysAsJson(@"D:\test\testOutcome.json");
+        }
+
+        [TestMethod]
+        public void ConvertLaunchKeyConfigToLaunchKeyJson()
+        {
+            List<string> configs = new List<string>();
+            configs.Add("LAUNCHKEY|MyKey=\"nokey|someFeature\"");
+            configs.Add("LAUNCHKEY|MyKey2=\"nokey2|someFeature2\"");
+            var x = DataCamel.Helpers.ConfigHelper.ConvertToKeysfileJson(configs);
+            Console.WriteLine(x);
+
+            Assert.AreEqual(x, "[{\"Description\":\"someFeature\", \"FeatureKey\":\"MyKey\", \"MinorKey\":\"nokey\"},{\"Description\":\"someFeature2\", \"FeatureKey\":\"MyKey2\", \"MinorKey\":\"nokey2\"}]");
+        }
     }
 }
