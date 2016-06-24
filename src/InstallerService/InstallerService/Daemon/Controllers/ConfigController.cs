@@ -36,10 +36,10 @@ namespace InstallerService.Daemon.Controllers
 
             try
             {
-                if (value.Contains(" "))
-                {
-                    value = "\"\"\"" + value + "\"\"\"";
-                }
+                //if (value.Contains(" "))
+                //{
+                //    value = "\"\"\"" + value + "\"\"\"";
+                //}
 
                 string message = FileHelpers.ChangeConfigItemWithWildcards("volitleData.config", key, value);
                 results += "<p>............Action.........." + message + "</p>";
