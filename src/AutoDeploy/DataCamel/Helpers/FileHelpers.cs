@@ -72,8 +72,8 @@ namespace DataCamel.Helpers
             string body = "";
 
             // FROM:        
-            //      LAUNCHKEY|MyKey="nokey|someFeature"
-            //      LAUNCHKEY|MyKey2="nokey2|someFeature2"
+            //      LAUNCHKEY|MyKey="someFeature"
+            //      LAUNCHKEY|MyKey2="someFeature2"
             // TO:
             //      [{"Description": "someFeature", "FeatureKey":"MyKey", "MinorKey":"nokey"},{"Description": "someFeature2", "FeatureKey":"MyKey2", "MinorKey":"nokey2"}]
             //
@@ -82,16 +82,13 @@ namespace DataCamel.Helpers
             {
                 string configBase = config.Substring(10, config.Length - 10);
                 string key = configBase.Split('=')[0];
-                string descr = config.Split('|')[2];
-                descr = descr.Substring(0, descr.Length - 1);
+                string descr = configBase.Split('=')[1];
+                descr = descr.Substring(1, descr.Length - 2);
 
-                string minor = config.Split('"')[1];
-                minor = minor.Split('|')[0];
 
-                string item = "{\"Description\":\"{0}\", \"FeatureKey\":\"{1}\", \"MinorKey\":\"{2}\"}";
+                string item = "{\"Description\":\"{0}\", \"FeatureKey\":\"{1}\"}";
                 item = item.Replace("{0}", descr);
                 item = item.Replace("{1}", key);
-                item = item.Replace("{2}", minor);
 
                 body += item + ",";
             }

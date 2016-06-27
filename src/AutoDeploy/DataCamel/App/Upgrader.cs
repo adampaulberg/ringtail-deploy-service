@@ -147,6 +147,9 @@ namespace DataCamel.App
 
 
                 string keyfileDropLocation = options.InstallPath + @"\" + "SQL Component_v" + options.Version +  @"\Scripts\Portal\PostProcessing\" + dbName + "_generated_feature_keys.txt";
+
+                Logger(string.Format("Attempting to write out Launch Keys\r\n"));
+
                 var helper = new LaunchKeyRunnerHelper();
                 resultCode = helper.RunFile(Logger, keyfileDropLocation);
             }
