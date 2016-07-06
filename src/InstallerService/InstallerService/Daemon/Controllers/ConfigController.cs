@@ -36,14 +36,16 @@ namespace InstallerService.Daemon.Controllers
 
             try
             {
-                //if (value.Contains(" "))
-                //{
-                //    value = "\"\"\"" + value + "\"\"\"";
-                //}
-
-                string message = FileHelpers.ChangeConfigItemWithWildcards("volitleData.config", key, value);
-                results += "<p>............Action.........." + message + "</p>";
-                results += FileHelpers.ReadConfig("volitleData.config");
+                if (ProcessHelpers.IsMasterRunnerAlreadyRunning())
+                {
+                    results = @"<p>Deployment in progress, cannot change config at this time.</p>";
+                }
+                else
+                {
+                    string message = FileHelpers.ChangeConfigItemWithWildcards("volitleData.config", key, value);
+                    results += "<p>............Action.........." + message + "</p>";
+                    results += FileHelpers.ReadConfig("volitleData.config");
+                }
             }
             catch (Exception ex)
             {
@@ -60,16 +62,23 @@ namespace InstallerService.Daemon.Controllers
 
             try
             {
-                string message = FileHelpers.ChangeConfigItemWithWildcards(fileName, key, value);
-                results += "<p>............Action.........." + message + "</p>";
-
-                if (!fileName.StartsWith("*"))
+                if (ProcessHelpers.IsMasterRunnerAlreadyRunning())
                 {
-                    results += FileHelpers.ReadConfig(fileName);
+                    results = @"<p>Deployment in progress, cannot change config at this time.</p>";
                 }
                 else
                 {
-                    results += "Multiple files potentially changed.";
+                    string message = FileHelpers.ChangeConfigItemWithWildcards(fileName, key, value);
+                    results += "<p>............Action.........." + message + "</p>";
+
+                    if (!fileName.StartsWith("*"))
+                    {
+                        results += FileHelpers.ReadConfig(fileName);
+                    }
+                    else
+                    {
+                        results += "Multiple files potentially changed.";
+                    }
                 }
             }
             catch (Exception ex)

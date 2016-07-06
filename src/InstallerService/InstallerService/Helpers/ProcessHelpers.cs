@@ -32,5 +32,12 @@ namespace InstallerService.Helpers
 
             return process;
         }
+
+
+        public static bool IsMasterRunnerAlreadyRunning()
+        {
+            var filtered = Process.GetProcesses().ToList().Where(x => x.ProcessName.ToLower().StartsWith("masterrunner"));
+            return filtered.ToList().Count > 0;
+        }
     }
 }

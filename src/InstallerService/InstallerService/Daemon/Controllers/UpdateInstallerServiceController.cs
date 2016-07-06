@@ -17,7 +17,14 @@ namespace InstallerService.Daemon.Controllers
         {
             string results = string.Empty;
             List<string> log = new List<string>();
-            var workingDirectory = EnvironmentInfo.INSTALLER_SERVICE_WORKING_FOLDER;
+
+            if (ProcessHelpers.IsMasterRunnerAlreadyRunning())
+            {
+                results = @"<p>Deployment in progress, cannot update the service until this deployment completes.</p>";
+                return results;
+            }
+
+                var workingDirectory = EnvironmentInfo.INSTALLER_SERVICE_WORKING_FOLDER;
             var fileName = workingDirectory + "UpdateInstallerService.exe";
             var pullLocation = FileHelpers.ReadConfig("upgrade.config", EnvironmentInfo.INSTALLER_SERVICE_WORKING_FOLDER);
 

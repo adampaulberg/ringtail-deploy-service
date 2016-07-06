@@ -34,7 +34,7 @@ namespace InstallerService.Daemon.Controllers
                 }
 
                 FileInfo lockFile = new FileInfo(LOCKFILE);
-                if (lockFile.Exists || IsMasterRunnerAlreadyRunning())
+                if (lockFile.Exists)
                 {
                     var x = SimpleFileReader.Read(LOCKFILE);
                     results = "There is already a deployment in progress.....";
@@ -43,6 +43,11 @@ namespace InstallerService.Daemon.Controllers
                     {
                         results += "<p>" + str + "</p>";
                     }
+                    return results;
+                }
+                if (ProcessHelpers.IsMasterRunnerAlreadyRunning())
+                {
+                    results = "There is already a deployment in progress.....";
                     return results;
                 }
 
@@ -266,10 +271,5 @@ namespace InstallerService.Daemon.Controllers
             }
         }
 
-        private static bool IsMasterRunnerAlreadyRunning()
-        {
-            var filtered = Process.GetProcesses().ToList().Where(x => x.ProcessName.ToLower().StartsWith("masterrunner"));
-            return filtered.ToList().Count > 0;
-        }
     }
 }
