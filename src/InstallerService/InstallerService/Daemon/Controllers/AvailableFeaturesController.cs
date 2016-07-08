@@ -77,7 +77,7 @@ namespace InstallerService.Daemon.Controllers
 
                 if (exitCode != 0)
                 {
-                    FileHelpers.SimpleFileWriter.Write(@"C:\Upgrade\InstallerService\availableFeaturesLog-Error.txt", log);
+                    FileHelpers.SimpleFileWriter.Write(@"C:\Upgrade\InstallerService\availableFeaturesLog-Error-" + exitCode + ".txt", log);
                 }
 
                 log.Add("Cmd errors: " + error);
@@ -90,6 +90,14 @@ namespace InstallerService.Daemon.Controllers
                 if (exitCode == 0)
                 {
                     keys = output;
+                }
+                else if( exitCode == 6)
+                {
+                    keys = "[]";   // just means they're upgrading from an old case and don't have the table.
+                }
+                else
+                {
+                    keys = "[]"; // probably not good.
                 }
             }
             catch (Exception ex)
@@ -121,8 +129,6 @@ namespace InstallerService.Daemon.Controllers
 
             FileHelpers.SimpleFileWriter.Write(@"C:\Upgrade\InstallerService\availableFeatures-Diagnostic.txt", log);
             return hr;
-
-            throw new NotImplementedException();
         }
 
 
