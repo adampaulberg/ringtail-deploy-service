@@ -31,6 +31,14 @@ namespace InstallFetcher.App
 
                 Console.WriteLine("Looking in root folder: " + rootFolder.FullName);
 
+                files = files.ToList().FindAll(x => x.Extension != ".txt").ToArray();
+
+
+                foreach(var x in files)
+                {
+                    Console.WriteLine("         found file: " + x.Name + " | " + x.Extension);
+                }
+
                 if (folders.Length > 0 || files.Length > 0)
                 {
                     DirectoryInfo finalFolder = GetFirstFolderWithFiles(rootFolder, options.FolderSuffix);
@@ -225,11 +233,20 @@ namespace InstallFetcher.App
         {
             DirectoryInfo foundFolder = null;
 
+            bool goDeeper = false;
+
             if (rootFolder.HasFiles())
             {
                 foundFolder = rootFolder;
+
+                if(rootFolder.GetFiles().ToList().FindAll(x => x.Extension != ".txt").Count == 0)
+                {
+                    goDeeper = true;
+                }
+
             }
-            else
+            
+            if(goDeeper)
             {
                 var orderedFolders = rootFolder.GetDirectories().ToList().ToList().OrderBy(x => x.CreationTimeUtc).ToList();
                 orderedFolders.Reverse();
