@@ -317,6 +317,8 @@ namespace InstallerService.Helpers
             fhr.Messages = new List<string>();
             fhr.IsSuccessful = false;
 
+            
+
             try
             {
                 IReplacementRule rule = GetRule(contents, keyOrPattern);
@@ -357,7 +359,8 @@ namespace InstallerService.Helpers
                 }
                 else
                 {
-                    if (contents.FindAll(x => x.Contains(keyOrPattern)).Count == 0)
+                    string matchPattern = keyOrPattern + "=";
+                    if (contents.FindAll(x => x.Contains(matchPattern)).Count == 0)
                     {
                         return new Insert();
                     }

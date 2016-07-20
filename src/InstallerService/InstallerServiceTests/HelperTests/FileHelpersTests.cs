@@ -16,7 +16,9 @@ namespace InstallerServiceTests.HelperTests
         [TestMethod]
         public void TestWildcardReplacement()
         {
-            var data = SimpleFileReader.Read(@"D:\Upgrade\fourServer\volitleData.config");
+            var data = new List<string>();
+            data.Add("blahApp|webserver=webserver01");
+            data.Add("blahApp|blahKey=value");
             string pattern = "webserver01";
             string newValue = "allinone";
 
@@ -36,7 +38,8 @@ namespace InstallerServiceTests.HelperTests
         [TestMethod]
         public void TestKeyInsertion()
         {
-            var data = SimpleFileReader.Read(@"D:\Upgrade\fourServer\volitleData.config");
+            var data = new List<string>();
+            data.Add("someExistingApp|someOldKey=oldValue");
             string key = "someExistingApp|someNewKey";
             string newValue = "thisIsTheNewValue";
             string expectedNewLine = "someExistingApp|someNewKey=\"thisIsTheNewValue\"";
@@ -54,9 +57,28 @@ namespace InstallerServiceTests.HelperTests
         }
 
         [TestMethod]
+        public void Test_Nearly_Identical_KeyInsertion()
+        {
+            var data = new List<string>();
+            data.Add("LAUNCHKEY|PortalNotifications-v2=\"Test Value\"") ;
+            string key = "LAUNCHKEY|PortalNotifications";
+            string newValue = "New description";
+            string expectedNewLine = "LAUNCHKEY|PortalNotifications=\"New description\"";
+
+            var fileResult = FileHelperResult.UpsertWildcardKeys(data, key, newValue);
+
+            Assert.IsTrue(fileResult.IsSuccessful, "Result should be successful.");
+            Assert.AreEqual(data.Count + 1, fileResult.NewFile.Count, "Should find one more key than originally.");
+
+            Assert.AreEqual(2, fileResult.NewFile.FindAll(x => x.Contains(key)).Count, "Should find 2 hits for the new key");
+            Assert.AreEqual(expectedNewLine, fileResult.NewFile[fileResult.NewFile.Count - 1], "Should find the exact new value at the end of the file.");
+        }
+
+        [TestMethod]
         public void TestKeyChangeExistingKey()
         {
-            var data = SimpleFileReader.Read(@"D:\Upgrade\fourServer\volitleData.config");
+            var data = new List<string>();
+            data.Add("RoleResolver|ROLE=\"oldValue\"");
             string key = "RoleResolver|ROLE";
             string newValue = "dummyValue";
             string expectedChangedValue = "RoleResolver|ROLE=\"dummyValue\"";
