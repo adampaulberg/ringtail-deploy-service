@@ -16,6 +16,7 @@ namespace InstallerService.Daemon.Controllers
         [HttpGet]
         public HttpResponseMessage GetInstalledKeys(string connectionString, string dropLocation)
         {
+            Debugger.Launch();
             string keys = "";
             var log = new List<string>();
 
@@ -145,27 +146,31 @@ namespace InstallerService.Daemon.Controllers
             var fileName = string.Empty;
             string username = null, password = null;
 
-
-            if (!dropLocation.StartsWith("\\"))
-            {
-                // open volitle data.
-                var volitleData = FileHelpers.ReadConfigAsData("volitleData.config");
-                var folderRoot = volitleData.Find(x => x.Contains("BUILD_FOLDER_ROOT"));
-                folderRoot = folderRoot.Substring(folderRoot.IndexOf(@"\"));
-                folderRoot = folderRoot.Replace("\"", "");
-                log.Add("....checking volitleData for build folder root ");
-                dropLocation = folderRoot + @"\" + dropLocation;
-                if (!dropLocation.EndsWith(@"\"))
-                {
-                    dropLocation = dropLocation + @"\";
-                }
-            }
-
-            log.Add(" reading from: " + dropLocation);
-
-            // needs to call the exe at the drop location and get the possible keys.
             try
             {
+                if (!dropLocation.StartsWith("\\"))
+                {
+                    // open volitle data.
+                    var volitleData = FileHelpers.ReadConfigAsData("volitleData.config");
+                    var folderRoot = volitleData.Find(x => x.Contains("BUILD_FOLDER_ROOT"));
+                    if (string.IsNullOrEmpty(folderRoot))
+                    {
+                        throw new Exception("BUILD_FOLDER_ROOT not set in config");
+                    }
+                    folderRoot = folderRoot.Substring(folderRoot.IndexOf(@"\"));
+                    folderRoot = folderRoot.Replace("\"", "");
+                    log.Add("....checking volitleData for build folder root ");
+                    dropLocation = folderRoot + @"\" + dropLocation;
+                    if (!dropLocation.EndsWith(@"\"))
+                    {
+                        dropLocation = dropLocation + @"\";
+                    }
+                }
+
+                log.Add(" reading from: " + dropLocation);
+
+            // needs to call the exe at the drop location and get the possible keys.
+            
                 if (config.ContainsKey(EnvironmentInfo.KeyMasterRunnerUser) && config.ContainsKey(EnvironmentInfo.KeyMasterRunnerPass))
                 {
                     username = config[EnvironmentInfo.KeyMasterRunnerUser];
