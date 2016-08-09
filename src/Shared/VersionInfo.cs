@@ -9,5 +9,5 @@ using System.Runtime.InteropServices;
 //      Bug fix
 //      0
 //
-[assembly: AssemblyVersion("2.7.2.0")]
-[assembly: AssemblyFileVersion("2.7.2.0")]
+[assembly: AssemblyVersion("2.8.0.0")]
+[assembly: AssemblyFileVersion("2.8.0.0")]
