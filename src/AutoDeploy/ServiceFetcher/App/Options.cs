@@ -18,7 +18,7 @@ namespace ServiceFetcher.App
         [Option('b', "branch", HelpText = "Branch")]
         public string BranchName { get; set; }
 
-        [Option('s', "suffix", HelpText = "Folder Suffix", DefaultValue="Microservices")]
+        [Option('s', "suffix", HelpText = "Folder Suffix")]
         public string FolderSuffix { get; set; }
 
         [Option('a', "appName", HelpText = "Application Name")]
