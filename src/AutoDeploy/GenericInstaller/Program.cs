@@ -148,14 +148,16 @@ namespace GenericInstaller
 
                     string workingcommand = realCommand;
 
+                    var keyValueDelimiter = command.Contains("powershell.exe") ? " " : "=";
+
                     foreach (var x in commonKeys.Keys)
                     {
-                        workingcommand = ReplaceParameter(workingcommand, x, commonKeys[x]);
+                        workingcommand = ReplaceParameter(workingcommand, x, commonKeys[x], keyValueDelimiter);
                     }
 
                     foreach (var x in applicationKeys.Keys)
                     {
-                        workingcommand = ReplaceParameter(workingcommand, x, applicationKeys[x]);
+                        workingcommand = ReplaceParameter(workingcommand, x, applicationKeys[x], keyValueDelimiter);
                     }
 
                     realCommand = workingcommand;
@@ -177,7 +179,7 @@ namespace GenericInstaller
             return filledInParameters;
         }
 
-        private static string ReplaceParameter(string workingcommand, string replacementKey, string replacementValue)
+        private static string ReplaceParameter(string workingcommand, string replacementKey, string replacementValue, string keyValueDelimiter)
         {
             if (workingcommand.Contains(replacementKey))
             {
@@ -212,7 +214,7 @@ namespace GenericInstaller
                     left = left.Substring(0, left.Length - 1);
                 }
 
-                string newString = left + replacementKey + "=" + replacementValue + finalizer + right;
+                string newString = left + replacementKey + keyValueDelimiter + replacementValue + finalizer + right;
 
                 Console.WriteLine("     replacing: " + replacementKey + " with " + replacementValue);
                 Console.WriteLine("     new is: " + newString);
@@ -220,79 +222,6 @@ namespace GenericInstaller
                 workingcommand = newString;
             }
             return workingcommand;
-        }
-
-        private static string FillInParameters(Dictionary<string, string> commonKeys, Dictionary<string, string> applicationKeys, string realCommand, List<string> parameters)
-        {
-            for (int i = 2; i < parameters.Count; i++)
-            {
-                var parameter = parameters[i];
-
-                if (parameter.Contains("/S /v/qn"))
-                {
-                    realCommand += parameter;
-                    continue;
-                }
-                if (!parameter.Contains("/v"))
-                {
-                    var realKey = parameter;
-                    foreach (var key in commonKeys.Keys)
-                    {
-                        if (parameter.StartsWith(key))
-                        {
-                            parameter = key + "=" + commonKeys[key];
-                        }
-                    }
-                    foreach (var key in applicationKeys.Keys)
-                    {
-                        if (parameter.StartsWith(key))
-                        {
-                            parameter = key + "=" + applicationKeys[key];
-                        }
-                    }
-
-
-                    realCommand += " /v\"" + parameter + "\"";
-                }
-            }
-            return realCommand;
-        }
-
-
-        private static string FillInParameters_BAK(Dictionary<string, string> commonKeys, Dictionary<string, string> applicationKeys, string realCommand, List<string> parameters)
-        {
-            for (int i = 2; i < parameters.Count; i++)
-            {
-                var parameter = parameters[i];
-
-                if (parameter.Contains("/S /v/qn"))
-                {
-                    realCommand += parameter;
-                    continue;
-                }
-                if (!parameter.Contains("/v"))
-                {
-                    var realKey = parameter;
-                    foreach (var key in commonKeys.Keys)
-                    {
-                        if (parameter.StartsWith(key))
-                        {
-                            parameter = key + "=" + commonKeys[key];
-                        }
-                    }
-                    foreach (var key in applicationKeys.Keys)
-                    {
-                        if (parameter.StartsWith(key))
-                        {
-                            parameter = key + "=" + applicationKeys[key];
-                        }
-                    }
-
-
-                    realCommand += " /v\"" + parameter + "\"";
-                }
-            }
-            return realCommand;
         }
 
         private static Dictionary<string, Dictionary<string, string>> BuildConfigDictionary(List<string> config)
