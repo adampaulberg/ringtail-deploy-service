@@ -43,6 +43,21 @@ namespace InstallerTests
             Assert.IsFalse(output[0].Contains("SERVICEUSERNAME"));
             Assert.IsTrue(output[0].Contains("serviceAccount"));
         }
+
+        [TestMethod]
+        public void ParameterReplacement_PowershellFillIn_Test()
+        {
+            Init();
+            var output = GenericInstaller.GenericInstallerHelper.DoIt(installerTemplate, data, "Ringtail-Svc-ContentSearch");
+
+            foreach (var x in output)
+            {
+                Console.WriteLine(x);
+            }
+
+            //Assert.IsFalse(output[0].Contains("CONTENT_SEARCH_USERNAME"));
+            //Assert.IsTrue(output[0].Contains("myUser1"));
+        }
     }
 
     public class SimpleFileReader
