@@ -35,13 +35,30 @@ namespace MasterRunner.Util
 
     public class SimpleFileWriter
     {
-        public static void Write(string fileName, List<string> s)
+        public static void Write(string fileName, List<string> s, int failCount = 0)
         {
-            using (StreamWriter wr = new StreamWriter(fileName))
+            try
             {
-                foreach (string str in s)
+                using (StreamWriter wr = new StreamWriter(fileName))
                 {
-                    wr.WriteLine(str);
+                    foreach (string str in s)
+                    {
+                        wr.WriteLine(str);
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                if (failCount < 50)
+                {
+                    Console.WriteLine("Couldn't write " + fileName + " .... retrying.");
+                    System.Threading.Thread.Sleep(1000);
+                    Write(fileName, s, failCount + 1);
+                }
+                else
+                {
+                    Console.WriteLine(ex.Message);
+                    throw;
                 }
             }
         }
