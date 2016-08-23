@@ -16,6 +16,11 @@ namespace RoleResolverUtility
         [HelpOption]
         public string GetUsage()
         {
+            Console.WriteLine("Role Resolver - ");
+            Console.WriteLine("  Reads in the masterCommands.config file and filters it by the roles.config file.");
+            Console.WriteLine("  Writes out master.config");
+            Console.WriteLine("  master.config is then used late by the Composer to write out master.bat");
+
             return HelpText.AutoBuild(this,
               (HelpText current) => HelpText.DefaultParsingErrorsHandler(this, current));
         }

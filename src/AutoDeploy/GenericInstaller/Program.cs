@@ -14,6 +14,12 @@ namespace GenericInstaller
             var exitCode = 0;
             Console.WriteLine("GenericInstaller starting on " + args[0]);
 
+            if(args.Length == 0)
+            {
+                GetUsage();
+                return -1;
+            }
+
             try
             {
 
@@ -39,7 +45,19 @@ namespace GenericInstaller
             return exitCode;
         }
 
+
+        public static void GetUsage()
+        {
+            Console.WriteLine("GenericInstaller - ");
+            Console.WriteLine("  Usage:    GenericInstaller.exe [appName]");
+            Console.WriteLine("  This will create a batch file of the form install-[APPNAME].bat");
+            Console.WriteLine("  The batch file it creates will be able to run an InstallShield installer.");
+            Console.WriteLine("     It looks for an app with the same name in InstallerTemplate.config.");
+            Console.WriteLine("     It replaces all the params in InstallerTemplate.config with configs from volitleData.config");
+        }
+
     }
+
 
     internal class DynamicExclusionDetector
     {
