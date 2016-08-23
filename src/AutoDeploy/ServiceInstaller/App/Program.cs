@@ -15,20 +15,29 @@ namespace ServiceInstaller
             var exitCode = 0;
             Console.WriteLine("ServiceInstaller starting for " + args[0]);
 
+
+            if(args.Length == 0)
+            {
+                GetUsage();
+                return 2;
+            }
+
+            string appName = args[0];
+
             try
             {
-                ServiceInstallerHelper.RunIt(args[0]);
+                ServiceInstallerHelper.RunIt(appName);
                 List<string> s = new List<string>();
                 s.Add(args[0]);
                 s.Add("Ok");
-                SimpleFileWriter.Write("ServiceInstallerLog.txt", s);
+                SimpleFileWriter.Write("ServiceInstallerLog-" + appName + ".txt", s);
             }
             catch (Exception ex)
             {
                 List<string> s = new List<string>();
                 s.Add(ex.Message);
                 s.Add(ex.StackTrace);
-                SimpleFileWriter.Write("ServiceInstallerLog.txt", s);
+                SimpleFileWriter.Write("ServiceInstallerLog-" + appName + ".txt", s);
 
                 Console.WriteLine("ServiceInstaller error");
                 s.ForEach(x => Console.WriteLine(s));
@@ -37,6 +46,14 @@ namespace ServiceInstaller
             }
 
             return exitCode;
+        }
+
+        public static void GetUsage()
+        {
+            Console.WriteLine("ServiceInstaller - ");
+            Console.WriteLine("  Usage:    ServiceInstaller.exe [appName]");
+            Console.WriteLine("  This will create a batch file that calls the DeployToIIS.exe to unpack a zip file and install an IIS website for it.");
+            Console.WriteLine("     It uses a convention based approach - so all you need to pass in is the service name.");
         }
 
         internal class DynamicExclusionDetector
