@@ -1,5 +1,4 @@
-﻿
-using CommandLine;
+﻿using CommandLine;
 using CommandLine.Text;
 using System;
 using System.Collections.Generic;
@@ -9,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace TestIISDeploy
+namespace DeployToIIS
 {
     public class Options
     {
@@ -29,6 +28,8 @@ namespace TestIISDeploy
         [HelpOption]
         public string GetUsage()
         {
+            Console.WriteLine("  This tool takes an installed path where the file is already unzipped, and adds an app pool and IIS website for that folder.");
+
             return HelpText.AutoBuild(this,
               (HelpText current) => HelpText.DefaultParsingErrorsHandler(this, current));
         }
