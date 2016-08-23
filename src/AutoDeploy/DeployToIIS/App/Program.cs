@@ -5,23 +5,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TestIISDeploy
+namespace DeployToIIS
 {
     class Program
     {
         static int Main(string[] args)
         {
+            Console.WriteLine("DeployToIIS starting ...");
+
             int exitCode = 0;
             var options = new Options();
 
             if (CommandLine.Parser.Default.ParseArguments(args, options))
             {
-                ServerManager iisManager = new ServerManager();
-
                 try
                 {
-                    
-
+                    ServerManager iisManager = new ServerManager();
                     bool exists = false;
                     foreach (var appPool in iisManager.ApplicationPools)
                     {
@@ -61,7 +60,7 @@ namespace TestIISDeploy
                 try
                 {
 
-
+                    ServerManager iisManager = new ServerManager();
                     Site site = null;
                     foreach (var x in iisManager.Sites)
                     {

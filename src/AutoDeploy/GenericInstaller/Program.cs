@@ -74,9 +74,10 @@ namespace GenericInstaller
                 try
                 {
                     var fileName = f.Name;
-                    if (fileName.StartsWith("omit-"))
+                    var STR_OMIT = "omit-";
+                    if (fileName.StartsWith(STR_OMIT))
                     {
-                        var omission = fileName.Split('-')[1];
+                        var omission = fileName.Substring(STR_OMIT.Length, fileName.Length - STR_OMIT.Length);
                         omission = omission.Split('.')[0];
 
                         list.Add(omission);

@@ -13,14 +13,14 @@ namespace ServiceInstaller
         static int Main(string[] args)
         {
             var exitCode = 0;
-            Console.WriteLine("ServiceInstaller starting for " + args[0]);
-
-
+            
             if(args.Length == 0)
             {
                 GetUsage();
                 return 2;
             }
+
+            Console.WriteLine("ServiceInstaller starting for " + args[0]);
 
             string appName = args[0];
 
@@ -52,8 +52,9 @@ namespace ServiceInstaller
         {
             Console.WriteLine("ServiceInstaller - ");
             Console.WriteLine("  Usage:    ServiceInstaller.exe [appName]");
-            Console.WriteLine("  This will create a batch file that calls the DeployToIIS.exe to unpack a zip file and install an IIS website for it.");
-            Console.WriteLine("     It uses a convention based approach - so all you need to pass in is the service name.");
+            Console.WriteLine("");
+            Console.WriteLine("... this will create a batch file that calls the DeployToIIS.exe to unpack a zip file and install an IIS website.");
+            Console.WriteLine("... It uses a convention based approach - only param is the service name.");
         }
 
         internal class DynamicExclusionDetector
@@ -71,9 +72,10 @@ namespace ServiceInstaller
                     try
                     {
                         var fileName = f.Name;
-                        if (fileName.StartsWith("omit-"))
+                        var STR_OMIT = "omit-";
+                        if (fileName.StartsWith(STR_OMIT))
                         {
-                            var omission = fileName.Split('-')[1];
+                            var omission = fileName.Substring(STR_OMIT.Length, fileName.Length - STR_OMIT.Length);
                             omission = omission.Split('.')[0];
 
                             list.Add(omission);
