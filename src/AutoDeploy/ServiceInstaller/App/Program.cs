@@ -26,7 +26,7 @@ namespace ServiceInstaller
 
             try
             {
-                ServiceInstallerHelper.RunIt(appName);
+                exitCode = ServiceInstallerHelper.RunIt(appName);
                 List<string> s = new List<string>();
                 s.Add(args[0]);
                 s.Add("Ok");
@@ -98,7 +98,7 @@ namespace ServiceInstaller
 
         public class ServiceInstallerHelper
         {
-            public static void RunIt(string appName)
+            public static int RunIt(string appName)
             {
                 List<string> exclusions = DynamicExclusionDetector.DetectExclusions(appName);
 
@@ -107,45 +107,91 @@ namespace ServiceInstaller
                     Console.WriteLine("ServiceInstaller found exclusion for: " + appName);
                     var noOpFile = new List<string>();
                     noOpFile.Add("@echo SKIPPING");
-                    SimpleFileWriter.Write("install-" + appName + ".bat", noOpFile);
-                    return;
+                    SimpleFileWriter.Write("deploy-" + appName + ".bat", noOpFile);
+                    return 0;
                 }
 
+
+                Console.WriteLine("ServiceInstaller Reading.... " + appName);
+
                 string volitileData = "volitleData.config";
-                string applicationName = appName;
-
-                Console.WriteLine("ServiceInstaller Reading.... " + applicationName);
-
                 var volitileDataList = SimpleFileReader.Read(volitileData);
                 var filledInParameters = new List<string>();
 
-                NormalizeZipName(applicationName);
-                var unzipCmd = GenerateUnzipCommand(applicationName);
+                NormalizeZipName(appName);
+                var unzipResult = ExtractZip(appName);
 
-                var iisInstallCmd = GenerateIISInstallCommand(volitileDataList, applicationName);
+                if (unzipResult == false)
+                {
+                    return 2;
+                }
+
+                var cleanResult = CleanupTarget(appName, GetInstallPath(appName));
+
+                if (cleanResult != 0)
+                {
+                    return cleanResult;
+                }
+
+                var moveResult = MoveZipToProgramFiles(appName);
+
+                if (moveResult != 0)
+                {
+                    return moveResult;
+                }
+
+                var iisInstallCmd = GenerateIISInstallCommand(volitileDataList, appName);
                 filledInParameters.Add(iisInstallCmd);
 
 
-                Console.WriteLine("ServiceInstaller Writing to file.... " + "deploy-" + applicationName + ".bat");
-                SimpleFileWriter.Write("deploy-" + applicationName + ".bat", filledInParameters);
+                Console.WriteLine("ServiceInstaller Writing to file.... " + "deploy-" + appName + ".bat");
+                SimpleFileWriter.Write("deploy-" + appName + ".bat", filledInParameters);
+
+                return 0;
             }
 
-            public static bool GenerateUnzipCommand(string applicationName)
+            public static bool ExtractZip(string applicationName)
             {
                 try
                 {
                     Console.WriteLine("Unzipping");
                     string zipPath = @"C:\Upgrade\AutoDeploy\" + applicationName + @"\" + applicationName + ".zip";
-                    string extractPath = @"C:\Upgrade\AutoDeploy\" + applicationName + @"\" + applicationName;
+                    string extractPath = GetExtractPath(applicationName);
+
+                    DirectoryInfo unzipFolder = new DirectoryInfo(extractPath);
+
+                    if(unzipFolder.Exists)
+                    {
+                        CleanupTarget(applicationName, extractPath);
+                    }
 
                     System.IO.Compression.ZipFile.ExtractToDirectory(zipPath, extractPath);
-                    return true;
+
+
+                    unzipFolder = new DirectoryInfo(extractPath);
+
+                    if (!unzipFolder.Exists)
+                    {
+                        Console.WriteLine("Failed to unzip - " + zipPath);
+                    }
+
+                    return unzipFolder.Exists;
                 }
                 catch(Exception ex)
                 {
                     Console.WriteLine("Error: " + ex.Message);
                     return false;
                 }
+            }
+
+            public static string GetExtractPath(string applicationName)
+            {
+                return @"C:\Upgrade\AutoDeploy\" + applicationName + @"\" + applicationName;
+            }
+
+            public static string GetInstallPath(string applicationName)
+            {
+                return @"C:\Program Files\FTI Technology\" + applicationName;
             }
 
             public static void NormalizeZipName(string applicationName)
@@ -179,31 +225,85 @@ namespace ServiceInstaller
                 }
             }
 
+            public static int CleanupTarget(string applicationName, string path)
+            {
+                Console.WriteLine("...starting CleanupInstallTarget");
+                try
+                {
+                    DirectoryInfo di = new DirectoryInfo(path);
+
+                    if (di.Exists)
+                    {
+                        di.Delete(true);
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+
+                    di = new DirectoryInfo(path);
+
+                    if(di.Exists)
+                    {
+                        Console.WriteLine("...warning - failed to fully clean up existing application");
+                        return 0;
+                    }
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine("...ERROR trying to cleanup existing application - " + ex.Message);
+                    return 1;
+                }
+
+                return 0;
+
+            }
+
+            public static int MoveZipToProgramFiles(string applicationName)
+            {
+                Console.WriteLine("...starting MoveZipToProgramFiles");
+                string installPath = GetInstallPath(applicationName);
+                string extractPath = GetExtractPath(applicationName);
+                try
+                {
+                    DirectoryInfo di = new DirectoryInfo(extractPath);
+                    if (!di.Exists)
+                    {
+                        di.Create();
+                    }
+                    System.IO.Directory.Move(extractPath, installPath);
+                }
+                catch
+                {
+                    Console.WriteLine("...failed to copy zip to " + installPath);
+                    return 1;
+                }
+
+                return 0;
+            }
+
             public static string GenerateIISInstallCommand(List<string> volitileData, string applicationName)
             {
                 Console.WriteLine("...starting to generate the IIS installation command");
 
                 var appConfigs = volitileData.FindAll(x => x.StartsWith(applicationName));
 
-                foreach(var x in appConfigs)
-                {
-                    Console.WriteLine("... kv: " + x);
-                }
 
-                //Ringtail-Svc-ContentSearch|Username="LM\#rpfdev_account"
-                //Ringtail-Svc-ContentSearch|Password="RPFd3v!"
+                //Ringtail-Svc-ContentSearch|Username="DOMAIN\user"
+                //Ringtail-Svc-ContentSearch|Password="PASSWORD"
                 //Ringtail-Svc-ContentSearch|Version="1"
                 var userKeyValue = appConfigs.Find(x => x.Contains(applicationName + "|Username="));
                 var pwdKeyValue = appConfigs.Find(x => x.Contains(applicationName + "|Password="));
-                var installPath = @"C:\Program Files\FTI Technology\" + applicationName;
+                var installPath = GetInstallPath(applicationName);
 
                 var user = "";
                 var pwd = "";
 
+
                 try
                 {
-                    Console.WriteLine("...userkeyvalue: " + userKeyValue);
-                    Console.WriteLine("...pwdKeyValue: " + pwdKeyValue);
+                    //Console.WriteLine("...userkeyvalue: " + userKeyValue);
+                    //Console.WriteLine("...pwdKeyValue: " + pwdKeyValue);
                     user = userKeyValue.Split('=')[1];
                     user = user.Substring(1, user.Length - 2);
 
@@ -216,9 +316,9 @@ namespace ServiceInstaller
                     throw ex;
                 }
 
-                //TestIISDeploy.exe -u LM\#rpfdev_account -p RPFd3v! -a RingtailSearchSvc -i "C:\Program Files\FTI Technology\Ringtail Search Service"
+                //DeployToIIS.exe -u DOMAIN\user -p PASSWORD! -a RingtailSearchSvc -i "C:\Program Files\FTI Technology\Ringtail Search Service"
 
-                string iisInstall = String.Format("DeployToIIS.exe -u {0} -p {1} -a {2} -i {3}", user, pwd, applicationName, installPath);
+                string iisInstall = String.Format("DeployToIIS.exe -u {0} -p {1} -a {2} -i \"{3}\"", user, pwd, applicationName, installPath);
                 return iisInstall;
             }
         }
