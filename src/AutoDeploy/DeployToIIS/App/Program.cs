@@ -1,6 +1,7 @@
 ﻿using Microsoft.Web.Administration;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,17 @@ namespace DeployToIIS
 
             if (CommandLine.Parser.Default.ParseArguments(args, options))
             {
+                options.InstallPath = options.InstallPath.Replace("\"", "");
+
+
+                DirectoryInfo di = new DirectoryInfo(options.InstallPath);
+
+                if(!di.Exists)
+                {
+                    Console.WriteLine("Error: the path provided does not exist - " + options.InstallPath);
+                    return 1;
+                }
+
                 try
                 {
                     ServerManager iisManager = new ServerManager();

@@ -59,6 +59,9 @@ namespace ServiceFetcher.App
 
                 SimpleFileWriter.Write(outFile, fetchFileContents);
 
+                // *hack * this file gets written for real later on when ServiceInstaller.exe is called.
+                 SimpleFileWriter.Write("deploy-" + options.ApplicationName + ".bat", new List<string>());  
+
                 if (!new FileInfo(outFile).Exists)
                 {
                     Console.WriteLine("Failed to write " + outFile);
