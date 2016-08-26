@@ -60,22 +60,57 @@ namespace InstallerTests
             Assert.IsFalse(str.Contains("junkValue"));
         }
 
+
+        class FakeFileSystem : IFileSystem
+        {
+
+            private List<string> whitelist = new List<string>();
+            public void AddToWhiteList(string file)
+            {
+                whitelist.Add(file);
+            }
+            public bool DirectoryExists(string path)
+            {
+                bool exists = whitelist.Any(x => x == path);
+
+                return exists;
+            }
+        }
+
+
+        class MockRoleProvider : IRoleProvider
+        {
+
+            public List<string> GetRoles()
+            {
+                var roles = new List<string>();
+                roles.Add("SKYTAP-ALLINONE|InstallRPF");
+                roles.Add("SKYTAP-ALLINONE|InstallRingtail8");
+                return roles;
+            }
+        }
+
         [TestMethod]
         public void ConfigurationValidator_ValidateConfiguration_Role_Test()
         {
             var existingConfigs = new List<string>();
             existingConfigs.Add("RingtailConfigurator|HOST=\"correctHost\"");
             existingConfigs.Add("Common|HOST=\"badHost\"");
+            existingConfigs.Add("Common|BUILD_FOLDER_ROOT=\"" + @"\\SomeServer" + "\"");
+            existingConfigs.Add("Common|BRANCH_NAME=\"MAH_BRANCH\"");
+
+            FakeFileSystem fakeFileSystem = new FakeFileSystem();
+            fakeFileSystem.AddToWhiteList(@"\\SomeServer\MAH_BRANCH");
 
             var problems = new List<string>();
-            var isValid = ConfigurationValidator.ValidateConfiguration(existingConfigs, 0, out problems);
+            var isValid = ConfigurationValidator.ValidateConfiguration(existingConfigs, 0, out problems, new MockRoleProvider(), fakeFileSystem);
 
             problems.ForEach(x => Console.Write(x));
             Assert.IsFalse(isValid);
             Assert.IsTrue(problems.Exists(x => x.Contains("RoleResolver|Role")));
 
             existingConfigs.Add("RoleResolver|ROLE=\"SKYTAP-ALLINONE\"");
-            isValid = ConfigurationValidator.ValidateConfiguration(existingConfigs, 0, out problems);
+            isValid = ConfigurationValidator.ValidateConfiguration(existingConfigs, 0, out problems, new MockRoleProvider(), fakeFileSystem);
 
             problems.ForEach(x => Console.Write(x));
             Assert.IsTrue(isValid);
@@ -88,10 +123,16 @@ namespace InstallerTests
             var existingConfigs = new List<string>();
             existingConfigs.Add("RoleResolver|ROLE=\"SKYTAP-ALLINONE\"");
             existingConfigs.Add("Common|URL=\"http://localhost/Ringtail\"");
+            existingConfigs.Add("Common|BUILD_FOLDER_ROOT=\"" + @"\\SomeServer" + "\"");
+            existingConfigs.Add("Common|BRANCH_NAME=\"MAH_BRANCH\"");
+
+
+            FakeFileSystem fakeFileSystem = new FakeFileSystem();
+            fakeFileSystem.AddToWhiteList(@"\\SomeServer\MAH_BRANCH");
 
 
             var problems = new List<string>();
-            var isValid = ConfigurationValidator.ValidateConfiguration(existingConfigs, 0, out problems);
+            var isValid = ConfigurationValidator.ValidateConfiguration(existingConfigs, 0, out problems, new MockRoleProvider(), fakeFileSystem);
 
             problems.ForEach(x => Console.Write(x));
 
@@ -99,32 +140,9 @@ namespace InstallerTests
             Assert.IsTrue(problems.Count == 0);
 
             existingConfigs.Add("Common|URL2=\"http://someUrlThatDoesNotExist_REALLY_REALLY_NOT_VALID/Ringtail\"");
-            isValid = ConfigurationValidator.ValidateConfiguration(existingConfigs, 0, out problems);
+            isValid = ConfigurationValidator.ValidateConfiguration(existingConfigs, 0, out problems, new MockRoleProvider(), fakeFileSystem);
             problems.ForEach(x => Console.Write(x));
-            Assert.IsFalse(isValid);
-            Assert.IsTrue(problems.Count == 1);
-        }
-
-        [TestMethod]
-        public void ConfigurationValidator_ValidConfiguration__ConnectableNetwork_Test()
-        {
-            var existingConfigs = new List<string>();
-            existingConfigs.Add("RoleResolver|ROLE=\"SKYTAP-ALLINONE\"");
-            existingConfigs.Add("Common|Network=\"" + @"\\pgp187-jbrown01" + "\"");
-
-
-            var problems = new List<string>();
-            var isValid = ConfigurationValidator.ValidateConfiguration(existingConfigs, 0, out problems);
-
-            problems.ForEach(x => Console.Write(x));
-
             Assert.IsTrue(isValid);
-            Assert.IsTrue(problems.Count == 0);
-
-            existingConfigs.Add("Common|Network2=\"" + @"\\thisisaUncPathThatDoesNotExist_REALLY" + "\"");
-            isValid = ConfigurationValidator.ValidateConfiguration(existingConfigs, 0, out problems);
-            problems.ForEach(x => Console.Write(x));
-            Assert.IsFalse(isValid);
             Assert.IsTrue(problems.Count == 1);
         }
 
