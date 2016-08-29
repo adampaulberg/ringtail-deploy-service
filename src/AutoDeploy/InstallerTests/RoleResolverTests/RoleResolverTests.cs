@@ -24,86 +24,51 @@ namespace InstallerTests
             }
         }
 
-        //[TestMethod]
-        //public void ReadRoleFile()
-        //{
-        //    Options opts = new Options();
-        //    opts.Role = "WEBSERVER";
-
-        //    List<string> mockRoleFile = new List<string>();
-        //    mockRoleFile.Add("WEBSERVER|RingtailLegalApplicationServer");
-        //    mockRoleFile.Add("WEBSERVER|Ringtail8");
-        //    mockRoleFile.Add("WEBSERVER|Deployer");
-
-        //    List<string> masterCommands = new List<string>();
-        //    masterCommands.Add("@echo Starting %time%");
-        //    masterCommands.Add("clean.bat");
-        //    masterCommands.Add("fetch-RingtailLegalApplicationServer.bat");
-        //    masterCommands.Add("fetch-RingtailDatabaseUtility.bat");
-        //    masterCommands.Add("--fetch-RingtailSQL.bat");
-        //    masterCommands.Add("fetch-RingtailProcessingFramework.bat");
-        //    masterCommands.Add("InstallNameTruncator.exe /r");
-        //    masterCommands.Add("iisreset.exe");
-        //    masterCommands.Add("--install-RingtailDatabaseUtility.bat");
-        //    masterCommands.Add("--install-RingtailLegalApplicationServer.bat");
-        //    masterCommands.Add("--install-RingtailProcessingFramework.bat");
-        //    masterCommands.Add("--install-RingtailLegalAgentServer.bat");
-        //    masterCommands.Add("--iisreset.exe");
-        //    masterCommands.Add("--Deployer.exe");
-        //    masterCommands.Add("--DataCamel.exe upgrade -u sa_Jake -p rs-101 -d localPortal,bullerEmail,bullerRPF");
-        //    masterCommands.Add("@echo Complete %time%");
-
-        //    Logger l = new Logger(new ConsoleOut());
-
-        //    RoleResolver rr = new RoleResolver(opts);
-        //    rr.Logger = l;
-        //    var configs = ConfigDictionary.BuildConfigDictionary(mockRoleFile, l);
-        //    if (configs == null)
-        //    {
-        //        l.Write(String.Empty);
-        //    }
-
-        //    Assert.IsNotNull(configs);
-
-        //    int resultCode = rr.Go(configs, masterCommands);
-
-        //    l.Write(String.Empty);
-        //    Assert.AreEqual(0, resultCode);
-
-        //}
-
-        [TestMethod]
+         [TestMethod]
         public void CommandBlockReader_Test()
         {
-            var masterCommands = SimpleFileReader.Read(@"D:\TestFile.config");
+            var testFileConfig = new List<string>();
+            testFileConfig.Add("|ALWAYS");
+            testFileConfig.Add("clean.bat");
+            testFileConfig.Add("|AWESOME");
+            testFileConfig.Add("doSomethingAwesome.bat");
+            testFileConfig.Add("doSomethingEvenAwesomer.bat");
+            testFileConfig.Add("|COOL");
+            testFileConfig.Add("doSomethinCool.bat");
+            testFileConfig.Add("doSomethingEvenCooler.bat");
+            testFileConfig.Add("|ALWAYS");
+            testFileConfig.Add("iisreset.exe");
 
-            var result = CommandBlock.BuildCommandBlockList(masterCommands);
+            var result = CommandBlock.BuildCommandBlockList(testFileConfig);
             Assert.IsTrue(result.Count > 0);
         }
 
-        [TestMethod]
-        public void ValuesForRole_BuildValuesForRole_LowLevel_Test()
-        {
-            var roleFile = SimpleFileReader.Read(@"D:\roles.config");
-            var values = ValuesForRole.BuildValuesForRole("DEV-FULL", roleFile);
-            Assert.AreEqual(6, values.Count);
-        }
-
-
-        [TestMethod]
-        public void ValuesForRole_BuildValuesForRole_Compositional_Test()
-        {
-            var roleFile = SimpleFileReader.Read(@"D:\roles.config");
-            var values = ValuesForRole.BuildValuesForRole("SUPER", roleFile);
-            Assert.AreEqual(19, values.Count);
-        }
 
         [TestMethod]
         public void FilterCommandBlockByRole_LowLevelEverythingRole_Test()
         {
-            var ROLE = "ALLINONE";
-            var commands = CommandBlock.BuildCommandBlockList(SimpleFileReader.Read(@"D:\TestFile.config"));
-            var values = ValuesForRole.BuildValuesForRole(ROLE, SimpleFileReader.Read(@"D:\roles.config"));
+            var ROLE = "EVERYTHING";
+
+            var testFileConfig = new List<string>();
+            testFileConfig.Add("|ALWAYS");
+            testFileConfig.Add("clean.bat");
+            testFileConfig.Add("|AWESOME");
+            testFileConfig.Add("doSomethingAwesome.bat");
+            testFileConfig.Add("doSomethingEvenAwesomer.bat");
+            testFileConfig.Add("|COOL");
+            testFileConfig.Add("doSomethinCool.bat");
+            testFileConfig.Add("doSomethingEvenCooler.bat");
+            testFileConfig.Add("|ALWAYS");
+            testFileConfig.Add("iisreset.exe");
+
+
+            var rolesConfig = new List<string>();
+            rolesConfig.Add("EVERYTHING|AWESOME");
+            rolesConfig.Add("EVERYTHING|COOL");
+            rolesConfig.Add("SUPER:EVERYTHING");
+
+            var commands = CommandBlock.BuildCommandBlockList(testFileConfig);
+            var values = ValuesForRole.BuildValuesForRole(ROLE, rolesConfig);
 
             var result = RoleResolver.FilterCommandsByRoles(values, commands);
             int expectedCount = 0;
@@ -118,8 +83,27 @@ namespace InstallerTests
         public void FilterCommandBlockByRole_HighLevelEverythingRole_Test()
         {
             var ROLE = "SUPER";
-            var commands = CommandBlock.BuildCommandBlockList(SimpleFileReader.Read(@"D:\TestFile.config"));
-            var values = ValuesForRole.BuildValuesForRole(ROLE, SimpleFileReader.Read(@"D:\roles.config"));
+
+            var testFileConfig = new List<string>();
+            testFileConfig.Add("|ALWAYS");
+            testFileConfig.Add("clean.bat");
+            testFileConfig.Add("|AWESOME");
+            testFileConfig.Add("doSomethingAwesome.bat");
+            testFileConfig.Add("doSomethingEvenAwesomer.bat");
+            testFileConfig.Add("|COOL");
+            testFileConfig.Add("doSomethinCool.bat");
+            testFileConfig.Add("doSomethingEvenCooler.bat");
+            testFileConfig.Add("|ALWAYS");
+            testFileConfig.Add("iisreset.exe");
+
+
+            var rolesConfig = new List<string>();
+            rolesConfig.Add("EVERYTHING|AWESOME");
+            rolesConfig.Add("EVERYTHING|COOL");
+            rolesConfig.Add("SUPER:EVERYTHING");
+
+            var commands = CommandBlock.BuildCommandBlockList(testFileConfig);
+            var values = ValuesForRole.BuildValuesForRole(ROLE, rolesConfig);
 
             var result = RoleResolver.FilterCommandsByRoles(values, commands);
             int expectedCount = 0;
@@ -128,22 +112,6 @@ namespace InstallerTests
 
             Assert.AreEqual(expectedCount, result.Count);
         }
-
-        [TestMethod]
-        public void FilterCommandBlockByRole_Resolution_Test()
-        {
-            var ROLE = "SKYTAP-ALLINONE";
-            var commands = SimpleFileReader.Read(@"D:\Upgrade\fourServer\masterCommands.config");
-            var roles = SimpleFileReader.Read(@"D:\Upgrade\fourServer\roles.config");
-
-            var opts = new Options();
-            opts.Role = ROLE;
-            RoleResolver r = new RoleResolver(opts, new Logger());
-
-            var result = r.FilterMasterCommandsByRole(commands, roles);
-            //Assert.AreEqual(0, result.Count);
-        }
-
 
         [TestMethod]
         public void FilterCommandBlockByRole_MULTIPLEROLES_Resolution_Test()
