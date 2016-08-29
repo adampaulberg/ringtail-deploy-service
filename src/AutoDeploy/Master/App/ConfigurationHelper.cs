@@ -66,9 +66,40 @@ namespace Master.App
     }
 
 
+    public interface IFileSystem
+    {
+        bool DirectoryExists(string path);
+    }
+
+    public class RealFileSystem : IFileSystem
+    {
+        public bool DirectoryExists(string path)
+        {
+            return Directory.Exists(path);
+        }
+    }
+
     public class ConfigurationValidator
     {
-        public static bool ValidateConfiguration(List<string> configuration, int toleranceLevel, out List<string> problems)
+        //private List<string> Configuration { get; set; }
+        //private int ToleranceLevel { get; set; }
+        //private IRoleProvider RoleProvider { get; set; }
+        //private IFileSystem FileSystem { get; set; }
+
+        //public ConfigurationValidator(List<string> configuration, int tolerance)
+        //{
+        //    this.Configuration = configuration;
+        //    this.RoleProvider = new FileBasedRoleProvider();
+        //    this.FileSystem = new RealFileSystem();
+        //    this.ToleranceLevel = tolerance;
+        //}
+
+        //public bool ValidateConfiguration(out List<string> problems)
+        //{
+        //    return ValidateConfiguration(this.Configuration, this.ToleranceLevel, out problems, this.RoleProvider, this.FileSystem);
+        //}
+
+        public static bool ValidateConfiguration(List<string> configuration, int toleranceLevel, out List<string> problems, IRoleProvider roleProvider = null, IFileSystem fileSystem = null)
         {
             var okay = true;
             problems = new List<string>();
@@ -91,13 +122,22 @@ namespace Master.App
                 return false;
             }
 
+            if(roleProvider == null)
+            {
+                roleProvider = new FileBasedRoleProvider();
+            }
+            if (fileSystem == null)
+            {
+                fileSystem = new RealFileSystem();
+            }
+
             var buildPathOk = ValidateBuildRoot(configuration, problems);
             okay = okay ? buildPathOk : okay;
 
-            var branchOk = buildPathOk && ValidateBranch(configuration, problems);
+            var branchOk = buildPathOk && ValidateBranch(configuration, fileSystem, problems);
             okay = okay ? branchOk : okay;
 
-            var rolesOk = ValidateRoles(configuration, new FileBasedRoleProvider(), problems);
+            var rolesOk = ValidateRoles(configuration, roleProvider, problems);
             okay = okay ? rolesOk : okay;
 
             var networkOk = ValidateNetworkConnectivity(configuration, problems);
@@ -280,7 +320,7 @@ namespace Master.App
             return okay;
         }
 
-        private static bool ValidateBranch(List<string> configuration, List<string> problems)
+        private static bool ValidateBranch(List<string> configuration, IFileSystem fileSystem, List<string> problems)
         {
             bool okay = true;
 
@@ -294,7 +334,7 @@ namespace Master.App
                 var buildFolderRoot = GetValueForConfigEntry(KeyValueConfigDictionary.GetConfigItemsByKey("Common|BUILD_FOLDER_ROOT", configuration, false)[0]).Replace("\"", "");
                 var branch = GetValueForConfigEntry(KeyValueConfigDictionary.GetConfigItemsByKey("Common|BRANCH_NAME", configuration, false)[0]).Replace("\"", "");
                 var path = buildFolderRoot + "\\" + branch;
-                if (!Directory.Exists(path))
+                if (!fileSystem.DirectoryExists(path))
                 {
                     problems.Add(string.Format("ERROR: The build drop folder '{0}' could not be reached....", path));
                     okay = false;

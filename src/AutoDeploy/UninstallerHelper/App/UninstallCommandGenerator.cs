@@ -27,6 +27,20 @@ namespace UninstallerHelper.App
                 l.AddAndWrite("  Creating uninstall string for:");
                 l.AddAndWrite("        " + "app:" + appName + "|alt:" + altAppName + "|" + isExclusion.ToString());
 
+                if(!isExclusion)
+                {
+                    string truncated = appName.Split('-')[0].TrimEnd();
+                    isExclusion = exclusions != null ? exclusions.Any(p => truncated == p) : false;
+                    l.AddAndWrite("        " + "after truncatedAppName == p|" + isExclusion.ToString() + "|" + truncated);
+
+                    if(!isExclusion)
+                    {
+                        truncated = RemoveWhiteSpaceFromString(truncated);
+                        isExclusion = exclusions != null ? exclusions.Any(p => truncated == p) : false;
+                        l.AddAndWrite("        " + "after truncatedAppName == p|" + isExclusion.ToString() + "|" + truncated);
+                    }
+                }
+
                 if (!isExclusion)
                 {
                     isExclusion = exclusions != null ? exclusions.Any(p => altAppName == p) : false;
@@ -41,6 +55,7 @@ namespace UninstallerHelper.App
                     isExclusion = exclusions != null ? exclusions.Any(p => altAppName == p) : false;
                     l.AddAndWrite("        " + "after altAppName == p|altAppName:" + altAppName + "|" + isExclusion.ToString());
                 }
+
 
                 if (!isExclusion && (appName.Contains(matchBy) || String.IsNullOrEmpty(matchBy)))
                 {

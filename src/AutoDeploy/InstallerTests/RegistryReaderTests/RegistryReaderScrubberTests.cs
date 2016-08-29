@@ -31,32 +31,33 @@ namespace InstallerTests
             Assert.IsTrue(regTree.Count > 0);
         }
 
-        [TestMethod]
-        public void RegistryKEyReaderTestSample()
-        {
-            var regKeyToAppDictionary = RegistryReaderUtilities.BuildRegistryToApplicationMap(SimpleFileReader.Read(@"D:\registry.config"));
+        // Commenting out - as this tool wound up being a dead end, and isn't used as part of deployments anymore.
+        //[TestMethod]
+        //public void RegistryKeyReaderTestSample()
+        //{
+        //    var regKeyToAppDictionary = RegistryReaderUtilities.BuildRegistryToApplicationMap(SimpleFileReader.Read(@"D:\registry.config"));
 
 
 
-            Dictionary<string, string> outFileNonDupe;
-            Dictionary<string, string> altConfig;
-            RegistryReaderUtilities.GenerateFiles(regKeyToAppDictionary, out outFileNonDupe, out altConfig);
+        //    Dictionary<string, string> outFileNonDupe;
+        //    Dictionary<string, string> altConfig;
+        //    RegistryReaderUtilities.GenerateFiles(regKeyToAppDictionary, out outFileNonDupe, out altConfig);
 
 
-            Console.WriteLine("Registry:");
-            foreach (var x in outFileNonDupe)
-            {
-                Console.WriteLine("\t" + x);
-            }
+        //    Console.WriteLine("Registry:");
+        //    foreach (var x in outFileNonDupe)
+        //    {
+        //        Console.WriteLine("\t" + x);
+        //    }
 
 
-            Console.WriteLine("Config:");
-            foreach (var x in altConfig)
-            {
-                Console.WriteLine("\t" + x);
-            }
+        //    Console.WriteLine("Config:");
+        //    foreach (var x in altConfig)
+        //    {
+        //        Console.WriteLine("\t" + x);
+        //    }
 
-        }
+        //}
 
         public class SimpleFileWriter
         {

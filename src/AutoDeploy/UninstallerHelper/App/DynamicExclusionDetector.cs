@@ -17,14 +17,16 @@ namespace UninstallerHelper.App
 
             var files = di.GetFiles();
 
+            var prefix = "omit-";
+
             foreach (var f in files.ToList())
             {
                 try
                 {
                     var fileName = f.Name;
-                    if (fileName.StartsWith("omit-"))
+                    if (fileName.StartsWith(prefix))
                     {
-                        var omission = fileName.Split('-')[1];
+                        var omission = fileName.Substring(prefix.Length, fileName.Length - prefix.Length);
                         omission = omission.Split('.')[0];
 
                         list.Add(omission);

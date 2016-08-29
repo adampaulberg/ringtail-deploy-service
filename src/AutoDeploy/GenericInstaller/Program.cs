@@ -14,6 +14,12 @@ namespace GenericInstaller
             var exitCode = 0;
             Console.WriteLine("GenericInstaller starting on " + args[0]);
 
+            if(args.Length == 0)
+            {
+                GetUsage();
+                return -1;
+            }
+
             try
             {
 
@@ -39,7 +45,19 @@ namespace GenericInstaller
             return exitCode;
         }
 
+
+        public static void GetUsage()
+        {
+            Console.WriteLine("GenericInstaller - ");
+            Console.WriteLine("  Usage:    GenericInstaller.exe [appName]");
+            Console.WriteLine("  This will create a batch file of the form install-[APPNAME].bat");
+            Console.WriteLine("  The batch file it creates will be able to run an InstallShield installer.");
+            Console.WriteLine("     It looks for an app with the same name in InstallerTemplate.config.");
+            Console.WriteLine("     It replaces all the params in InstallerTemplate.config with configs from volitleData.config");
+        }
+
     }
+
 
     internal class DynamicExclusionDetector
     {
@@ -56,9 +74,10 @@ namespace GenericInstaller
                 try
                 {
                     var fileName = f.Name;
-                    if (fileName.StartsWith("omit-"))
+                    var STR_OMIT = "omit-";
+                    if (fileName.StartsWith(STR_OMIT))
                     {
-                        var omission = fileName.Split('-')[1];
+                        var omission = fileName.Substring(STR_OMIT.Length, fileName.Length - STR_OMIT.Length);
                         omission = omission.Split('.')[0];
 
                         list.Add(omission);
@@ -142,13 +161,18 @@ namespace GenericInstaller
                     filledInParameters.Add(command.Split('|')[2].TrimStart());
                     continue;
                 }
+                //if (command.Contains("powershell.exe"))
+                //{
+                //    var realCommand = GeneratePowershellRunnerScript(command, commonKeys, applicationKeys, applicationName);
+                //    filledInParameters.AddRange(realCommand);
+                //    continue;
+                //}
                 if (command.Contains(".exe"))
                 {
                     var realCommand = command.Split('|')[2].TrimStart();
 
                     string workingcommand = realCommand;
-
-                    var keyValueDelimiter = command.Contains("powershell.exe") ? " " : "=";
+                    var keyValueDelimiter = "=";
 
                     foreach (var x in commonKeys.Keys)
                     {
@@ -161,13 +185,6 @@ namespace GenericInstaller
                     }
 
                     realCommand = workingcommand;
-
-                    //char[] whitespace = new char[] { ' ', '\t' };
-                    //var parameters = new List<string>();
-                    //parameters = realCommand.Split(whitespace).ToList();
-
-                    ////realCommand = "\"" + split[1] + "\"";
-                    //realCommand = FillInParameters(commonKeys, applicationKeys, realCommand, parameters);
                     filledInParameters.Add(realCommand);
                 }
                 else
@@ -178,6 +195,39 @@ namespace GenericInstaller
 
             return filledInParameters;
         }
+
+        //private static List<string> GeneratePowershellRunnerScript(string command, Dictionary<string, string> commonKeys, Dictionary<string, string> applicationKeys, string applicationName)
+        //{
+        //    var realCommand = command.Split('|')[2].TrimStart();
+
+        //    string workingcommand = realCommand;
+
+        //    var keyValueDelimiter = " ";
+
+
+        //    foreach (var x in commonKeys.Keys)
+        //    {
+        //        workingcommand = ReplaceParameter(workingcommand, x, commonKeys[x], keyValueDelimiter);
+        //    }
+
+        //    foreach (var x in applicationKeys.Keys)
+        //    {
+        //        workingcommand = ReplaceParameter(workingcommand, x, applicationKeys[x], keyValueDelimiter);
+        //    }
+
+        //    var realCommands = new List<string>();
+
+
+        //    realCommands.Add("copy InstallNameTruncator.exe " + @".\" + applicationName + " /Y");
+        //    realCommands.Add("cd " + applicationName);
+        //    realCommands.Add("InstallNameTruncator.exe");
+        //    realCommands.Add("scrubNames.bat");
+        //    realCommands.Add(workingcommand);
+        //    realCommands.Add("cd ..");
+
+        //    return realCommands;
+
+        //}
 
         private static string ReplaceParameter(string workingcommand, string replacementKey, string replacementValue, string keyValueDelimiter)
         {
@@ -207,7 +257,7 @@ namespace GenericInstaller
                 string left = workingcommand.Substring(0, indexOfThisCommand);
 
                 string finalizer = "\" ";
-                Console.WriteLine("     left is: " + left);
+                //Console.WriteLine("     left is: " + left);
                 if (left.EndsWith("--"))
                 {
                     finalizer = " ";
@@ -216,8 +266,8 @@ namespace GenericInstaller
 
                 string newString = left + replacementKey + keyValueDelimiter + replacementValue + finalizer + right;
 
-                Console.WriteLine("     replacing: " + replacementKey + " with " + replacementValue);
-                Console.WriteLine("     new is: " + newString);
+                //Console.WriteLine("     replacing: " + replacementKey + " with " + replacementValue);
+                //Console.WriteLine("     new is: " + newString);
 
                 workingcommand = newString;
             }

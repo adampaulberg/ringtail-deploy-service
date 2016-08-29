@@ -33,7 +33,7 @@ namespace InstallNameTruncator
                 {
                     if (x.Name.StartsWith("Ringtail") || x.Name.StartsWith("NativeFileService"))
                     {
-                        string newName = x.Name.Split('_')[0] + ".exe";
+                        string newName = x.Name.Split('_')[0] + x.Extension;
 
                         if (!x.Name.Contains('_'))
                         {
