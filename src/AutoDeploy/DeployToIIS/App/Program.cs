@@ -55,6 +55,7 @@ namespace DeployToIIS
                                 appPool.ProcessModel.UserName = options.Username;
                                 appPool.ProcessModel.Password = options.Password;
                                 appPool.ProcessModel.IdentityType = ProcessModelIdentityType.SpecificUser;
+                                appPool.ManagedRuntimeVersion = options.ManagedRuntimeVersion;
                             }
                         }
 
