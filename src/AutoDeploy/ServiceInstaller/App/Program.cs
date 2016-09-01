@@ -193,7 +193,7 @@ namespace ServiceInstaller
             {
                 return @"C:\Program Files\FTI Technology\" + applicationName;
             }
-
+            
             public static void NormalizeZipName(string applicationName)
             {
                 var path = @"C:\Upgrade\AutoDeploy\" + applicationName;
@@ -266,16 +266,18 @@ namespace ServiceInstaller
                 string extractPath = GetExtractPath(applicationName);
                 try
                 {
-                    DirectoryInfo di = new DirectoryInfo(extractPath);
+                    DirectoryInfo di = new DirectoryInfo(@"C:\Program Files\FTI Technology\");
                     if (!di.Exists)
                     {
                         di.Create();
+                        Console.WriteLine("...created folder: " + di.FullName);
                     }
                     System.IO.Directory.Move(extractPath, installPath);
                 }
-                catch
+                catch(Exception ex)
                 {
                     Console.WriteLine("...failed to copy zip to " + installPath);
+                    Console.WriteLine("..error:" + ex.Message);
                     return 1;
                 }
 
