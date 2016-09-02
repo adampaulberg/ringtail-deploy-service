@@ -44,7 +44,8 @@ namespace MasterRunner.App.Runners
             Console.WriteLine("Processing via PowerShellRunner");
 
             var allowedExits = SimpleFileReader.Read(workingFolder + "allowedExit.config");
-            ProcessExecutorHelper helper = new ProcessExecutorHelper(logger, allowedExits);
+
+            ProcessExecutorHelper helper = new ProcessExecutorHelper(logger, allowedExits, SimpleFileReader.Read("timeout.config"), 10000);
 
             int exitCode = helper.SpawnAndLog("PowerShell.exe -ExecutionPolicy Bypass -File " + filename, workingFolder, username, password);
             if (exitCode == 0)

@@ -29,11 +29,15 @@ namespace MasterRunner.App
     {
         Logger logger;
         List<string> allowedExceptions = new List<string>();
+        List<string> timeoutList = new List<string>();
+        int defaultTimeout = 0;
 
-        public ProcessExecutorHelper(Logger logger, List<string> allowedExceptions)
+        public ProcessExecutorHelper(Logger logger, List<string> allowedExceptions, List<string> timeoutList, int defaultTimeout)
         {
             this.logger = logger;
             this.allowedExceptions = allowedExceptions;
+            this.timeoutList = timeoutList;
+            this.defaultTimeout = defaultTimeout;
         }
 
         public int SpawnAndLog(string command, string workingFolder, string username, string password)
@@ -134,10 +138,34 @@ namespace MasterRunner.App
                 foreach (char c in password.ToCharArray()) securePassword.AppendChar(c);
                 process.StartInfo.Password = securePassword;
             }
-
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             process.Start();
+
+            var timeout = ProcessExecutorHelper.GetTimeoutLength(commandName, timeoutList, logger, defaultTimeout);
+
+            if (timeout != 0)
+            {
+                if (process.WaitForExit(timeout))
+                {
+                    sw.Stop();
+                    logger.AddAndWrite("*finished in " + sw.ElapsedMilliseconds + " ms");
+                }
+                else
+                {
+                    logger.AddAndWrite("*process took longer than " + timeout + "  ms");
+                    return new ProcessOutcome("", "", 1, false);
+                }
+            }
             string output = process.StandardOutput.ReadToEnd();
             string error = process.StandardError.ReadToEnd();
+
+
+            if (timeout == 0)
+            {
+                sw.Stop();
+                logger.AddAndWrite("*finished in " + sw.ElapsedMilliseconds + " ms");
+            }
 
             logger.AddAndWrite("*ran with exit code: " + process.ExitCode);
 
@@ -156,6 +184,33 @@ namespace MasterRunner.App
             }
 
             return new ProcessOutcome(error, output, process.ExitCode, exitOk);
+        }
+
+
+        public static int GetTimeoutLength(string commandName, List<string> timeoutList, Logger logger, int defaultTimeout)
+        {
+            logger.AddAndWrite("* found timeoutlist " + timeoutList.Count);
+            try
+            {
+                if (timeoutList != null && timeoutList.Count > 0)
+                {
+                    var timeout = timeoutList.Find(x => x.Split('|')[0] == commandName);
+
+                    if (timeout != null && timeout.Length > 0)
+                    {
+                        logger.AddToLog(" found special timeout: " + timeout);
+                        var customTimeout = Convert.ToInt32(timeout.Split('|')[1]);
+                        return customTimeout;
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                logger.AddToLog("...exception reading timeouts... defaulting to " + defaultTimeout + " ms");
+                logger.AddToLog("       " + ex.Message);
+            }
+
+            return defaultTimeout;
         }
     }
 }
