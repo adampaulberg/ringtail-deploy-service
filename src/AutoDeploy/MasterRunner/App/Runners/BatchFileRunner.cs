@@ -14,14 +14,16 @@ namespace MasterRunner.App.Runners
         private Logger logger;
         private string username;
         private string password;
+        private int defaultTimeout;
 
-        public BatchFileRunner(Logger logger, List<string> fileContents, string workingFolder, string username, string password)
+        public BatchFileRunner(Logger logger, List<string> fileContents, string workingFolder, string username, string password, int defaultTimeout)
         {
             this.logger = logger;
             this.fileContents = fileContents;
             this.workingFolder = workingFolder;
             this.username = username;
             this.password = password;
+            this.defaultTimeout = defaultTimeout;
         }
 
         public int RunFile()
@@ -34,7 +36,7 @@ namespace MasterRunner.App.Runners
             }
 
             var allowedExits = SimpleFileReader.Read(workingFolder + "allowedExit.config");
-            ProcessExecutorHelper helper = new ProcessExecutorHelper(logger, allowedExits);
+            ProcessExecutorHelper helper = new ProcessExecutorHelper(logger, allowedExits, SimpleFileReader.Read("timeout.config"), defaultTimeout);
 
 
             if (allowedExits.Count == 0)

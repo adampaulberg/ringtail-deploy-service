@@ -11,7 +11,7 @@ namespace MasterRunner.App
 {
     public class RunnerFactory
     {
-        public static IRunner MakeRunner(string logFile, string fileName, string workingFolder, string username, string password)
+        public static IRunner MakeRunner(string logFile, string fileName, string workingFolder, string username, string password, int defaultTimeout)
         {
             Logger logger = new Logger();
             logger.fileName = logFile;
@@ -25,7 +25,7 @@ namespace MasterRunner.App
             if (fileName.Contains(".bat"))
             {
                 Console.WriteLine("Spawning: BatchFileRunner: " + fileName);
-                return new BatchFileRunner(logger, SimpleFileReader.Read(fileName), workingFolder, username, password);
+                return new BatchFileRunner(logger, SimpleFileReader.Read(fileName), workingFolder, username, password, defaultTimeout);
             }
             if (fileName.Contains(".exe"))
             {
