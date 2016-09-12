@@ -142,14 +142,21 @@ namespace MasterRunner.App
             sw.Start();
             process.Start();
 
+            string output = process.StandardOutput.ReadToEnd();
+            string error = process.StandardError.ReadToEnd();
+
+            logger.AddAndWrite("* started");
+
             var timeout = ProcessExecutorHelper.GetTimeoutLength(commandName, timeoutList, logger, defaultTimeout);
 
             if (timeout != 0)
             {
+                logger.AddAndWrite("* waitingForExit");
+
                 if (process.WaitForExit(timeout))
                 {
                     sw.Stop();
-                    logger.AddAndWrite("*finished in " + sw.ElapsedMilliseconds + " ms");
+                    logger.AddAndWrite("*finished in " + Math.Floor(sw.ElapsedMilliseconds / 1000m) + " s");
                 }
                 else
                 {
@@ -157,14 +164,13 @@ namespace MasterRunner.App
                     return new ProcessOutcome("", "", 1, false);
                 }
             }
-            string output = process.StandardOutput.ReadToEnd();
-            string error = process.StandardError.ReadToEnd();
+
 
 
             if (timeout == 0)
             {
                 sw.Stop();
-                logger.AddAndWrite("*finished in " + sw.ElapsedMilliseconds + " ms");
+                logger.AddAndWrite("*finished in " + Math.Floor(sw.ElapsedMilliseconds / 1000m) + " s");
             }
 
             logger.AddAndWrite("*ran with exit code: " + process.ExitCode);
@@ -189,7 +195,6 @@ namespace MasterRunner.App
 
         public static int GetTimeoutLength(string commandName, List<string> timeoutList, Logger logger, int defaultTimeout)
         {
-            logger.AddAndWrite("* found timeoutlist " + timeoutList.Count);
             try
             {
                 if (timeoutList != null && timeoutList.Count > 0)

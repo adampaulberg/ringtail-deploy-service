@@ -10,41 +10,38 @@ namespace UninstallerHelper.App
 {
     public class UninstallCommandGenerator
     {
-        internal static string CreateUninstallString(Logger l, RegistryKey app, string matchBy, string[] exclusions)
+
+        internal static string CreateUninstallString(Logger l, RegistryFacade app, string matchBy, string[] exclusions)
         {
             var uninstallString = string.Empty;
-            var hasUninstallString = !String.IsNullOrEmpty(app.GetValueNames().ToList().Find(x => x == "UninstallString"));
-            var hasAppName = !String.IsNullOrEmpty(app.GetValueNames().ToList().Find(x => x == "DisplayName"));
+            var appName = app.AppName;
 
-
-
-            if (hasUninstallString && hasAppName)
+            if (app.Ok)
             {
-                var appName = app.GetValue("DisplayName").ToString();
                 var altAppName = RemoveWhiteSpaceFromString(appName);
                 var isExclusion = exclusions != null ? exclusions.Any(p => appName == p) : false;
 
-                l.AddAndWrite("  Creating uninstall string for:");
-                l.AddAndWrite("        " + "app:" + appName + "|alt:" + altAppName + "|" + isExclusion.ToString());
+                l.AddToLog("  Creating uninstall string for:");
+                l.AddToLog("        " + "app:" + appName + "|alt:" + altAppName + "|" + isExclusion.ToString());
 
-                if(!isExclusion)
+                if (!isExclusion)
                 {
                     string truncated = appName.Split('-')[0].TrimEnd();
                     isExclusion = exclusions != null ? exclusions.Any(p => truncated == p) : false;
-                    l.AddAndWrite("        " + "after truncatedAppName == p|" + isExclusion.ToString() + "|" + truncated);
+                    l.AddToLog("        " + "after truncatedAppName == p|" + isExclusion.ToString() + "|" + truncated);
 
-                    if(!isExclusion)
+                    if (!isExclusion)
                     {
                         truncated = RemoveWhiteSpaceFromString(truncated);
                         isExclusion = exclusions != null ? exclusions.Any(p => truncated == p) : false;
-                        l.AddAndWrite("        " + "after truncatedAppName == p|" + isExclusion.ToString() + "|" + truncated);
+                        l.AddToLog("        " + "after truncatedAppName == p|" + isExclusion.ToString() + "|" + truncated);
                     }
                 }
 
                 if (!isExclusion)
                 {
                     isExclusion = exclusions != null ? exclusions.Any(p => altAppName == p) : false;
-                    l.AddAndWrite("        " + "after altAppName == p|" + isExclusion.ToString());
+                    l.AddToLog("        " + "after altAppName == p|" + isExclusion.ToString());
                 }
                 if (!isExclusion)
                 {
@@ -53,22 +50,25 @@ namespace UninstallerHelper.App
                         altAppName = altAppName.Replace("Ringtail", "RingtailLegal");
                     }
                     isExclusion = exclusions != null ? exclusions.Any(p => altAppName == p) : false;
-                    l.AddAndWrite("        " + "after altAppName == p|altAppName:" + altAppName + "|" + isExclusion.ToString());
+                    l.AddToLog("        " + "after altAppName == p|altAppName:" + altAppName + "|" + isExclusion.ToString());
                 }
 
 
                 if (!isExclusion && (appName.Contains(matchBy) || String.IsNullOrEmpty(matchBy)))
                 {
-                    var registryUnintallString = app.GetValue("UninstallString").ToString();
-                    var type = appName.Contains("Configurator") ? "partial" : "complete";                    
+                    var registryUnintallString = app.UninstallString;
+                    var type = appName.Contains("Configurator") ? "partial" : "complete";
                     uninstallString = AddArgumentsToUninstallString(registryUnintallString, type, appName);
                 }
 
                 if (!isExclusion)
                 {
-                    Console.WriteLine(" going to uninstall: " + appName);
+                    l.AddToLog(" going to uninstall: " + appName);
                 }
             }
+
+            l.AddAndWrite("  finished creating uninstall string for " + appName);
+            //l.AddAndWrite("  created uninstall string: " + uninstallString);
 
             return uninstallString;
         }
@@ -158,5 +158,45 @@ namespace UninstallerHelper.App
             return applicationNamesByKey;
         }
 
+    }
+
+    public class RegistryFacade
+    {
+        public string AppName { get; private set; }
+        public string UninstallString { get; private set; }
+
+        public bool Ok { get; private set; }
+
+        public RegistryFacade(RegistryKey app, Logger l)
+        {
+            l.AddAndWrite(" Extracting Registry Info");
+
+            List<string> valueNames = new List<string>();
+            if (app != null)
+            {
+                var valueNamesAsArray = app.GetValueNames();
+                l.AddAndWrite(" Extracted valueNames");
+                valueNames = valueNamesAsArray.ToList();
+            }
+            var hasUninstallString = !String.IsNullOrEmpty(valueNames.Find(x => x == "UninstallString"));
+            var hasAppName = !String.IsNullOrEmpty(valueNames.Find(x => x == "DisplayName"));
+
+            if (hasUninstallString && hasAppName)
+            {
+                Ok = true;
+                AppName = app.GetValue("DisplayName").ToString();
+                UninstallString = app.GetValue("UninstallString").ToString();
+                l.AddAndWrite(" Extracted Registry Info");
+                l.AddAndWrite("   app Name: " + AppName);
+                l.AddAndWrite("   uninstall String: " + UninstallString);
+            }
+            else
+            {
+                l.AddAndWrite(" This was a valid uninstallation key, which is okay");
+                Ok = false;
+            }
+
+            l.AddAndWrite(" Extracting Registry Info - Exiting");
+        }
     }
 }

@@ -28,9 +28,10 @@ namespace MasterRunner.App.Runners
         public int RunFile()
         {
             Console.WriteLine("Processing via ExeFileRunner");
+            logger.AddAndWrite("* Processing via ExeFileRunner");
 
             var allowedExits = SimpleFileReader.Read(workingFolder + "allowedExit.config");
-            ProcessExecutorHelper helper = new ProcessExecutorHelper(logger, allowedExits, SimpleFileReader.Read("timeout.config"), 10000);
+            ProcessExecutorHelper helper = new ProcessExecutorHelper(logger, allowedExits, SimpleFileReader.Read("timeout.config"), 0);
 
             int exitCode = helper.SpawnAndLog(filename, workingFolder, username, password);
             if (exitCode == 0)
