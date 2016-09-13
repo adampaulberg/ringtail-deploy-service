@@ -159,44 +159,4 @@ namespace UninstallerHelper.App
         }
 
     }
-
-    public class RegistryFacade
-    {
-        public string AppName { get; private set; }
-        public string UninstallString { get; private set; }
-
-        public bool Ok { get; private set; }
-
-        public RegistryFacade(RegistryKey app, Logger l)
-        {
-            l.AddAndWrite(" Extracting Registry Info");
-
-            List<string> valueNames = new List<string>();
-            if (app != null)
-            {
-                var valueNamesAsArray = app.GetValueNames();
-                l.AddAndWrite(" Extracted valueNames");
-                valueNames = valueNamesAsArray.ToList();
-            }
-            var hasUninstallString = !String.IsNullOrEmpty(valueNames.Find(x => x == "UninstallString"));
-            var hasAppName = !String.IsNullOrEmpty(valueNames.Find(x => x == "DisplayName"));
-
-            if (hasUninstallString && hasAppName)
-            {
-                Ok = true;
-                AppName = app.GetValue("DisplayName").ToString();
-                UninstallString = app.GetValue("UninstallString").ToString();
-                l.AddAndWrite(" Extracted Registry Info");
-                l.AddAndWrite("   app Name: " + AppName);
-                l.AddAndWrite("   uninstall String: " + UninstallString);
-            }
-            else
-            {
-                l.AddAndWrite(" This was a valid uninstallation key, which is okay");
-                Ok = false;
-            }
-
-            l.AddAndWrite(" Extracting Registry Info - Exiting");
-        }
-    }
 }
