@@ -24,18 +24,28 @@ namespace UninstallerHelper.Util
         }
         public void AddToLog(string s)
         {
-            Console.WriteLine(s);
             log.Add(s);
         }
         public void AddToLog(List<string> s)
         {
             log.AddRange(s);
         }
+        public List<string> GetLog()
+        {
+            return this.log;
+        }
         public void Write(string file)
         {
             if (output == null)
             {
-                SimpleFileWriter.Write(file, log);
+                try
+                {
+                    SimpleFileWriter.Write(file, log);
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine("Failed to write log file: " + ex.Message);
+                }
             }
             else
             {

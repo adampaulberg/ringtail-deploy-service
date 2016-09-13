@@ -29,6 +29,7 @@ namespace MasterRunner.App.Runners
         public int RunFile()
         {
             int exitCode = 0;
+            logger.AddAndWrite("* Processing via BatchFileRunner");
             Console.WriteLine("Processing via BatchFileRunner");
             if (fileContents.Count == 0)
             {

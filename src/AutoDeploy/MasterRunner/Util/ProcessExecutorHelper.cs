@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MasterRunner.App
@@ -50,21 +51,14 @@ namespace MasterRunner.App
                 logger.AddAndWrite(" *time: " + DateTime.Now);
                 var result = SpawnProcess(command, workingFolder, username, password);
 
-                logger.AddAndWrite("*Output text: ");
-                logger.AddAndWrite(result.Output);
-
                 if (result.ExitCode != 0 && !result.ExitOk)
                 {
-                    logger.AddAndWrite("*Error text: ");
-                    logger.AddAndWrite(result.Error);
                     logger.AddAndWrite("* time: " + DateTime.Now);
                     logger.AddAndWrite("*Exited with code " + result.ExitCode);
                     exitCode = result.ExitCode;
                 }
                 else if (result.ExitCode !=0 && result.ExitOk)
                 {
-                    logger.AddAndWrite("*Error text: ");
-                    logger.AddAndWrite(result.Error);
                     logger.AddAndWrite("* time: " + DateTime.Now);
                     logger.AddAndWrite("*Exited with code " + result.ExitCode);
                     logger.AddAndWrite("*...but this is a whitelisted exit code for this command");
@@ -108,88 +102,147 @@ namespace MasterRunner.App
 
             string cmd = "/c " + workingDirectory + commandName;
             var processInfo = new ProcessStartInfo("cmd.exe", cmd);
-
-            var process = new System.Diagnostics.Process();
-            process.StartInfo.FileName = file;
-            process.StartInfo.WorkingDirectory = workingDirectory;
-            process.StartInfo.Arguments = args;
-            process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.RedirectStandardError = true;
-            process.StartInfo.UseShellExecute = false;
-
-            if(!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password)) 
-            {
-                var nameParts = username.Split('\\');
-                string domain = null;
-                string user = null;
-                if(nameParts.Length == 2) 
-                {
-                    domain = nameParts[0];
-                    user = nameParts[1];
-                } else 
-                {
-                    user = username;
-                }
-
-                process.StartInfo.Domain = domain;
-                process.StartInfo.UserName = user;
-                SecureString securePassword = new SecureString();
-                foreach (char c in password.ToCharArray()) securePassword.AppendChar(c);
-                process.StartInfo.Password = securePassword;
-            }
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            process.Start();
-
-            var timeout = ProcessExecutorHelper.GetTimeoutLength(commandName, timeoutList, logger, defaultTimeout);
-
-            if (timeout != 0)
-            {
-                if (process.WaitForExit(timeout))
-                {
-                    sw.Stop();
-                    logger.AddAndWrite("*finished in " + sw.ElapsedMilliseconds + " ms");
-                }
-                else
-                {
-                    logger.AddAndWrite("*process took longer than " + timeout + "  ms");
-                    return new ProcessOutcome("", "", 1, false);
-                }
-            }
-            string output = process.StandardOutput.ReadToEnd();
-            string error = process.StandardError.ReadToEnd();
-
-
-            if (timeout == 0)
-            {
-                sw.Stop();
-                logger.AddAndWrite("*finished in " + sw.ElapsedMilliseconds + " ms");
-            }
-
-            logger.AddAndWrite("*ran with exit code: " + process.ExitCode);
-
+            var exitCode = 0;
             bool exitOk = false;
+            StringBuilder output = new StringBuilder();
+            StringBuilder error = new StringBuilder();
 
-            if (process.ExitCode > 0)
+
+            using (AutoResetEvent outputWaitHandle = new AutoResetEvent(false))
+            using (AutoResetEvent errorWaitHandle = new AutoResetEvent(false))
             {
-                //logger.AddToLog("*Looking for allowed exceptions for: " + commandName);
-                //allowedExceptions.ForEach(z => logger.AddToLog("*: " + z));
-                var allowedException = this.allowedExceptions.Find(a => a.Contains(commandName));
-                if (!String.IsNullOrEmpty(allowedException))
+                using (Process process = new Process())
                 {
-                    exitOk = true;
-                }
 
+                    process.StartInfo.FileName = file;
+                    process.StartInfo.WorkingDirectory = workingDirectory;
+                    process.StartInfo.Arguments = args;
+                    process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
+                    process.StartInfo.RedirectStandardOutput = true;
+                    process.StartInfo.RedirectStandardError = true;
+                    process.StartInfo.UseShellExecute = false;
+
+                    if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
+                    {
+                        var nameParts = username.Split('\\');
+                        string domain = null;
+                        string user = null;
+                        if (nameParts.Length == 2)
+                        {
+                            domain = nameParts[0];
+                            user = nameParts[1];
+                        }
+                        else
+                        {
+                            user = username;
+                        }
+
+                        process.StartInfo.Domain = domain;
+                        process.StartInfo.UserName = user;
+                        SecureString securePassword = new SecureString();
+                        foreach (char c in password.ToCharArray()) securePassword.AppendChar(c);
+                        process.StartInfo.Password = securePassword;
+                    }
+
+                    logger.AddAndWrite("* started");
+
+
+                    var timeout = ProcessExecutorHelper.GetTimeoutLength(commandName, timeoutList, logger, defaultTimeout);
+
+                    logger.AddAndWrite("* Output Text: ");
+
+                    //http://stackoverflow.com/questions/139593/processstartinfo-hanging-on-waitforexit-why
+                    process.OutputDataReceived += (sender, e) =>
+                    {
+                        if (e.Data == null)
+                        {
+                            outputWaitHandle.Set();
+                        }
+                        else
+                        {
+                            logger.AddAndWrite(e.Data);
+                            output.AppendLine(e.Data);
+                        }
+                    };
+                    process.ErrorDataReceived += (sender, e) =>
+                    {
+                        if (e.Data == null)
+                        {
+                            errorWaitHandle.Set();
+                        }
+                        else
+                        {
+                            logger.AddAndWrite("* Error Text: ");
+                            logger.AddAndWrite(e.Data);
+                            error.AppendLine(e.Data);
+                        }
+                    };
+
+                    Stopwatch sw = new Stopwatch();
+                    sw.Start();
+
+                    process.Start();
+                    process.BeginOutputReadLine();
+                    process.BeginErrorReadLine();
+
+                    if (timeout != 0)
+                    {
+                        if (process.WaitForExit(timeout) &&
+                            outputWaitHandle.WaitOne(timeout) &&
+                            errorWaitHandle.WaitOne(timeout))
+                        {
+                            // Process completed.
+
+                            // show .00 place if it's less than 10 seconds, otherwise just show integer seconds.
+                            var elapsed = sw.ElapsedMilliseconds > 10000 ? Math.Floor(sw.ElapsedMilliseconds / 1000m) : Math.Round(sw.ElapsedMilliseconds / 1000m, 2);
+                            sw.Stop();
+                            logger.AddAndWrite("*finished in " + elapsed + " s");
+                            exitCode = process.ExitCode;
+                        }
+                        else
+                        {
+                            // Timed out.
+                            logger.AddAndWrite("* timed out....");
+                            logger.AddAndWrite("*process took longer than " + timeout + "  ms");
+                            return new ProcessOutcome("", "", 1001, false);
+                        }
+                    }
+                    else
+                    {
+                        // Process completed.
+                        process.WaitForExit();
+
+                        // show .00 place if it's less than 10 seconds, otherwise just show integer seconds.
+                        var elapsed = sw.ElapsedMilliseconds > 10000 ? Math.Floor(sw.ElapsedMilliseconds / 1000m) : Math.Round(sw.ElapsedMilliseconds / 1000m, 2);
+                        sw.Stop();
+                        logger.AddAndWrite("*finished in " + elapsed + " s");
+                        exitCode = process.ExitCode;
+
+                    }
+
+                    logger.AddAndWrite("*ran with exit code: " + process.ExitCode);
+
+
+
+                    if (process.ExitCode > 0)
+                    {
+                        var allowedException = this.allowedExceptions.Find(a => a.Contains(commandName));
+                        if (!String.IsNullOrEmpty(allowedException))
+                        {
+                            exitOk = true;
+                        }
+
+                    }
+                    exitCode = process.ExitCode;
+                }
             }
 
-            return new ProcessOutcome(error, output, process.ExitCode, exitOk);
+            return new ProcessOutcome(error.ToString(), output.ToString(), exitCode, exitOk);
         }
 
 
         public static int GetTimeoutLength(string commandName, List<string> timeoutList, Logger logger, int defaultTimeout)
         {
-            logger.AddAndWrite("* found timeoutlist " + timeoutList.Count);
             try
             {
                 if (timeoutList != null && timeoutList.Count > 0)

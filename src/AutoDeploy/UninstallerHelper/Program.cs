@@ -15,12 +15,12 @@ namespace UninstallerHelper
         static int Main(string[] args)
         {
             int exitCode = 0;
-            Logger l = new Logger();
-            l.fileName = "UninstallerHelper.log";
+            Logger logger = new Logger();
+            logger.fileName = "UninstallerHelper.log";
             try
             {
-                l.AddAndWrite("-- UninstallerHelper --");
-                var ringtailKeys = RegistryHelper.GetAllRingtailKeys(l);
+                logger.AddAndWrite("-- UninstallerHelper --");
+                var ringtailKeys = RegistryHelper.GetAllRingtailKeys(logger);
 
                 var allUninstallStrings = new List<string>();
 
@@ -45,41 +45,58 @@ namespace UninstallerHelper
                 }
                 exclusions.AddRange(DynamicExclusionDetector.DetectExclusions());
 
-                Console.WriteLine(" Found the following exclusions: ");
+                logger.AddAndWrite(" Found the following exclusions: ");
                 foreach (var x in exclusions)
                 {
-                    Console.WriteLine("     " + x);
+                    logger.AddAndWrite("     " + x);
                 }
 
-                ringtailKeys.ForEach(z => allUninstallStrings.Add(UninstallCommandGenerator.CreateUninstallString(l, z, matchBy, exclusions.ToArray())));
+
+                List<RegistryFacade> rfList = new List<RegistryFacade>();
+                var exclusionsAsArray = exclusions.ToArray();
+                foreach (var x in ringtailKeys)
+                {
+                    logger.AddAndWrite("Reading reg key: " + x.Name);
+                    var rfItem = new RegistryFacade(x, logger);
+                    var uninstallString = UninstallCommandGenerator.CreateUninstallString(logger, rfItem, matchBy, exclusionsAsArray);
+
+                    if (!String.IsNullOrEmpty(uninstallString))
+                    {
+                        allUninstallStrings.Add(uninstallString);
+                    }
+                }
+
+                logger.AddAndWrite("Read all keys - generated " + allUninstallStrings.Count + " uninstall commands.");
 
                 allUninstallStrings = new Prioritizer().OrderCommands(allUninstallStrings).ToList();
+
+                logger.AddAndWrite("Prioritizer finished.");
 
                 if (allUninstallStrings.Count == 0)
                 {
                     allUninstallStrings.Add("@echo Nothing to uninstall");
-                    l.AddAndWrite("WARNING: Found nothing to uninstall.");
+                    logger.AddAndWrite("WARNING: Found nothing to uninstall.");
                     exitCode = 0;
                 }  
 
                 allUninstallStrings.ForEach(x => Console.WriteLine(x));                
 
-                l.AddAndWrite("Writing " + outputFile);
+                logger.AddAndWrite("Writing " + outputFile);
+
                 SimpleFileWriter.Write(outputFile, allUninstallStrings);
 
                 if (!new FileInfo(outputFile).Exists)
                 {
-                    l.AddAndWrite("Failed to write " + outputFile);
+                    logger.AddAndWrite("Failed to write " + outputFile);
                     exitCode = 1;
                 }
-              
             }
             catch (Exception ex)
             {
                 try
                 {
-                    l.AddAndWrite(ex.Message);
-                    l.AddAndWrite(ex.StackTrace);
+                    logger.AddAndWrite(ex.Message);
+                    logger.AddAndWrite(ex.StackTrace);
                     exitCode = 1;
                 }
                 catch(Exception x)
