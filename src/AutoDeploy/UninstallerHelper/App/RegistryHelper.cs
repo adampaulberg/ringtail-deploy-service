@@ -10,7 +10,7 @@ namespace UninstallerHelper.App
 {
 
     /// <summary>
-    /// Functions for reading the Windows System Registry.   ...it's hard coded for use with FTI for now..
+    /// Functions for reading the Windows System Registry.   ...it's hard coded for use with FTI for now.
     /// </summary>
     public class RegistryHelper
     {

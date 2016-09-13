@@ -147,11 +147,11 @@ namespace MasterRunner.App
                     logger.AddAndWrite("* started");
 
 
-                    //http://stackoverflow.com/questions/139593/processstartinfo-hanging-on-waitforexit-why
                     var timeout = ProcessExecutorHelper.GetTimeoutLength(commandName, timeoutList, logger, defaultTimeout);
 
                     logger.AddAndWrite("* Output Text: ");
 
+                    //http://stackoverflow.com/questions/139593/processstartinfo-hanging-on-waitforexit-why
                     process.OutputDataReceived += (sender, e) =>
                     {
                         if (e.Data == null)
@@ -185,30 +185,39 @@ namespace MasterRunner.App
                     process.BeginOutputReadLine();
                     process.BeginErrorReadLine();
 
-                    if (process.WaitForExit(timeout) &&
-                        outputWaitHandle.WaitOne(timeout) &&
-                        errorWaitHandle.WaitOne(timeout))
+                    if (timeout != 0)
+                    {
+                        if (process.WaitForExit(timeout) &&
+                            outputWaitHandle.WaitOne(timeout) &&
+                            errorWaitHandle.WaitOne(timeout))
+                        {
+                            // Process completed.
+
+                            // show .00 place if it's less than 10 seconds, otherwise just show integer seconds.
+                            var elapsed = sw.ElapsedMilliseconds > 10000 ? Math.Floor(sw.ElapsedMilliseconds / 1000m) : Math.Round(sw.ElapsedMilliseconds / 1000m, 2);
+                            sw.Stop();
+                            logger.AddAndWrite("*finished in " + elapsed + " s");
+                            exitCode = process.ExitCode;
+                        }
+                        else
+                        {
+                            // Timed out.
+                            logger.AddAndWrite("* timed out....");
+                            logger.AddAndWrite("*process took longer than " + timeout + "  ms");
+                            return new ProcessOutcome("", "", 1001, false);
+                        }
+                    }
+                    else
                     {
                         // Process completed.
+                        process.WaitForExit();
 
                         // show .00 place if it's less than 10 seconds, otherwise just show integer seconds.
                         var elapsed = sw.ElapsedMilliseconds > 10000 ? Math.Floor(sw.ElapsedMilliseconds / 1000m) : Math.Round(sw.ElapsedMilliseconds / 1000m, 2);
                         sw.Stop();
                         logger.AddAndWrite("*finished in " + elapsed + " s");
                         exitCode = process.ExitCode;
-                    }
-                    else
-                    {
-                        // Timed out.
-                        logger.AddAndWrite("* timed out....");
-                        logger.AddAndWrite("*process took longer than " + timeout + "  ms");
-                        return new ProcessOutcome("", "", 1001, false);
-                    }
 
-                    if (timeout == 0)
-                    {
-                        sw.Stop();
-                        logger.AddAndWrite("*finished in " + Math.Floor(sw.ElapsedMilliseconds / 1000m) + " s");
                     }
 
                     logger.AddAndWrite("*ran with exit code: " + process.ExitCode);
