@@ -50,8 +50,12 @@ namespace MasterRunner.App.Runners
                 allowedExits.ForEach(x => logger.AddToLog(x));
             }
 
-            foreach (var x in fileContents)
+            for(int i = 0; i < fileContents.Count; i++)
             {
+                var x = fileContents[i];
+                var friendlyNameStep = i + 1;
+                var progress = "* " + friendlyNameStep + " of " + fileContents.Count;
+
                 var command = x.Trim();
                 if (!string.IsNullOrWhiteSpace(command))
                 {
@@ -60,10 +64,24 @@ namespace MasterRunner.App.Runners
                         Console.WriteLine(command);
                         continue;
                     }
-                    var result = helper.SpawnAndLog(command, workingFolder, username, password);
+                    var result = helper.SpawnAndLog(command, workingFolder, username, password, progress);
                     if (result != 0)
                     {
                         exitCode = result;
+
+
+                        var remainingSteps = new List<string>();
+                        for(int j = i; j < fileContents.Count; j++)
+                        {
+                            remainingSteps.Add(fileContents[j]);
+                        }
+                        SimpleFileWriter.Write("retry.bat", remainingSteps);
+                        Console.WriteLine("************************************");
+                        Console.WriteLine("   To resume from the failure point....");
+                        Console.WriteLine("   Reboot this machine.");
+                        Console.WriteLine("   Run: ");
+                        Console.WriteLine(@"   C:\upgrade\autodeploy\MasterRunner.exe -f retry.bat");
+                        Console.WriteLine("************************************");
                         break;
                     }
                 }

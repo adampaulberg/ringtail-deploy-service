@@ -20,9 +20,26 @@ namespace Deployer.Util
             log.AddRange(s);
         }
 
+        public List<string> GetLog()
+        {
+            return log;
+        }
+
         public void Write(string file)
         {
             SimpleFileWriter.Write(file, log);
+        }
+
+        public void AddAndWrite(string s, string file)
+        {
+            AddToLog(s);
+            Write(file);
+        }
+
+        public void AddAndWrite(List<string> s, string file)
+        {
+            AddToLog(s);
+            Write(file);
         }
     }
 

@@ -12,7 +12,8 @@ namespace InstallNameTruncator
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(" InstallNameTruncator...");
+            //Console.WriteLine(" InstallNameTruncator...");
+            Logger logger = new Logger();
             try
             {
                 if (args.Length > 0) 
@@ -40,7 +41,7 @@ namespace InstallNameTruncator
                             newName = x.Name;
                         }
 
-                        Console.WriteLine("   truncating: " + x + " to: " + newName);
+                        logger.AddToLog("   truncating: " + x + " to: " + newName);
                         s.Add("rename \"" + x.Name + "\" \"" + newName + "\"");
                     }
                 }
@@ -52,12 +53,25 @@ namespace InstallNameTruncator
 
                 SimpleFileWriter.Write("scrubNames.bat", s);
 
-                Console.WriteLine("   Wrote out scrubNames.bat");
+                logger.AddToLog("   Wrote out scrubNames.bat");
 
                 if (args.Length > 0 && args[0] == "/r")
                 {
-                    ExecuteCommand("scrubNames.bat");
+                    int exitCode = ExecuteCommand("scrubNames.bat", logger);
+                    
+                    if(exitCode == 0)
+                    {
+                        Console.WriteLine(" Ok");
+                    }
+                    else
+                    {
+                        Console.WriteLine(" There was an error.  See the installNameTruncator.log for more information.");
+                    }
                 }
+
+                
+
+                logger.Write("installNameTruncator.log");
             }
             catch (Exception ex)
             {
@@ -88,9 +102,9 @@ namespace InstallNameTruncator
             Console.WriteLine("                  default file: commands.config");
         }
 
-        private static void ExecuteCommand(string command)
+        private static int ExecuteCommand(string command, Logger logger)
         {
-            int ExitCode;
+            int ExitCode = 0;
             ProcessStartInfo ProcessInfo;
             Process process;
 
@@ -110,11 +124,50 @@ namespace InstallNameTruncator
             string error = process.StandardError.ReadToEnd();
 
             ExitCode = process.ExitCode;
-
-            Console.Write("output>>" + (String.IsNullOrEmpty(output) ? "(none)" : output));
-            Console.Write("error>>" + (String.IsNullOrEmpty(error) ? "(none)" : error));
-            Console.Write("ExitCode: " + ExitCode.ToString(), "ExecuteCommand");
             process.Close();
+
+            logger.AddToLog("Output: " + output);
+            logger.AddToLog("Errors: " + error);
+            logger.AddToLog("ExitCode: " + ExitCode);
+
+            return ExitCode;
+        }
+    }
+
+
+    public class Logger
+    {
+        List<string> log = new List<string>();
+
+        public void AddToLog(string s)
+        {
+            log.Add(s);
+        }
+        public void AddToLog(List<string> s)
+        {
+            log.AddRange(s);
+        }
+
+        public List<string> GetLog()
+        {
+            return log;
+        }
+
+        public void Write(string file)
+        {
+            SimpleFileWriter.Write(file, log);
+        }
+
+        public void AddAndWrite(string s, string file)
+        {
+            AddToLog(s);
+            Write(file);
+        }
+
+        public void AddAndWrite(List<string> s, string file)
+        {
+            AddToLog(s);
+            Write(file);
         }
     }
 

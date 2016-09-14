@@ -47,7 +47,7 @@ namespace MasterRunner.App.Runners
 
             ProcessExecutorHelper helper = new ProcessExecutorHelper(logger, allowedExits, SimpleFileReader.Read("timeout.config"), 600000);
 
-            int exitCode = helper.SpawnAndLog("PowerShell.exe -ExecutionPolicy Bypass -File " + filename, workingFolder, username, password);
+            int exitCode = helper.SpawnAndLog("PowerShell.exe -ExecutionPolicy Bypass -File " + filename, workingFolder, username, password, string.Empty);
             if (exitCode == 0)
             {
                 logger.AddAndWrite("UPGRADE SUCCESSFUL");
