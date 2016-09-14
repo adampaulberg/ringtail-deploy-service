@@ -24,3 +24,4 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyVersion("1.4.6.0")]
 [assembly: AssemblyFileVersion("1.4.6.0")]
+[assembly: InternalsVisibleTo("InstallerTests")]

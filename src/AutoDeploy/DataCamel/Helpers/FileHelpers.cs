@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
+using System.Web.Script.Serialization;
 
 namespace DataCamel.Helpers
 {
@@ -49,10 +51,19 @@ namespace DataCamel.Helpers
 
     public class ConfigHelper
     {
-        public static List<string> GetLaunchKeys()
+        public static List<string> GetLaunchKeys(string config=@"C:\upgrade\AutoDeploy\volitleData.config")
         {
-            var userData = SimpleFileReader.Read(@"C:\upgrade\AutoDeploy\volitleData.config");
+            var userData = SimpleFileReader.Read(config);
             return userData.FindAll(x => x.StartsWith("LAUNCHKEY"));
+        }
+
+        public static void WriteLaunchKeysAsJson(string writeLocation, string configLocation=null)
+        {
+            var launchKeysAsConfig = string.IsNullOrEmpty(configLocation) == true ? GetLaunchKeys() : GetLaunchKeys(configLocation);
+            var launchKeysAsJson = Helpers.ConfigHelper.ConvertToKeysfileJson(launchKeysAsConfig);
+            var asList = new List<string>();
+            asList.Add(launchKeysAsJson);
+            Helpers.SimpleFileWriter.Write(writeLocation, asList);
         }
 
         public static void WriteLaunchKeysAsJson(string writeLocation)
@@ -66,18 +77,15 @@ namespace DataCamel.Helpers
 
         public static string ConvertToKeysfileJson(List<string> configs)
         {
-            string front = "[";
-            string back = "]";
-
-            string body = "";
-
             // FROM:        
             //      LAUNCHKEY|MyKey="someFeature"
             //      LAUNCHKEY|MyKey2="someFeature2"
             // TO:
             //      [{"Description": "someFeature", "FeatureKey":"MyKey", "MinorKey":"nokey"},{"Description": "someFeature2", "FeatureKey":"MyKey2", "MinorKey":"nokey2"}]
             //
-
+            List<object> keysList = new List<object>();
+            
+            
             foreach (var config in configs)
             {
                 string configBase = config.Substring(10, config.Length - 10);
@@ -85,17 +93,21 @@ namespace DataCamel.Helpers
                 string descr = configBase.Split('=')[1];
                 descr = descr.Substring(1, descr.Length - 2);
 
-
-                string item = "{\"Description\":\"{0}\", \"FeatureKey\":\"{1}\"}";
-                item = item.Replace("{0}", descr);
-                item = item.Replace("{1}", key);
-
-                body += item + ",";
+                var obj = new
+                {
+                    Description = descr,
+                    FeatureKey = key
+                };
+                keysList.Add(obj);
             }
 
-            body = body.Length > 0 ? body.Substring(0, body.Length - 1) : string.Empty;
+            if(keysList.Any())
+            { 
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                return serializer.Serialize(keysList);
+            }
 
-            return front + body + back;
+            return string.Empty;
         }
 
     }

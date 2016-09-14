@@ -15,8 +15,7 @@ namespace InstallerService.Daemon.Controllers
     {
         [HttpGet]
         public HttpResponseMessage GetInstalledKeys(string connectionString, string dropLocation)
-        {
-            Debugger.Launch();
+        {            
             string keys = "";
             var log = new List<string>();
 
