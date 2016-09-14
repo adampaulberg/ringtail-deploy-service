@@ -25,6 +25,11 @@ namespace DeployToIIS
         public string InstallPath { get; set; }
 
 
+        [Option('v', "runtimeVersion", Required = false, DefaultValue ="v4.0", HelpText = "CLR Versions")]
+        public string ManagedRuntimeVersion { get; set; }
+
+
+
         [HelpOption]
         public string GetUsage()
         {

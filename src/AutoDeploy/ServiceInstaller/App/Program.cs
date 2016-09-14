@@ -140,9 +140,27 @@ namespace ServiceInstaller
                     return moveResult;
                 }
 
-                var iisInstallCmd = GenerateIISInstallCommand(volitileDataList, appName);
+
+                var iisInstallCmd = String.Empty;
+
+
+                try
+                {
+                    iisInstallCmd = GenerateIISInstallCommand(volitileDataList, appName);
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                    return 1;
+                }
                 filledInParameters.Add(iisInstallCmd);
 
+
+                if(String.IsNullOrEmpty(iisInstallCmd))
+                {
+                    Console.WriteLine("Unknown error - the deploy to iis command is blank, so this won't create an IIS website correctly.");
+                    return 1;
+                }
 
                 Console.WriteLine("ServiceInstaller Writing to file.... " + "deploy-" + appName + ".bat");
                 SimpleFileWriter.Write("deploy-" + appName + ".bat", filledInParameters);
@@ -193,7 +211,7 @@ namespace ServiceInstaller
             {
                 return @"C:\Program Files\FTI Technology\" + applicationName;
             }
-
+            
             public static void NormalizeZipName(string applicationName)
             {
                 var path = @"C:\Upgrade\AutoDeploy\" + applicationName;
@@ -266,16 +284,18 @@ namespace ServiceInstaller
                 string extractPath = GetExtractPath(applicationName);
                 try
                 {
-                    DirectoryInfo di = new DirectoryInfo(extractPath);
+                    DirectoryInfo di = new DirectoryInfo(@"C:\Program Files\FTI Technology\");
                     if (!di.Exists)
                     {
                         di.Create();
+                        Console.WriteLine("...created folder: " + di.FullName);
                     }
                     System.IO.Directory.Move(extractPath, installPath);
                 }
-                catch
+                catch(Exception ex)
                 {
                     Console.WriteLine("...failed to copy zip to " + installPath);
+                    Console.WriteLine("..error:" + ex.Message);
                     return 1;
                 }
 
@@ -292,13 +312,32 @@ namespace ServiceInstaller
                 //Ringtail-Svc-ContentSearch|Username="DOMAIN\user"
                 //Ringtail-Svc-ContentSearch|Password="PASSWORD"
                 //Ringtail-Svc-ContentSearch|Version="1"
-                var userKeyValue = appConfigs.Find(x => x.Contains(applicationName + "|Username="));
-                var pwdKeyValue = appConfigs.Find(x => x.Contains(applicationName + "|Password="));
+                var userKeyValue = appConfigs.Find(x => x.Contains(applicationName + "|SERVICEUSERNAME="));
+                var pwdKeyValue = appConfigs.Find(x => x.Contains(applicationName + "|SERVICEPASSWORD="));
                 var installPath = GetInstallPath(applicationName);
 
                 var user = "";
                 var pwd = "";
 
+
+                bool valid = true;
+                if (String.IsNullOrEmpty(userKeyValue))
+                {
+                    Console.WriteLine(" Missing a required entry in volitleData.config for the key: " + " Ringtail-Svc-ContentSearch|SERVICEUSERNAME");
+                    valid = false;
+                }
+
+                if (String.IsNullOrEmpty(pwdKeyValue))
+                {
+                    Console.WriteLine(" Missing a required entry in volitleData.config for the key: " + " Ringtail-Svc-ContentSearch|SERVICEPASSWORD");
+                    valid = false;
+                }
+
+                if (!valid)
+                {
+                    Console.WriteLine("One of the required configurations was missing.");
+                    throw new ArgumentNullException();
+                }
 
                 try
                 {
@@ -312,7 +351,7 @@ namespace ServiceInstaller
                 }
                 catch(Exception ex)
                 {
-                    Console.WriteLine("...error reading configurations" + ex.Message);
+                    Console.WriteLine("...error reading configurations: " + ex.Message);
                     throw ex;
                 }
 

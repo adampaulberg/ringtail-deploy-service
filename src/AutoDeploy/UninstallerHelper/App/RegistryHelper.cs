@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 namespace UninstallerHelper.App
 {
 
+    /// <summary>
+    /// Functions for reading the Windows System Registry.   ...it's hard coded for use with FTI for now.
+    /// </summary>
     public class RegistryHelper
     {
         public string RPF_Version { get; private set; }
@@ -18,34 +21,6 @@ namespace UninstallerHelper.App
 
         public Dictionary<string, RegistryKey> RingtailRegistryKeysByApplicationName { get; private set; }
 
-        //public RegistryHelper()
-        //{
-        //    var ringtailRegistryKeys = RegistryHelper.GetAllRingtailKeys();
-        //    RingtailRegistryKeysByApplicationName = new Dictionary<string, RegistryKey>();
-
-        //    foreach (var x in ringtailRegistryKeys)
-        //    {
-        //        string currentName = (string)x.GetValue("DisplayName");
-        //        this.RingtailRegistryKeysByApplicationName.Add(currentName, x);
-
-        //        if (currentName.Contains("Ringtail Processing Framework"))
-        //        {
-        //            RPF_Version = (string)x.GetValue("DisplayVersion");
-        //        }
-        //        if (currentName.Contains("Framework Workers"))
-        //        {
-        //            RPF_Worker_Version = (string)x.GetValue("DisplayVersion");
-        //        }
-        //        if (currentName.Contains("Ringtail Application"))
-        //        {
-        //            Ringtail_Application_Version = (string)x.GetValue("DisplayVersion");
-        //        }
-        //        if (currentName.Contains("Ringtail Database Utility"))
-        //        {
-        //            Ringtail_DatabaseTools_Version = (string)x.GetValue("DisplayVersion");
-        //        }
-        //    }
-        //}
 
         public static List<RegistryKey> GetAllRingtailKeys(Logger l)
         {
@@ -86,6 +61,49 @@ namespace UninstallerHelper.App
             }
 
             return applicationNamesByKey;
+        }
+    }
+
+    /// <summary>
+    /// This decouples querying the Registry object from other things you might want to do with that information.
+    /// </summary>
+    public class RegistryFacade
+    {
+        public string AppName { get; private set; }
+        public string UninstallString { get; private set; }
+
+        public bool Ok { get; private set; }
+
+        public RegistryFacade(RegistryKey app, Logger logger)
+        {
+            logger.AddAndWrite(" Extracting Registry Info");
+
+            List<string> valueNames = new List<string>();
+            if (app != null)
+            {
+                var valueNamesAsArray = app.GetValueNames();
+                logger.AddAndWrite(" Extracted valueNames");
+                valueNames = valueNamesAsArray.ToList();
+            }
+            var hasUninstallString = !String.IsNullOrEmpty(valueNames.Find(x => x == "UninstallString"));
+            var hasAppName = !String.IsNullOrEmpty(valueNames.Find(x => x == "DisplayName"));
+
+            if (hasUninstallString && hasAppName)
+            {
+                Ok = true;
+                AppName = app.GetValue("DisplayName").ToString();
+                UninstallString = app.GetValue("UninstallString").ToString();
+                logger.AddAndWrite(" Extracted Registry Info");
+                logger.AddAndWrite("   app Name: " + AppName);
+                logger.AddAndWrite("   uninstall String: " + UninstallString);
+            }
+            else
+            {
+                logger.AddAndWrite(" This was a valid uninstallation key, which is okay");
+                Ok = false;
+            }
+
+            logger.AddAndWrite(" Extracting Registry Info - Exiting");
         }
     }
 }
