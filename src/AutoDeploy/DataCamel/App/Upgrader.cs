@@ -286,12 +286,12 @@ namespace DataCamel.App
 
     public class LaunchKeyRunnerHelper
     {
+        internal string keysFile = @"C:\Upgrade\AutoDeploy\launchKeys.json";
+        internal string workingFolder = @"C:\upgrade\autodeploy\";
 
         public int RunFile(Action<string> Logger, string targetFilePath)
         {
-            string keys = @"C:\Upgrade\AutoDeploy\launchKeys.json";
-            string filename = "ringtail-deploy-feature-utility.exe --bulkdatapath=\"" + targetFilePath + "\" --keysfile=\"" + keys + "\"";
-            string workingFolder = @"C:\upgrade\autodeploy\";
+            string filename = "ringtail-deploy-feature-utility.exe --bulkdatapath=\"" + targetFilePath + "\" --keysfile=\"" + keysFile + "\"";
 
             FileInfo fi = new FileInfo(workingFolder + "ringtail-deploy-feature-utility.exe");
             if (!fi.Exists)
@@ -300,7 +300,7 @@ namespace DataCamel.App
                 return 0;
             }
 
-            Helpers.ConfigHelper.WriteLaunchKeysAsJson(keys);
+            Helpers.ConfigHelper.WriteLaunchKeysAsJson(keysFile);
 
 
             int exitCode = SpawnAndLog(Logger, filename, workingFolder, null, null);

@@ -5,12 +5,33 @@ using System.IO;
 using Microsoft.Win32;
 using System.Linq;
 using DatabaseUpgrader.App;
+using System.Web.Script.Serialization;
+using DataCamel.Helpers;
 
 namespace InstallerTests
 {
     [TestClass]
     public class DatabaseUpgraderTests
     {
+       // const string configFile = @"DatabaseUpgraderTests\testData.config";
+
+        /// <summary>
+        /// Dynamically generate a test config
+        /// </summary>
+        /// <returns></returns>
+        public string generateConfig()
+        {
+            string tempFile = Path.GetTempFileName();
+
+            using (StreamWriter writetext = new StreamWriter(tempFile))
+            {                
+                writetext.WriteLine("LAUNCHKEY|MyKey=\"someFeature with \"some\"\"");
+                writetext.WriteLine("LAUNCHKEY|MyKey2=\"someFeature2\"");
+            }
+            return tempFile;
+        }
+
+
         [TestMethod]
         public void DoIt()
         {
@@ -42,7 +63,24 @@ namespace InstallerTests
         [TestMethod]
         public void WriteLaunchKeyJson()
         {
-            DataCamel.Helpers.ConfigHelper.WriteLaunchKeysAsJson(@"D:\test\testOutcome.json");
+            // Write keys to temp file
+            string tempFile = Path.GetTempFileName();
+
+            DataCamel.Helpers.ConfigHelper.WriteLaunchKeysAsJson(new ConfigHelper.ConfigOptions() { VolitleDataFile = tempFile, WriteLocation = Path.Combine(Directory.GetCurrentDirectory(), generateConfig()) });
+
+            Assert.IsTrue(File.Exists(tempFile), "Keyfile was not created");
+            string keyFileContents = File.ReadAllText(tempFile);
+            Assert.IsNotNull(keyFileContents, "Keyfile was created, but is empty.  Expected file to contain keys entries.");
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            try
+            {
+                // Test for valid JSon
+                var obj = serializer.Deserialize<object>(keyFileContents);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("JSon data could not be deserialized indicating bad data: " + ex.Message);
+            }
         }
 
         [TestMethod]
@@ -54,7 +92,23 @@ namespace InstallerTests
             var x = DataCamel.Helpers.ConfigHelper.ConvertToKeysfileJson(configs);
             Console.WriteLine(x);
 
-            Assert.AreEqual(x, "[{\"Description\":\"someFeature\", \"FeatureKey\":\"MyKey\"},{\"Description\":\"someFeature2\", \"FeatureKey\":\"MyKey2\"}]");
+            var targetMatch = "[{\"Description\":\"someFeature\",\"FeatureKey\":\"MyKey\"},{\"Description\":\"someFeature2\",\"FeatureKey\":\"MyKey2\"}]";
+            Assert.AreEqual(x, targetMatch);
         }
+
+
+        [TestMethod]
+        public void ConvertLaunchKeyConfigToLaunchKeySpecialCharsJson()
+        {
+            List<string> configs = new List<string>();
+            configs.Add("LAUNCHKEY|MyKey=\"someFeature\" with -- some \"special\" chars");
+            configs.Add("LAUNCHKEY|MyKey2=\"someFeature2\"");
+            var x = DataCamel.Helpers.ConfigHelper.ConvertToKeysfileJson(configs);
+            Console.WriteLine(x);
+
+            var targetMatch = "[{\"Description\":\"someFeature\\\" with -- some \\\"special\\\" char\",\"FeatureKey\":\"MyKey\"},{\"Description\":\"someFeature2\",\"FeatureKey\":\"MyKey2\"}]";
+            Assert.AreEqual(x, targetMatch);
+        }
+
     }
 }
