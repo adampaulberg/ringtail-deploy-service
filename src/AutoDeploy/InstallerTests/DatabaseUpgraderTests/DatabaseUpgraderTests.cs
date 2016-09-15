@@ -6,13 +6,31 @@ using Microsoft.Win32;
 using System.Linq;
 using DatabaseUpgrader.App;
 using System.Web.Script.Serialization;
+using DataCamel.Helpers;
 
 namespace InstallerTests
 {
     [TestClass]
     public class DatabaseUpgraderTests
     {
-        const string configFile = @"DatabaseUpgraderTests\testData.config";
+       // const string configFile = @"DatabaseUpgraderTests\testData.config";
+
+        /// <summary>
+        /// Dynamically generate a test config
+        /// </summary>
+        /// <returns></returns>
+        public string generateConfig()
+        {
+            string tempFile = Path.GetTempFileName();
+
+            using (StreamWriter writetext = new StreamWriter(tempFile))
+            {                
+                writetext.WriteLine("LAUNCHKEY|MyKey=\"someFeature with \"some\"\"");
+                writetext.WriteLine("LAUNCHKEY|MyKey2=\"someFeature2\"");
+            }
+            return tempFile;
+        }
+
 
         [TestMethod]
         public void DoIt()
@@ -48,7 +66,7 @@ namespace InstallerTests
             // Write keys to temp file
             string tempFile = Path.GetTempFileName();
 
-            DataCamel.Helpers.ConfigHelper.WriteLaunchKeysAsJson(tempFile, Path.Combine(Directory.GetCurrentDirectory(), configFile));
+            DataCamel.Helpers.ConfigHelper.WriteLaunchKeysAsJson(new ConfigHelper.ConfigOptions() { VolitleDataFile = tempFile, WriteLocation = Path.Combine(Directory.GetCurrentDirectory(), generateConfig()) });
 
             Assert.IsTrue(File.Exists(tempFile), "Keyfile was not created");
             string keyFileContents = File.ReadAllText(tempFile);

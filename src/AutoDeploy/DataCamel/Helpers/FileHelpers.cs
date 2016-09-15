@@ -51,28 +51,53 @@ namespace DataCamel.Helpers
 
     public class ConfigHelper
     {
-        public static List<string> GetLaunchKeys(string config=@"C:\upgrade\AutoDeploy\volitleData.config")
+        public class ConfigOptions
         {
-            var userData = SimpleFileReader.Read(config);
+            public string VolitleDataFile { get; set; } = @"C:\upgrade\AutoDeploy\volitleData.config";
+            public string WriteLocation { get; set; }
+        }
+
+        /// <summary>
+        /// Get launch keys from the default config file
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> GetLaunchKeysFromDefaultConfig()
+        {
+            return GetLaunchKeys(new ConfigOptions());
+        }
+
+        /// <summary>
+        /// Get launch keys from the config file
+        /// </summary>
+        /// <param name="configOptions"></param>
+        /// <returns></returns>
+        public static List<string> GetLaunchKeys(ConfigOptions configOptions)
+        {
+            var userData = SimpleFileReader.Read(configOptions.VolitleDataFile);
             return userData.FindAll(x => x.StartsWith("LAUNCHKEY"));
         }
 
-        public static void WriteLaunchKeysAsJson(string writeLocation, string configLocation=null)
+        /// <summary>
+        /// Write keys to file as JSon reading the key data from the default config file (volitleData) or user sepecified
+        /// </summary>
+        /// <param name="configOptions"></param>
+        public static void WriteLaunchKeysAsJson(ConfigOptions configOptions)
         {
-            var launchKeysAsConfig = string.IsNullOrEmpty(configLocation) == true ? GetLaunchKeys() : GetLaunchKeys(configLocation);
+            var launchKeysAsConfig = GetLaunchKeys(configOptions);
             var launchKeysAsJson = Helpers.ConfigHelper.ConvertToKeysfileJson(launchKeysAsConfig);
             var asList = new List<string>();
             asList.Add(launchKeysAsJson);
-            Helpers.SimpleFileWriter.Write(writeLocation, asList);
+            Helpers.SimpleFileWriter.Write(configOptions.WriteLocation, asList);
         }
 
+        /// <summary>
+        /// Write keys to file as JSon reading the key data from the default config file (volitleData)
+        /// </summary>
+        /// <param name="writeLocation"></param>
         public static void WriteLaunchKeysAsJson(string writeLocation)
         {
-            var launchKeysAsConfig = Helpers.ConfigHelper.GetLaunchKeys();
-            var launchKeysAsJson = Helpers.ConfigHelper.ConvertToKeysfileJson(launchKeysAsConfig);
-            var asList = new List<string>();
-            asList.Add(launchKeysAsJson);
-            Helpers.SimpleFileWriter.Write(writeLocation, asList);
+            ConfigOptions configOptions = new ConfigOptions() { WriteLocation = writeLocation };
+            WriteLaunchKeysAsJson(configOptions);
         }
 
         public static string ConvertToKeysfileJson(List<string> configs)
