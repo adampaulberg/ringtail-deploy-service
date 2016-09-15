@@ -41,42 +41,46 @@ namespace MasterRunner.App
             this.defaultTimeout = defaultTimeout;
         }
 
-        public int SpawnAndLog(string command, string workingFolder, string username, string password)
+        public int SpawnAndLog(string command, string workingFolder, string username, string password, string headerInfo)
         {
             int exitCode = 0;
             try
             {
                 logger.AddAndWrite("-----------");
-                logger.AddAndWrite("*starting: " + workingFolder + command);
-                logger.AddAndWrite(" *time: " + DateTime.Now);
+                logger.AddAndWrite(headerInfo);
+                logger.AddAndWrite("* starting: " + workingFolder + command);
+                //logger.AddAndWrite("* time: " + DateTime.Now);
                 var result = SpawnProcess(command, workingFolder, username, password);
 
                 if (result.ExitCode != 0 && !result.ExitOk)
                 {
                     logger.AddAndWrite("* time: " + DateTime.Now);
-                    logger.AddAndWrite("*Exited with code " + result.ExitCode);
+                    logger.AddAndWrite("* Exited with code " + result.ExitCode);
                     exitCode = result.ExitCode;
                 }
                 else if (result.ExitCode !=0 && result.ExitOk)
                 {
                     logger.AddAndWrite("* time: " + DateTime.Now);
-                    logger.AddAndWrite("*Exited with code " + result.ExitCode);
-                    logger.AddAndWrite("*...but this is a whitelisted exit code for this command");
+                    logger.AddAndWrite("* Exited with code " + result.ExitCode);
+                    logger.AddAndWrite("* ...but this is a whitelisted exit code for this command");
                     exitCode = 0;
                 }
             }
             catch (Exception ex)
             {
-                logger.AddAndWrite("*RunFile error - trying to run the process threw an exception.");
+                logger.AddAndWrite("* RunFile error - trying to run the process threw an exception.");
                 logger.AddAndWrite(ex.Message);
                 logger.AddAndWrite(ex.StackTrace);
                 logger.AddAndWrite("* time: " + DateTime.Now);
-                logger.AddAndWrite("*Exited with code 2");
+                logger.AddAndWrite("* Exited with code 2");
                 exitCode = 2;
             }
 
-            logger.AddAndWrite("*finished: " + workingFolder + command);
-            logger.AddAndWrite(" *time: " + DateTime.Now);
+            if (exitCode != 0)
+            {
+                logger.AddAndWrite("* finished: " + workingFolder + command);
+                logger.AddAndWrite("* time: " + DateTime.Now);
+            }
 
             return exitCode;
         }
@@ -93,11 +97,11 @@ namespace MasterRunner.App
                 args = commandName.Substring(index + 1, commandName.Length - index - 1);
             }
 
-            logger.AddToLog("*cmd: " + file);
-            logger.AddToLog("*args: " + args);
+            //logger.AddToLog("*cmd: " + file);
+            //logger.AddToLog("*args: " + args);
 
 
-            logger.AddAndWrite("* ...now running... ");
+            //logger.AddAndWrite("* ...now running... ");
 
 
             string cmd = "/c " + workingDirectory + commandName;
@@ -107,6 +111,8 @@ namespace MasterRunner.App
             StringBuilder output = new StringBuilder();
             StringBuilder error = new StringBuilder();
 
+
+            bool suppressNoise = commandName.Contains("fetch-");
 
             using (AutoResetEvent outputWaitHandle = new AutoResetEvent(false))
             using (AutoResetEvent errorWaitHandle = new AutoResetEvent(false))
@@ -144,7 +150,7 @@ namespace MasterRunner.App
                         process.StartInfo.Password = securePassword;
                     }
 
-                    logger.AddAndWrite("* started");
+                    //logger.AddAndWrite("* started");
 
 
                     var timeout = ProcessExecutorHelper.GetTimeoutLength(commandName, timeoutList, logger, defaultTimeout);
@@ -160,8 +166,11 @@ namespace MasterRunner.App
                         }
                         else
                         {
-                            logger.AddAndWrite(e.Data);
-                            output.AppendLine(e.Data);
+                            if (!suppressNoise)
+                            {
+                                logger.AddAndWrite("  " + e.Data);
+                                output.AppendLine("  " + e.Data);
+                            }
                         }
                     };
                     process.ErrorDataReceived += (sender, e) =>
@@ -173,8 +182,8 @@ namespace MasterRunner.App
                         else
                         {
                             logger.AddAndWrite("* Error Text: ");
-                            logger.AddAndWrite(e.Data);
-                            error.AppendLine(e.Data);
+                            logger.AddAndWrite("  " + e.Data);
+                            error.AppendLine("  " + e.Data);
                         }
                     };
 
@@ -193,17 +202,26 @@ namespace MasterRunner.App
                         {
                             // Process completed.
 
-                            // show .00 place if it's less than 10 seconds, otherwise just show integer seconds.
-                            var elapsed = sw.ElapsedMilliseconds > 10000 ? Math.Floor(sw.ElapsedMilliseconds / 1000m) : Math.Round(sw.ElapsedMilliseconds / 1000m, 2);
+                            if (suppressNoise)
+                            {
+                                logger.AddAndWrite("  Finished - OK");
+                            }
+
+
                             sw.Stop();
-                            logger.AddAndWrite("*finished in " + elapsed + " s");
+                            if (sw.ElapsedMilliseconds > 10000)
+                            {
+                                // show .00 place if it's less than 10 seconds, otherwise just show integer seconds.
+                                var elapsed = sw.ElapsedMilliseconds > 10000 ? Math.Floor(sw.ElapsedMilliseconds / 1000m) : Math.Round(sw.ElapsedMilliseconds / 1000m, 2);
+                                logger.AddAndWrite("* finished in " + elapsed + " s");
+                            }
                             exitCode = process.ExitCode;
                         }
                         else
                         {
                             // Timed out.
                             logger.AddAndWrite("* timed out....");
-                            logger.AddAndWrite("*process took longer than " + timeout + "  ms");
+                            logger.AddAndWrite("* process took longer than " + timeout + "  ms");
                             return new ProcessOutcome("", "", 1001, false);
                         }
                     }
@@ -212,15 +230,21 @@ namespace MasterRunner.App
                         // Process completed.
                         process.WaitForExit();
 
-                        // show .00 place if it's less than 10 seconds, otherwise just show integer seconds.
-                        var elapsed = sw.ElapsedMilliseconds > 10000 ? Math.Floor(sw.ElapsedMilliseconds / 1000m) : Math.Round(sw.ElapsedMilliseconds / 1000m, 2);
                         sw.Stop();
-                        logger.AddAndWrite("*finished in " + elapsed + " s");
+                        if (sw.ElapsedMilliseconds > 10000)
+                        {
+                            // show .00 place if it's less than 10 seconds, otherwise just show integer seconds.
+                            var elapsed = sw.ElapsedMilliseconds > 10000 ? Math.Floor(sw.ElapsedMilliseconds / 1000m) : Math.Round(sw.ElapsedMilliseconds / 1000m, 2);
+                            logger.AddAndWrite("* finished in " + elapsed + " s");
+                        }
                         exitCode = process.ExitCode;
 
                     }
 
-                    logger.AddAndWrite("*ran with exit code: " + process.ExitCode);
+                    if (process.ExitCode != 0)
+                    {
+                        logger.AddAndWrite("* ran with exit code: " + process.ExitCode);
+                    }
 
 
 

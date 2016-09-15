@@ -33,7 +33,7 @@ namespace MasterRunner.App.Runners
             var allowedExits = SimpleFileReader.Read(workingFolder + "allowedExit.config");
             ProcessExecutorHelper helper = new ProcessExecutorHelper(logger, allowedExits, SimpleFileReader.Read("timeout.config"), 0);
 
-            int exitCode = helper.SpawnAndLog(filename, workingFolder, username, password);
+            int exitCode = helper.SpawnAndLog(filename, workingFolder, username, password, string.Empty);
             if (exitCode == 0)
             {
                 logger.AddAndWrite("UPGRADE SUCCESSFUL");
