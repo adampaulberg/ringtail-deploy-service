@@ -22,7 +22,7 @@ namespace MasterRunner
                 {
                     options.WorkingFolder = Environment.CurrentDirectory + @"\";
                     Console.WriteLine("running: " + options.WorkingFolder + options.FileName);
-                    exitCode = RunnerFactory.MakeRunner(options.OutputFile, options.FileName, options.WorkingFolder, options.User, options.Password, options.Timeout).RunFile();
+                    exitCode = RunnerFactory.MakeRunner(options.OutputFile, options.FileName, options.WorkingFolder, options.User, options.Password, options.Timeout, options.LogMode).RunFile();
                 }
             }
             catch

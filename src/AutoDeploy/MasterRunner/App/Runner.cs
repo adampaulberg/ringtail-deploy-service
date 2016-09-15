@@ -11,10 +11,18 @@ namespace MasterRunner.App
 {
     public class RunnerFactory
     {
-        public static IRunner MakeRunner(string logFile, string fileName, string workingFolder, string username, string password, int defaultTimeout)
+        public static IRunner MakeRunner(string logFile, string fileName, string workingFolder, string username, string password, int defaultTimeout, string logMode)
         {
             Logger logger = new Logger();
             logger.fileName = logFile;
+
+            if(!string.IsNullOrEmpty(logMode) && logMode.ToLower() == "append")
+            {
+                var existingLog = SimpleFileReader.Read(logFile);
+                existingLog.Add("Appending on a retry");
+                logger.AddToLog(existingLog);
+                logger.Write(logFile);
+            }
 
             
             if (fileName.StartsWith("rem") || fileName.StartsWith("@") || fileName.StartsWith("--"))

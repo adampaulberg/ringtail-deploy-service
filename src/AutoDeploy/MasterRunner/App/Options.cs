@@ -26,6 +26,11 @@ namespace MasterRunner.App
         public string Password { get; set; }
 
 
+        [Option('l', "logMode", DefaultValue = "", HelpText = "if set to 'append' this run will append to the logs rather than restarting.")]
+        public string LogMode { get; set; }
+
+
+
         [Option('t', "defaultTaskTimeout", DefaultValue = 600000, Required = false, HelpText = "default task timeout length")]
         public int Timeout { get; set; }
 
