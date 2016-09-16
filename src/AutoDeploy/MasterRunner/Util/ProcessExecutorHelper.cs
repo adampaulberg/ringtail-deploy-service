@@ -112,7 +112,7 @@ namespace MasterRunner.App
             StringBuilder error = new StringBuilder();
 
 
-            bool suppressNoise = commandName.Contains("fetch-") || commandName.Contains("clean");
+            bool suppressNoise = commandName.Contains("fetch-") || commandName.Contains("clean") || commandName.Contains("iisreset") || commandName.Contains("install-");
             bool suppressErrors = commandName.Contains("clean");
 
             using (AutoResetEvent outputWaitHandle = new AutoResetEvent(false))

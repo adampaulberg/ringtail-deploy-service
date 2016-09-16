@@ -36,8 +36,8 @@ namespace InstallerService.Daemon.Controllers
 
                 if (ProcessHelpers.IsMasterRunnerAlreadyRunning())
                 {
-                    results = "There is already a deployment in progress.....";
-                    results = "Use api/stop if you want to stop that before running a retry.";
+                    results += "There is already a deployment in progress.....";
+                    results += "Use api/stop if you want to stop that before running a retry.";
                     return results;
                 }
                 else
