@@ -112,7 +112,8 @@ namespace MasterRunner.App
             StringBuilder error = new StringBuilder();
 
 
-            bool suppressNoise = commandName.Contains("fetch-");
+            bool suppressNoise = commandName.Contains("fetch-") || commandName.Contains("clean") || commandName.Contains("iisreset") || commandName.Contains("install-");
+            bool suppressErrors = commandName.Contains("clean");
 
             using (AutoResetEvent outputWaitHandle = new AutoResetEvent(false))
             using (AutoResetEvent errorWaitHandle = new AutoResetEvent(false))
@@ -181,9 +182,12 @@ namespace MasterRunner.App
                         }
                         else
                         {
-                            logger.AddAndWrite("* Error Text: ");
-                            logger.AddAndWrite("  " + e.Data);
-                            error.AppendLine("  " + e.Data);
+                            if (!suppressErrors)
+                            {
+                                logger.AddAndWrite("* Error Text: ");
+                                logger.AddAndWrite("  " + e.Data);
+                                error.AppendLine("  " + e.Data);
+                            }
                         }
                     };
 

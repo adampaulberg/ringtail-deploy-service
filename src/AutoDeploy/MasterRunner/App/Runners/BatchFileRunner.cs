@@ -1,6 +1,7 @@
 ﻿using MasterRunner.Util;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,7 +30,7 @@ namespace MasterRunner.App.Runners
         public int RunFile()
         {
             int exitCode = 0;
-            logger.AddAndWrite("* Processing via BatchFileRunner");
+            logger.AddAndWrite("* Starting: " + DateTime.Now);
             Console.WriteLine("Processing via BatchFileRunner");
             if (fileContents.Count == 0)
             {
@@ -49,6 +50,8 @@ namespace MasterRunner.App.Runners
                 logger.AddToLog("* found the following whitelisted areas");
                 allowedExits.ForEach(x => logger.AddToLog(x));
             }
+
+            bool retry = false;
 
             for(int i = 0; i < fileContents.Count; i++)
             {
@@ -76,19 +79,32 @@ namespace MasterRunner.App.Runners
                             remainingSteps.Add(fileContents[j]);
                         }
                         SimpleFileWriter.Write("retry.bat", remainingSteps);
-                        Console.WriteLine("************************************");
-                        Console.WriteLine("   To resume from the failure point....");
-                        Console.WriteLine("   Reboot this machine.");
-                        Console.WriteLine("   Run: ");
-                        Console.WriteLine(@"   C:\upgrade\autodeploy\MasterRunner.exe -f retry.bat");
-                        Console.WriteLine("************************************");
+                        logger.AddToLog("RETRY");
+                        logger.AddToLog("************************************");
+                        logger.AddToLog("   To resume from the failure point....");
+                        logger.AddToLog("   Reboot this machine.");
+                        logger.AddToLog("   Run: ");
+                        logger.AddToLog(@"   http://IP:8080/api/retry");
+                        logger.AddToLog("************************************");
+                        retry = true;
                         break;
                     }
                 }
             }
 
+            if(!retry)
+            {
+                // remove out the retry.bat file if we either failed or succeeded so that no further retries will happen.
+                FileInfo fi = new FileInfo(@"C:\upgrade\autodeploy\retry.bat");
+                if(fi.Exists)
+                {
+                    fi.Delete();
+                }
+            }
+
             if (exitCode == 0)
             {
+                logger.AddAndWrite("* Ending: " + DateTime.Now);
                 logger.AddAndWrite("UPGRADE SUCCESSFUL");
             }
             else

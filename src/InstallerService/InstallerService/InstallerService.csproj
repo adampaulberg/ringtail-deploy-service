@@ -116,6 +116,7 @@
     <Compile Include="Daemon\Controllers\InstalledBuildsController.cs" />
     <Compile Include="Daemon\Controllers\InstallerController.cs" />
     <Compile Include="Daemon\Controllers\ConfigController.cs" />
+    <Compile Include="Daemon\Controllers\RetryController.cs" />
     <Compile Include="Daemon\Controllers\StatusController.cs" />
     <Compile Include="Daemon\Controllers\StopController.cs" />
     <Compile Include="Daemon\Controllers\UninstallerController.cs" />
