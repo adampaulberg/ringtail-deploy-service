@@ -114,54 +114,6 @@ namespace InstallerService.Daemon.Controllers
             return results;
         }
 
-        private void DeleteFileLock()
-        {
-            var installerServiceFolder = EnvironmentInfo.INSTALLER_SERVICE_WORKING_FOLDER;
-            var LOCKFILE = installerServiceFolder + "LOCK_BUILDS.txt";
-            var fi = new FileInfo(LOCKFILE);
-
-            if (fi.Exists)
-            {
-                try
-                {
-                    string newFile = "__buildArchive." + ConvertDateToFileString(DateTime.Now) + "." + Guid.NewGuid().ToString().Substring(0, 10) + ".txt";
-                    fi.CopyTo(installerServiceFolder + newFile);
-                    fi.Delete();
-                }
-                catch
-                {
-                    fi.Delete();
-                }
-            }
-        }
-
-        private static string AppendFileToResults(string filePath)
-        {
-            FileInfo fi = new FileInfo(filePath);
-
-            string results = string.Empty;
-            if (fi.Exists)
-            {
-                var s = SimpleFileReader.Read(filePath);
-
-                foreach (var str in s)
-                {
-                    results += "<p>" + str + "</p>";
-                }
-            }
-            else
-            {
-                results = "Install started... check api/status to find out how it's going.";
-            }
-
-            return results;
-        }
-
-        private static string ConvertDateToFileString(DateTime dt)
-        {
-            return dt.Month + "." + dt.Day + "." + dt.Hour + dt.Minute + "." + dt.Second;
-        }
-
 
         private static List<string> ReadBuildOutput()
         {
