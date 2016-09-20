@@ -161,12 +161,6 @@ namespace GenericInstaller
                     filledInParameters.Add(command.Split('|')[2].TrimStart());
                     continue;
                 }
-                //if (command.Contains("powershell.exe"))
-                //{
-                //    var realCommand = GeneratePowershellRunnerScript(command, commonKeys, applicationKeys, applicationName);
-                //    filledInParameters.AddRange(realCommand);
-                //    continue;
-                //}
                 if (command.Contains(".exe"))
                 {
                     var realCommand = command.Split('|')[2].TrimStart();
@@ -235,8 +229,14 @@ namespace GenericInstaller
             {
                 int indexOfThisCommand = workingcommand.IndexOf(replacementKey);
                 int indexOfNextCommand = indexOfThisCommand + replacementKey.Length;
+                bool isAutoWrap = false;
 
                 string right = string.Empty;
+
+                if (workingcommand.Contains("/v"))
+                {
+                    isAutoWrap = true;
+                }
 
                 if (indexOfNextCommand < workingcommand.Length)
                 {
@@ -254,10 +254,33 @@ namespace GenericInstaller
                     }
                 }
 
+                Console.WriteLine("checking - " + replacementValue);
+                if (isAutoWrap)
+                {
+                    Console.WriteLine("autowrap - " + replacementValue);
+                    if (replacementValue.Contains(" "))
+                    {
+                        Console.WriteLine("in contains");
+                        int quoteCount = 0;
+                        for (int i = 0; i < replacementValue.Length; i++)
+                        {
+                            if (replacementValue[i] == '"')
+                            {
+                                quoteCount++;
+                            }
+                        }
+
+                        Console.WriteLine("quote count = " + quoteCount);
+                        if (quoteCount <=2)
+                        {
+                            replacementValue = "\"\"\"" + replacementValue + "\"\"\"";
+                        }
+                    }
+                }
+
                 string left = workingcommand.Substring(0, indexOfThisCommand);
 
                 string finalizer = "\" ";
-                //Console.WriteLine("     left is: " + left);
                 if (left.EndsWith("--"))
                 {
                     finalizer = " ";

@@ -45,6 +45,25 @@ namespace InstallerTests
         }
 
         [TestMethod]
+        public void ParameterAutoQuoteFillIn_Test()
+        {
+            Init();
+
+            var output = GenericInstaller.GenericInstallerHelper.DoIt(installerTemplate, data, "Ringtail8");
+            Console.WriteLine(output[0]);
+
+
+            SimpleFileWriter.Write(@"D:\test.bat", output);
+
+            Assert.IsTrue(output[0].Contains("RINGTAILIISWEBAPPLICATIONNAME"));
+            Assert.IsTrue(output[0].Contains("\"Default Web Site/Ringtail\"\""), "Should contain the right value");
+
+            Assert.IsTrue(output[0].Contains("CERT"));
+            Assert.IsTrue(output[0].Contains("\"2c 3f\"\""), "Should contain the right value");
+
+        }
+
+        [TestMethod]
         public void ParameterReplacement_PowershellFillIn_Test()
         {
             Init();
