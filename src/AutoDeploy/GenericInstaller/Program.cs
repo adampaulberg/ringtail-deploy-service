@@ -161,12 +161,6 @@ namespace GenericInstaller
                     filledInParameters.Add(command.Split('|')[2].TrimStart());
                     continue;
                 }
-                //if (command.Contains("powershell.exe"))
-                //{
-                //    var realCommand = GeneratePowershellRunnerScript(command, commonKeys, applicationKeys, applicationName);
-                //    filledInParameters.AddRange(realCommand);
-                //    continue;
-                //}
                 if (command.Contains(".exe"))
                 {
                     var realCommand = command.Split('|')[2].TrimStart();
@@ -235,8 +229,14 @@ namespace GenericInstaller
             {
                 int indexOfThisCommand = workingcommand.IndexOf(replacementKey);
                 int indexOfNextCommand = indexOfThisCommand + replacementKey.Length;
+                bool isAutoWrap = false;
 
                 string right = string.Empty;
+
+                if (workingcommand.Contains("/v"))
+                {
+                    isAutoWrap = true;
+                }
 
                 if (indexOfNextCommand < workingcommand.Length)
                 {
@@ -254,10 +254,14 @@ namespace GenericInstaller
                     }
                 }
 
+                if (isAutoWrap)
+                {
+                    replacementValue = SmartWrapParameterInQuotes(replacementValue);
+                }
+
                 string left = workingcommand.Substring(0, indexOfThisCommand);
 
                 string finalizer = "\" ";
-                //Console.WriteLine("     left is: " + left);
                 if (left.EndsWith("--"))
                 {
                     finalizer = " ";
@@ -272,6 +276,27 @@ namespace GenericInstaller
                 workingcommand = newString;
             }
             return workingcommand;
+        }
+
+        private static string SmartWrapParameterInQuotes(string replacementValue)
+        {
+            if (replacementValue.Contains(" "))
+            {
+                int quoteCount = 0;
+                for (int i = 0; i < replacementValue.Length; i++)
+                {
+                    if (replacementValue[i] == '"')
+                    {
+                        quoteCount++;
+                    }
+                }
+                if (quoteCount <= 2)
+                {
+                    replacementValue = "\"\"\"" + replacementValue + "\"\"\"";
+                }
+            }
+
+            return replacementValue;
         }
 
         private static Dictionary<string, Dictionary<string, string>> BuildConfigDictionary(List<string> config)
