@@ -254,28 +254,9 @@ namespace GenericInstaller
                     }
                 }
 
-                Console.WriteLine("checking - " + replacementValue);
                 if (isAutoWrap)
                 {
-                    Console.WriteLine("autowrap - " + replacementValue);
-                    if (replacementValue.Contains(" "))
-                    {
-                        Console.WriteLine("in contains");
-                        int quoteCount = 0;
-                        for (int i = 0; i < replacementValue.Length; i++)
-                        {
-                            if (replacementValue[i] == '"')
-                            {
-                                quoteCount++;
-                            }
-                        }
-
-                        Console.WriteLine("quote count = " + quoteCount);
-                        if (quoteCount <=2)
-                        {
-                            replacementValue = "\"\"\"" + replacementValue + "\"\"\"";
-                        }
-                    }
+                    replacementValue = SmartWrapParameterInQuotes(replacementValue);
                 }
 
                 string left = workingcommand.Substring(0, indexOfThisCommand);
@@ -295,6 +276,27 @@ namespace GenericInstaller
                 workingcommand = newString;
             }
             return workingcommand;
+        }
+
+        private static string SmartWrapParameterInQuotes(string replacementValue)
+        {
+            if (replacementValue.Contains(" "))
+            {
+                int quoteCount = 0;
+                for (int i = 0; i < replacementValue.Length; i++)
+                {
+                    if (replacementValue[i] == '"')
+                    {
+                        quoteCount++;
+                    }
+                }
+                if (quoteCount <= 2)
+                {
+                    replacementValue = "\"\"\"" + replacementValue + "\"\"\"";
+                }
+            }
+
+            return replacementValue;
         }
 
         private static Dictionary<string, Dictionary<string, string>> BuildConfigDictionary(List<string> config)
