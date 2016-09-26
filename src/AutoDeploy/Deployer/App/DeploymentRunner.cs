@@ -51,9 +51,8 @@ namespace Deployer.App
 
                     Console.WriteLine(" " + friendlyName + "   " + (i + 1) + " of " + filesToDeploy.Count);
 
-                    int j = 1;
                     int exitInfo = 0;
-                    for (; j <= retryMax; j++)
+                    for (int j = 1; j <= retryMax; j++)
                     {
 
                         List<string> myBatch = new List<string>();
