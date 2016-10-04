@@ -275,7 +275,8 @@ namespace MasterRunner.App
             {
                 if (timeoutList != null && timeoutList.Count > 0)
                 {
-                    var timeout = timeoutList.Find(x => x.Split('|')[0] == commandName);
+                    string nonExtension = commandName.Split('.')[0];
+                    var timeout = timeoutList.Find(x => x.Split('|')[0] == nonExtension);
 
                     if (timeout != null && timeout.Length > 0)
                     {
