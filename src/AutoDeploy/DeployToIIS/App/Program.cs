@@ -38,7 +38,13 @@ namespace DeployToIIS
                     {
                         if (appPool.Name == options.AppName)
                         {
+                            appPool.ProcessModel.UserName = options.Username;
+                            appPool.ProcessModel.Password = options.Password;
+                            appPool.ProcessModel.IdentityType = ProcessModelIdentityType.SpecificUser;
+                            appPool.ManagedRuntimeVersion = options.ManagedRuntimeVersion;
                             exists = true;
+                            Console.WriteLine("...updating app pool.");
+                            iisManager.CommitChanges();
                         }
                     }
 

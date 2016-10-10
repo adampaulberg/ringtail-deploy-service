@@ -102,6 +102,26 @@ namespace MasterRunner.App.Runners
                 }
             }
 
+            if (retry)
+            {
+                var log = logger.GetLog();
+
+                var newLog = new List<string>();
+                foreach (var x in log)
+                {
+                    if (x.StartsWith("UPGRADE SUCCESSFUL") || x.StartsWith("UPGRADE FAILED") || x.StartsWith("UPGRADE RETRY"))
+                    {
+                        continue;
+                    }
+                    newLog.Add(x);
+                }
+
+                logger.ClearLog();
+                logger.AddToLog(newLog);
+
+                logger.AddAndWrite("UPGRADE RETRY");
+                return exitCode;
+            }
             if (exitCode == 0)
             {
                 logger.AddAndWrite("* Ending: " + DateTime.Now);

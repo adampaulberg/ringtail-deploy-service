@@ -100,6 +100,16 @@ namespace MasterRunner.Util
             }
         }
 
+        public List<string> GetLog()
+        {
+            return log;
+        }
+
+        public void ClearLog()
+        {
+            log.Clear();
+        }
+
         public void AddAndWrite(string s)
         {
             AddToLog(s);
