@@ -50,6 +50,7 @@ namespace MasterRunner.App
                 logger.AddAndWrite(headerInfo);
                 logger.AddAndWrite("* starting: " + workingFolder + command);
                 //logger.AddAndWrite("* time: " + DateTime.Now);
+
                 var result = SpawnProcess(command, workingFolder, username, password);
 
                 if (result.ExitCode != 0 && !result.ExitOk)
@@ -58,22 +59,31 @@ namespace MasterRunner.App
                     logger.AddAndWrite("* Exited with code " + result.ExitCode);
                     exitCode = result.ExitCode;
                 }
-                else if (result.ExitCode !=0 && result.ExitOk)
+                else if (result.ExitCode != 0 && result.ExitOk)
                 {
                     logger.AddAndWrite("* time: " + DateTime.Now);
                     logger.AddAndWrite("* Exited with code " + result.ExitCode);
                     logger.AddAndWrite("* ...but this is a whitelisted exit code for this command");
                     exitCode = 0;
                 }
+
             }
             catch (Exception ex)
             {
-                logger.AddAndWrite("* RunFile error - trying to run the process threw an exception.");
-                logger.AddAndWrite(ex.Message);
-                logger.AddAndWrite(ex.StackTrace);
-                logger.AddAndWrite("* time: " + DateTime.Now);
-                logger.AddAndWrite("* Exited with code 2");
-                exitCode = 2;
+                var allowedException = this.allowedExceptions.Find(a => a.Contains(command));
+                if (String.IsNullOrEmpty(allowedException))
+                {
+                    logger.AddAndWrite("* RunFile error - trying to run the process threw an exception.");
+                    logger.AddAndWrite(ex.Message);
+                    logger.AddAndWrite(ex.StackTrace);
+                    logger.AddAndWrite("* time: " + DateTime.Now);
+                    logger.AddAndWrite("* Exited with code 2");
+                    exitCode = 2;
+                }
+                else
+                {
+                    logger.AddAndWrite("* Command failed, but this command is whitelisted.");
+                }
             }
 
             if (exitCode != 0)

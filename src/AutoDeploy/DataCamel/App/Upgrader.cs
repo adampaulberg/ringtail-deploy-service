@@ -143,11 +143,7 @@ namespace DataCamel.App
             int resultCode = 0;
             try
             {
-                Logger(string.Format("Attempting to write out Launch Keys\r\n"));
-
-
                 string keyfileDropLocation = options.InstallPath + @"\" + "SQL Component_v" + options.Version +  @"\Scripts\Portal\PostProcessing\" + dbName + "_generated_feature_keys.txt";
-
                 Logger(string.Format("Attempting to write out Launch Keys\r\n"));
 
                 var helper = new LaunchKeyRunnerHelper();
@@ -296,7 +292,7 @@ namespace DataCamel.App
             FileInfo fi = new FileInfo(workingFolder + "ringtail-deploy-feature-utility.exe");
             if (!fi.Exists)
             {
-                Logger("Skipping Launch Keys - this build may be prior to Launch Keys.\r\n");
+                //Logger("Skipping Launch Keys - this build may be prior to Launch Keys.\r\n");
                 return 0;
             }
 
