@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-
+using FileCleaner.App;
 
 namespace FileCleaner
 {
@@ -15,15 +15,24 @@ namespace FileCleaner
             var options = new Options();
             if(!CommandLine.Parser.Default.ParseArguments(args, options))
             {                
-                return 1;
+                return 2;
             }
 
-            var cleaner = new CleanerHelper(options);            
-            var exitCode = cleaner.Process();
-            Console.WriteLine(cleaner.WriteLog());
-            cleaner.WriteOutput();
-
-            Console.WriteLine("Exiting with code " + exitCode);
+            int exitCode = 0;
+            try
+            {
+                JobCleanupOptions opts = new JobCleanupOptions();
+                opts.FilterStartsWithCriteria = options.Startswith;
+                opts.FilterExtensionsCriteria = options.Extension;
+                opts.Path = options.Path;
+                exitCode = JobCleanupHelper.RunCleanup(opts);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Unknown exception during file clean.");
+                Console.WriteLine("  Message: " + ex.Message);
+                exitCode = 3;
+            }
             return exitCode;
         }
     }    

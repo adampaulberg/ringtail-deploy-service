@@ -47,13 +47,17 @@
     <Compile Include="..\..\Shared\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="CleanerHelper.cs" />
-    <Compile Include="Options.cs" />
+    <Compile Include="App\CleanerHelper.cs" />
+    <Compile Include="App\JobCleanupHelper.cs" />
+    <Compile Include="App\Options.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Util\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

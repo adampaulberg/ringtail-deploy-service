@@ -290,7 +290,20 @@ namespace ServiceInstaller
                         di.Create();
                         Console.WriteLine("...created folder: " + di.FullName);
                     }
-                    System.IO.Directory.Move(extractPath, installPath);
+
+                    for (int i = 0; i < 5; i++)
+                    {
+                        try
+                        {
+                            System.IO.Directory.Move(extractPath, installPath);
+                            break;
+                        }
+                        catch
+                        {
+                            System.Threading.Thread.Sleep(5000);  // wait 5 seconds.  the unzip may still be holding onto resources.
+                        }
+                    }
+
                 }
                 catch(Exception ex)
                 {
