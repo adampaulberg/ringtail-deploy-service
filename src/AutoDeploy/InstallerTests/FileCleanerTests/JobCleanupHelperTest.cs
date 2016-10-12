@@ -11,8 +11,18 @@ namespace InstallerTests.FileCleanerTests
     [TestClass]
     public class JobCleanupHelperTest
     {
+        //[TestMethod]
+        //public void Test()
+        //{
+        //    JobCleanupOptions opts = new JobCleanupOptions();
+        //    opts.Path = @"D:\tmp\deploy\test";
+        //    opts.FilterStartsWithCriteria = "Ringtail";
+        //    opts.FilterExtensionsCriteria = "exe";
 
+        //    int exit  = JobCleanupHelper.RunCleanup(opts);
 
+        //    Console.WriteLine("Exit code: " + exit);
 
+        //}
     }
 }
