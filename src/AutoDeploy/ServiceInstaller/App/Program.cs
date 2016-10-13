@@ -290,12 +290,32 @@ namespace ServiceInstaller
                         di.Create();
                         Console.WriteLine("...created folder: " + di.FullName);
                     }
-                    System.IO.Directory.Move(extractPath, installPath);
+
+
+                    for (int i = 0; i < 5; i++)
+                    {
+                        try
+                        {
+                            System.IO.Directory.Move(extractPath, installPath);
+                            break;
+                        }
+                        catch(Exception ex)
+                        {
+                            Console.WriteLine("...couldn't move files.  retrying " + (i + 1) + " of 5 times.");
+                            System.Threading.Thread.Sleep(5000);  // wait 5 seconds.  the unzip may still be holding onto resources.
+
+                            if (i == 4)
+                            {
+                                //Console.WriteLine("...error: " + ex.Message);
+                                throw ex;
+                            }
+                        }
+                    }
                 }
                 catch(Exception ex)
                 {
                     Console.WriteLine("...failed to copy zip to " + installPath);
-                    Console.WriteLine("..error:" + ex.Message);
+                    Console.WriteLine("..error: " + ex.Message);
                     return 1;
                 }
 

@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="ConfiguratorHelperTests\ApplicationPoolHelperTests.cs" />
     <Compile Include="ConfiguratorHelperTests\RegistryHelperTests.cs" />
+    <Compile Include="FileCleanerTests\JobCleanupHelperTest.cs" />
     <Compile Include="GenericInstallerTests\GenericInstallerTests.cs" />
     <Compile Include="MasterTests\ConfigCompareTests.cs" />
     <Compile Include="DatabaseUpgraderTests\DatabaseUpgraderTests.cs" />
