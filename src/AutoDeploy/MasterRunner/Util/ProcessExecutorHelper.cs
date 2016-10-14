@@ -288,10 +288,18 @@ namespace MasterRunner.App
                     string nonExtension = commandName.Split('.')[0];
                     var timeout = timeoutList.Find(x => x.Split('|')[0] == nonExtension);
 
+                    var globalTimeout = timeoutList.Find(x => x.Split('|')[0] == "*");
+
                     if (timeout != null && timeout.Length > 0)
                     {
                         logger.AddToLog(" found special timeout: " + timeout);
                         var customTimeout = Convert.ToInt32(timeout.Split('|')[1]);
+                        return customTimeout;
+                    }
+
+                    if (globalTimeout != null && globalTimeout.Length > 0)
+                    {
+                        var customTimeout = Convert.ToInt32(globalTimeout.Split('|')[1]);
                         return customTimeout;
                     }
                 }
