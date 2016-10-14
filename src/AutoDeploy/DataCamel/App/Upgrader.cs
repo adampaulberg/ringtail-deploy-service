@@ -91,7 +91,7 @@ namespace DataCamel.App
 
                 foreach (var x in fetchPortalDatabasesResult.PortalDatabases)
                 {
-                    Logger("\r\nPreparing feature launch keys prior to portal upgrade.\r\n");
+                    Logger("\r\nPreparing feature launch keys prior to portal upgrade for portal: " + x + "\r\n");
                     result = InsertLaunchKeysPriorToUpgrade(options, x);
                 }
 
@@ -144,10 +144,17 @@ namespace DataCamel.App
             try
             {
                 string keyfileDropLocation = options.InstallPath + @"\" + "SQL Component_v" + options.Version +  @"\Scripts\Portal\PostProcessing\" + dbName + "_generated_feature_keys.txt";
-                Logger(string.Format("Attempting to write out Launch Keys\r\n"));
 
-                var helper = new LaunchKeyRunnerHelper();
-                resultCode = helper.RunFile(Logger, keyfileDropLocation);
+                FileInfo f = new FileInfo(keyfileDropLocation);
+                if (f.Exists)
+                {
+                    var helper = new LaunchKeyRunnerHelper();
+                    resultCode = helper.RunFile(Logger, keyfileDropLocation);
+                }
+                else
+                {
+                    Logger("There was no key file in this SQL component, so there are no keys to add.\r\n");
+                }
             }
             catch(Exception ex)
             {
@@ -292,22 +299,26 @@ namespace DataCamel.App
             FileInfo fi = new FileInfo(workingFolder + "ringtail-deploy-feature-utility.exe");
             if (!fi.Exists)
             {
-                //Logger("Skipping Launch Keys - this build may be prior to Launch Keys.\r\n");
+                return 0;
+            }
+
+            var keyFileContents = DataCamel.Helpers.SimpleFileReader.Read(keysFile);
+            if (keyFileContents.Count == 0)
+            {
+                Logger("Launch Keys: No keys needed to be added.\r\n");
                 return 0;
             }
 
             Helpers.ConfigHelper.WriteLaunchKeysAsJson(keysFile);
 
-
             int exitCode = SpawnAndLog(Logger, filename, workingFolder, null, null);
             if (exitCode == 0)
             {
-                Logger("Launch Keys: SUCCESSFUL\r\n");
+                Logger("* Launch Keys: SUCCESS\r\n");
             }
             else
             {
-                Logger("Launch Keys: FAILED\r\n");
-                Logger("Exit code: " + exitCode + "\r\n");
+                Logger("* Launch Keys: FAILED\r\n");
             }
             return exitCode;
 
@@ -318,19 +329,26 @@ namespace DataCamel.App
             int exitCode = 0;
             try
             {
-                Logger("*starting: " + workingFolder + command + "\r\n");
+                var startingString = "*starting: " + workingFolder + command + "\r\n";
                 var result = SpawnProcess(command, workingFolder, username, password);
-
-                Logger("*Output text: ");
-                Logger(result.Output + "\r\n");
 
                 if (result.ExitCode != 0 && !result.ExitOk)
                 {
-                    Logger("*Error text: ");
-                    Logger(result.Error + "\r\n");
-                    Logger("*Exited with code " + result.ExitCode + "\r\n");
+                    Logger(startingString);
+                    if (result.Output.Length > 0)
+                    {
+                        Logger("*Output text: ");
+                        Logger(result.Output + "\r\n");
+                    }
+                    if (result.Error.Length > 0)
+                    {
+                        Logger("*Error text: ");
+                        Logger(result.Error + "\r\n");
+                    }
+                    Logger("*Exit code: " + result.ExitCode + "\r\n");
                     exitCode = result.ExitCode;
                 }
+
             }
             catch (Exception ex)
             {
@@ -340,8 +358,10 @@ namespace DataCamel.App
                 exitCode = 2;
             }
 
-            Logger("*finished: " + workingFolder + command + "\r\n");
-            Logger(" *time: " + DateTime.Now + "\r\n");
+            if (exitCode != 0)
+            {
+                Logger("*finished time: " + DateTime.Now + "\r\n");
+            }
 
             return exitCode;
         }
