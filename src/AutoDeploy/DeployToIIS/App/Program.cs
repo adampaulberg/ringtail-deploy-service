@@ -10,6 +10,7 @@ namespace DeployToIIS
 {
     class Program
     {
+
         static int Main(string[] args)
         {
             Console.WriteLine("DeployToIIS starting ...");
@@ -38,9 +39,7 @@ namespace DeployToIIS
                     {
                         if (appPool.Name == options.AppName)
                         {
-                            appPool.ProcessModel.UserName = options.Username;
-                            appPool.ProcessModel.Password = options.Password;
-                            appPool.ProcessModel.IdentityType = ProcessModelIdentityType.SpecificUser;
+                            SetIdentityToAppPool(options, appPool);
                             appPool.ManagedRuntimeVersion = options.ManagedRuntimeVersion;
                             exists = true;
                             Console.WriteLine("...updating app pool.");
@@ -58,9 +57,7 @@ namespace DeployToIIS
                         {
                             if (appPool.Name == options.AppName)
                             {
-                                appPool.ProcessModel.UserName = options.Username;
-                                appPool.ProcessModel.Password = options.Password;
-                                appPool.ProcessModel.IdentityType = ProcessModelIdentityType.SpecificUser;
+                                SetIdentityToAppPool(options, appPool);
                                 appPool.ManagedRuntimeVersion = options.ManagedRuntimeVersion;
                             }
                         }
@@ -152,6 +149,20 @@ namespace DeployToIIS
             }
 
             return exitCode;
+        }
+
+        private static void SetIdentityToAppPool(Options options, ApplicationPool appPool)
+        {
+            if (!String.IsNullOrEmpty(options.Username))
+            {
+                appPool.ProcessModel.UserName = options.Username;
+                appPool.ProcessModel.Password = options.Password;
+                appPool.ProcessModel.IdentityType = ProcessModelIdentityType.SpecificUser;
+            }
+            else
+            {
+                appPool.ProcessModel.IdentityType = ProcessModelIdentityType.ApplicationPoolIdentity;
+            }
         }
     }
 }
