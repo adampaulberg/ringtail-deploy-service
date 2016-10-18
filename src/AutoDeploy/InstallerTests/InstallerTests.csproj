@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>InstallerTests</RootNamespace>
     <AssemblyName>InstallerTests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -20,6 +20,7 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -75,6 +76,7 @@
     <Compile Include="RegistryReaderTests\RegistryReaderScrubberTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoleResolverTests\RoleResolverTests.cs" />
+    <Compile Include="ServiceInstallerTests\ServiceInstallerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Composer\Composer.csproj">
@@ -129,13 +131,13 @@
       <Project>{b6cc9f23-007d-47ba-8f49-236fba118442}</Project>
       <Name>RequiredConfigurationsGenerator</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RingtailCertificate\RingtailCertificate.csproj">
-      <Project>{a6fa4c7b-dc28-4b52-94a2-a47205455137}</Project>
-      <Name>RingtailCertificate</Name>
-    </ProjectReference>
     <ProjectReference Include="..\RoleResolver\RoleResolver.csproj">
       <Project>{1dbb10f2-5070-419c-b6d4-b0847ad097f0}</Project>
       <Name>RoleResolver</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ServiceInstaller\ServiceInstaller.csproj">
+      <Project>{85e0b9eb-ccaf-4ee7-82b9-d04163affa01}</Project>
+      <Name>ServiceInstaller</Name>
     </ProjectReference>
     <ProjectReference Include="..\UninstallerHelper\UninstallerHelper.csproj">
       <Project>{daa7b640-3e08-430c-ab98-917597ce3601}</Project>

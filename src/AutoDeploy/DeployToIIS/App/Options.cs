@@ -12,10 +12,10 @@ namespace DeployToIIS
 {
     public class Options
     {
-        [Option('u', "username", Required = true, HelpText = "username")]
+        [Option('u', "username", Required = false, HelpText = "username")]
         public string Username { get; set; }
 
-        [Option('p', "password", Required = true, HelpText = "password")]
+        [Option('p', "password", Required = false, HelpText = "password")]
         public string Password { get; set; }
 
         [Option('a', "appname", Required = true , HelpText = "The name of the application")]
