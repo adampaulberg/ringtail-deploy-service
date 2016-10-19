@@ -28,7 +28,7 @@ namespace ServiceInstaller
 
             try
             {
-                exitCode = ServiceInstallerHelper.RunIt(appName);
+                exitCode = ServiceInstallerHelper.InstallService(appName);
                 List<string> s = new List<string>();
                 s.Add(args[0]);
                 s.Add("Ok");
@@ -58,8 +58,6 @@ namespace ServiceInstaller
             Console.WriteLine("... this will create a batch file that calls the DeployToIIS.exe to unpack a zip file and install an IIS website.");
             Console.WriteLine("... It uses a convention based approach - only param is the service name.");
         }
-
-
     }
 
 }

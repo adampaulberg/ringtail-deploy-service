@@ -24,12 +24,12 @@ namespace InstallerTests.ServiceInstallerTests
             vData.Add("SomeOtherApp|RpfDBUser=\"Junk\"");
             
 
-            var newConfig = WebConfigConfigurator.ApplyVolitleDataToConfig("blah", testFile, vData);
+            var newConfig = ConfigHelper.ApplyVolitleDataToConfig("blah", testFile, vData);
             Assert.IsTrue(newConfig[0].Contains("localPortal"), "Should be localPortal");
 
 
             vData.Add("TESTAPP|RpfDBUser=\"alternateKey\"");
-            newConfig = WebConfigConfigurator.ApplyVolitleDataToConfig("TESTAPP", testFile, vData);
+            newConfig = ConfigHelper.ApplyVolitleDataToConfig("TESTAPP", testFile, vData);
             Assert.IsTrue(newConfig[0].Contains("alternateKey"), "Should be alternateKey");
 
         }
