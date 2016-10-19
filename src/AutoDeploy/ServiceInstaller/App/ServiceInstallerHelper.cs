@@ -10,7 +10,12 @@ namespace ServiceInstaller.App
 {
     public class ServiceInstallerHelper
     {
-        public static int RunIt(string appName)
+        /// <summary>
+        /// This is the main workflow for the ServiceInstaller.
+        /// </summary>
+        /// <param name="appName"></param>
+        /// <returns></returns>
+        public static int InstallService(string appName)
         {
             List<string> exclusions = DynamicExclusionDetector.DetectExclusions(appName);
 
@@ -31,8 +36,8 @@ namespace ServiceInstaller.App
             var filledInParameters = new List<string>();
 
             NormalizeZipName(appName);
-            var unzipResult = ExtractZip(appName);
 
+            var unzipResult = ExtractZip(appName);
             if (unzipResult == false)
             {
                 return 2;
@@ -43,17 +48,14 @@ namespace ServiceInstaller.App
             }
 
             var cleanResult = CleanupTarget(appName, GetInstallPath(appName));
-
             if (cleanResult != 0)
             {
                 return cleanResult;
             }
 
-            var applyWebConfig = ApplyConfigToWebConfig(appName);
-            
+            ApplyConfigToWebConfig(appName);
 
             var moveResult = MoveZipToProgramFiles(appName);
-
             if (moveResult != 0)
             {
                 return moveResult;
@@ -61,8 +63,6 @@ namespace ServiceInstaller.App
 
 
             var iisInstallCmd = String.Empty;
-
-
             try
             {
                 iisInstallCmd = GenerateIISInstallCommand(volitileDataList, appName);
@@ -72,8 +72,8 @@ namespace ServiceInstaller.App
                 Console.WriteLine("Error: " + ex.Message);
                 return 1;
             }
-            filledInParameters.Add(iisInstallCmd);
 
+            filledInParameters.Add(iisInstallCmd);
 
             if (String.IsNullOrEmpty(iisInstallCmd))
             {
@@ -136,7 +136,7 @@ namespace ServiceInstaller.App
                     {
                         var configFile = SimpleFileReader.Read(extractPath + @"\" + "web.config");
                         var volitleData = SimpleFileReader.Read(@"C:\upgrade\AutoDeploy\volitleData.config");
-                        var newWebConfig = WebConfigConfigurator.ApplyVolitleDataToConfig(applicationName, configFile, volitleData);
+                        var newWebConfig = ConfigHelper.ApplyVolitleDataToConfig(applicationName, configFile, volitleData);
 
                         if (newWebConfig.Count == configFile.Count && newWebConfig.Count > 0)
                         {
@@ -358,44 +358,45 @@ namespace ServiceInstaller.App
             }
             return iisInstall;
         }
-    }
 
-    internal class DynamicExclusionDetector
-    {
-        public static List<string> DetectExclusions(string appName)
+
+        internal class DynamicExclusionDetector
         {
-            var list = new List<string>();
-
-            var di = new DirectoryInfo(Environment.CurrentDirectory);
-
-            var files = di.GetFiles();
-
-            foreach (var f in files.ToList())
+            public static List<string> DetectExclusions(string appName)
             {
-                try
+                var list = new List<string>();
+
+                var di = new DirectoryInfo(Environment.CurrentDirectory);
+
+                var files = di.GetFiles();
+
+                foreach (var f in files.ToList())
                 {
-                    var fileName = f.Name;
-                    var STR_OMIT = "omit-";
-                    if (fileName.StartsWith(STR_OMIT))
+                    try
                     {
-                        var omission = fileName.Substring(STR_OMIT.Length, fileName.Length - STR_OMIT.Length);
-                        omission = omission.Split('.')[0];
-
-                        list.Add(omission);
-
-                        if (omission.Contains(appName))
+                        var fileName = f.Name;
+                        var STR_OMIT = "omit-";
+                        if (fileName.StartsWith(STR_OMIT))
                         {
-                            Console.WriteLine("found omission: " + omission);
+                            var omission = fileName.Substring(STR_OMIT.Length, fileName.Length - STR_OMIT.Length);
+                            omission = omission.Split('.')[0];
+
+                            list.Add(omission);
+
+                            if (omission.Contains(appName))
+                            {
+                                Console.WriteLine("found omission: " + omission);
+                            }
                         }
                     }
+                    catch
+                    {
+                        Console.WriteLine("Minor problem reading omission files.  Continuing.");
+                    }
                 }
-                catch
-                {
-                    Console.WriteLine("Minor problem reading omission files.  Continuing.");
-                }
-            }
 
-            return list;
+                return list;
+            }
         }
     }
 }
