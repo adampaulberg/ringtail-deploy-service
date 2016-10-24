@@ -144,17 +144,8 @@ namespace DataCamel.App
             try
             {
                 string keyfileDropLocation = options.InstallPath + @"\" + "SQL Component_v" + options.Version +  @"\Scripts\Portal\PostProcessing\" + dbName + "_generated_feature_keys.txt";
-
-                FileInfo f = new FileInfo(keyfileDropLocation);
-                if (f.Exists)
-                {
-                    var helper = new LaunchKeyRunnerHelper();
-                    resultCode = helper.RunFile(Logger, keyfileDropLocation);
-                }
-                else
-                {
-                    Logger("There was no key file in this SQL component, so there are no keys to add.\r\n");
-                }
+                var helper = new LaunchKeyRunnerHelper();
+                resultCode = helper.RunFile(Logger, keyfileDropLocation);
             }
             catch(Exception ex)
             {
