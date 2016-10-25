@@ -132,7 +132,7 @@ namespace DataCamel.Helpers
                 return serializer.Serialize(keysList);
             }
 
-            return string.Empty;
+            return "{}";
         }
 
     }

@@ -1,4 +1,5 @@
 ﻿using DataCamel.Data;
+using DataCamel.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -62,10 +63,18 @@ namespace DataCamel.App
             if (primaryAction == "upgrade")
             {
                 databases.AddRange(options.Databases);
+                List<string> portalDbs = new List<string>();
                 foreach (var x in databases)
                 {
-                    Logger("\r\nPreparing feature launch keys prior to portal upgrade.\r\n");
-                    result = InsertLaunchKeysPriorToUpgrade(options, x);
+                    PortalDataMapper dbMapper = new PortalDataMapper();
+
+                    var dbType = dbMapper.GetDatabaseType(options.Server, x, options.Username, options.Password);
+                    if (dbType == DatabaseType.PORTAL)
+                    {
+                        portalDbs.Add(x);
+                        Logger("\r\nPreparing feature launch keys prior to portal upgrade for portal: " + x + "\r\n");
+                        result = CreateLaunchKeysForPostProcessing(options, x);
+                    }
 
                     if(result != 0)
                     {
@@ -77,6 +86,14 @@ namespace DataCamel.App
                 {
                     result = RunUpgradeDatabases(options, databases);
                 }
+
+                if (result == 0)
+                {
+                    // check that featureset_list table is correct for portal dbs, if any.
+                    result = VerifyFeaturesetListTable(options, portalDbs);
+                }
+
+
                 return result;
 
             }
@@ -92,13 +109,19 @@ namespace DataCamel.App
                 foreach (var x in fetchPortalDatabasesResult.PortalDatabases)
                 {
                     Logger("\r\nPreparing feature launch keys prior to portal upgrade for portal: " + x + "\r\n");
-                    result = InsertLaunchKeysPriorToUpgrade(options, x);
+                    result = CreateLaunchKeysForPostProcessing(options, x);
                 }
 
                 if (result == 0)
                 {
                     Logger("\r\nStarting portal upgrade.\r\n");
                     result = RunUpgradeDatabases(options, fetchPortalDatabasesResult.PortalDatabases);
+                }
+
+                if (result == 0)
+                {
+                    // check that featureset_list table is correct.
+                    result = VerifyFeaturesetListTable(options, fetchPortalDatabasesResult.PortalDatabases);
                 }
 
                 if (result == 0)
@@ -138,7 +161,7 @@ namespace DataCamel.App
 
         }
 
-        int InsertLaunchKeysPriorToUpgrade(Options options, string dbName)
+        int CreateLaunchKeysForPostProcessing(Options options, string dbName)
         {
             int resultCode = 0;
             try
@@ -195,6 +218,38 @@ namespace DataCamel.App
             return resultCode;
         }
 
+        int VerifyFeaturesetListTable(Options options, List<string> databases)
+        {
+            try
+            {
+                var launchKeys = new PortalDataMapper();
+
+                foreach (var database in databases)
+                {
+                    if (database == "rs_tempdb")
+                    {
+                        continue;
+                    }
+                    var featuresetList = launchKeys.ReadFeaturesetListTable(options.Server, database, options.Username, options.Password);
+                    var problems = LaunchKeyRunnerHelper.ReconcileExpectedKeysWithPostUpgradeKeys(
+                        ConfigHelper.GetLaunchKeysFromDefaultConfig(), 
+                        featuresetList.ToList());
+
+                    foreach (var x in problems)
+                    {
+                        Logger("UPGRADE WARNING - the following selected launch key was not in the database after the upgrade - " + x + "\r\n");
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger("Failure in checking launch keys: " + ex.Message + "\r\n");
+                return 1;
+            }
+            return 0;
+        }
+
         public class DatabaseUpgradeError : Exception
         {
             public DatabaseUpgradeError(string message)
@@ -225,13 +280,50 @@ namespace DataCamel.App
                     command.Parameters.AddWithValue("@ringtail_app_version", options.Version);
                     command.ExecuteNonQuery();
                 }
-                Logger(string.Format("Update for '{0}' Complete\r\n", database));
+
+                ReadUpgradeTable(options, database);
 
             }
             catch (Exception ex)
             {
                 Logger(string.Format("Update for '{0}' Failed ({1})\r\n", database, ex.Message));
                 throw ex;
+            }
+        }
+
+        /// <summary>
+        /// Reads the database.upgrade table, and adds appropriate information to the logs.
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="database"></param>
+        public void ReadUpgradeTable(Options options, string database)
+        {
+            PortalDataMapper dbMapper = new PortalDataMapper();
+
+            if (upgradeErrors.Count > 0)
+            {
+                bool loggedSomething = false;
+                foreach (var error in upgradeErrors)
+                {
+                    // usually the line before 'Upgrade failed...' contains the info we want, but if 'upgrade failed' is the only line we get, use those as the details.
+                    var split = error.Split('\n');
+                    var errorText = split[0];
+                    if (errorText.Length > 100)
+                    {
+                        errorText = errorText.Substring(0, 99);
+                    }
+
+                    if (!errorText.StartsWith("Upgrade failed") || !loggedSomething)
+                    {
+                        loggedSomething = true;
+                        Logger(string.Format("  Details: {0}", errorText));
+                    }
+                }
+                Logger(string.Format("UPGRADE WARNING - {0} database upgrade failed - see the {0}.upgrade table for more information.\r\n", database));
+            }
+            else
+            {
+                Logger(string.Format("Update for '{0}' Complete\r\n", database));
             }
         }
 
@@ -274,157 +366,6 @@ namespace DataCamel.App
                 return new GetDatabaseResult(null, null, null, 6);
             }
             return new GetDatabaseResult(portalDbs, rpfDbs, caseDbs, 0);
-        }
-    }
-
-
-    public class LaunchKeyRunnerHelper
-    {
-        internal string keysFile = @"C:\Upgrade\AutoDeploy\launchKeys.json";
-        internal string workingFolder = @"C:\upgrade\autodeploy\";
-
-        public int RunFile(Action<string> Logger, string targetFilePath)
-        {
-            string filename = "ringtail-deploy-feature-utility.exe --bulkdatapath=\"" + targetFilePath + "\" --keysfile=\"" + keysFile + "\"";
-
-            FileInfo fi = new FileInfo(workingFolder + "ringtail-deploy-feature-utility.exe");
-            if (!fi.Exists)
-            {
-                return 0;
-            }
-
-            var keyFileContents = DataCamel.Helpers.SimpleFileReader.Read(keysFile);
-            if (keyFileContents.Count == 0)
-            {
-                Logger("Launch Keys: No keys needed to be added.\r\n");
-                return 0;
-            }
-
-            Helpers.ConfigHelper.WriteLaunchKeysAsJson(keysFile);
-
-            int exitCode = SpawnAndLog(Logger, filename, workingFolder, null, null);
-            if (exitCode == 0)
-            {
-                Logger("* Launch Keys: SUCCESS\r\n");
-            }
-            else
-            {
-                Logger("* Launch Keys: FAILED\r\n");
-            }
-            return exitCode;
-
-        }
-
-        public int SpawnAndLog(Action<string> Logger, string command, string workingFolder, string username, string password)
-        {
-            int exitCode = 0;
-            try
-            {
-                var startingString = "*starting: " + workingFolder + command + "\r\n";
-                var result = SpawnProcess(command, workingFolder, username, password);
-
-                if (result.ExitCode != 0 && !result.ExitOk)
-                {
-                    Logger(startingString);
-                    if (result.Output.Length > 0)
-                    {
-                        Logger("*Output text: ");
-                        Logger(result.Output + "\r\n");
-                    }
-                    if (result.Error.Length > 0)
-                    {
-                        Logger("*Error text: ");
-                        Logger(result.Error + "\r\n");
-                    }
-                    Logger("*Exit code: " + result.ExitCode + "\r\n");
-                    exitCode = result.ExitCode;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Logger("*RunFile error - trying to run the process threw an exception." + "\r\n");
-                Logger(ex.Message);
-                Logger(ex.StackTrace);
-                exitCode = 2;
-            }
-
-            if (exitCode != 0)
-            {
-                Logger("*finished time: " + DateTime.Now + "\r\n");
-            }
-
-            return exitCode;
-        }
-
-
-        public class ProcessOutcome
-        {
-            public int ExitCode { get; private set; }
-            public string Output { get; private set; }
-            public string Error { get; private set; }
-            public bool ExitOk { get; private set; }
-
-            public ProcessOutcome(string error, string output, int exitCode, bool exitOk)
-            {
-                this.ExitCode = exitCode;
-                this.Error = error;
-                this.Output = output;
-                this.ExitOk = exitOk;
-            }
-        }
-
-        private ProcessOutcome SpawnProcess(string commandName, string workingDirectory, string username, string password)
-        {
-            var index = commandName.IndexOf(' ');
-
-            string file = commandName;
-            string args = string.Empty;
-            if (index != -1)
-            {
-                file = commandName.Substring(0, index);
-                args = commandName.Substring(index + 1, commandName.Length - index - 1);
-            }
-
-            string cmd = "/c " + workingDirectory + commandName;
-            var processInfo = new ProcessStartInfo("cmd.exe", cmd);
-
-            var process = new System.Diagnostics.Process();
-            process.StartInfo.FileName = file;
-            process.StartInfo.WorkingDirectory = workingDirectory;
-            process.StartInfo.Arguments = args;
-            process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.RedirectStandardError = true;
-            process.StartInfo.UseShellExecute = false;
-
-            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
-            {
-                var nameParts = username.Split('\\');
-                string domain = null;
-                string user = null;
-                if (nameParts.Length == 2)
-                {
-                    domain = nameParts[0];
-                    user = nameParts[1];
-                }
-                else
-                {
-                    user = username;
-                }
-
-                process.StartInfo.Domain = domain;
-                process.StartInfo.UserName = user;
-                SecureString securePassword = new SecureString();
-                foreach (char c in password.ToCharArray()) securePassword.AppendChar(c);
-                process.StartInfo.Password = securePassword;
-            }
-
-            process.Start();
-            string output = process.StandardOutput.ReadToEnd();
-            string error = process.StandardError.ReadToEnd();
-
-            return new ProcessOutcome(error, output, process.ExitCode, false);
         }
     }
 
