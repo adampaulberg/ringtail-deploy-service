@@ -299,6 +299,7 @@ namespace DataCamel.App
         public void ReadUpgradeTable(Options options, string database)
         {
             PortalDataMapper dbMapper = new PortalDataMapper();
+            var upgradeErrors = dbMapper.ReadErrosFromUpgradeTable(options.Server, database, options.Username, options.Password);
 
             if (upgradeErrors.Count > 0)
             {
