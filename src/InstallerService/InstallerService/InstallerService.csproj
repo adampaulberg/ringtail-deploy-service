@@ -119,6 +119,7 @@
     <Compile Include="Daemon\Controllers\RetryController.cs" />
     <Compile Include="Daemon\Controllers\StatusController.cs" />
     <Compile Include="Daemon\Controllers\StopController.cs" />
+    <Compile Include="Daemon\Controllers\StorageController.cs" />
     <Compile Include="Daemon\Controllers\UninstallerController.cs" />
     <Compile Include="Daemon\Controllers\UpdateInstallerServiceController.cs" />
     <Compile Include="Helpers\ConfigParser.cs" />
