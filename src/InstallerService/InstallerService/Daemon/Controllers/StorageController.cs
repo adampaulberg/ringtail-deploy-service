@@ -1,45 +1,53 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http;
-using System.Diagnostics;
+using System.Dynamic;
 
 namespace InstallerService.Daemon.Controllers
 {
     public class StorageController : BaseController
     {
         [HttpGet]
-        public bool GetIsStorageSpaceAvailable()
+        public List<ExpandoObject> GetIsStorageSpaceAvailable()
         {
             return GetAvailableStorage();
         }
 
         [HttpGet]
-        public bool GetIsStorageSpaceAvailable(string minGB)
+        public List<ExpandoObject> GetIsStorageSpaceAvailable(string minGB)
         {
             int tempMinGB = int.Parse(minGB);
             return GetAvailableStorage(tempMinGB);
         }
 
-        private static bool GetAvailableStorage(int minGB = 10)
+        private static List<ExpandoObject> GetAvailableStorage(int minGB = 10)
         {
             DriveInfo[] allDrives = DriveInfo.GetDrives();
+            List<ExpandoObject> driveData = new List<ExpandoObject>();
+
             foreach (DriveInfo d in allDrives)
             {
-                if (d.Name == "C:\\")
+                if(d.IsReady)
                 {
                     long freeGB = d.AvailableFreeSpace / (1024 * 1024 * 1024);
+
+                    dynamic obj = new ExpandoObject();
+                    obj.Name = d.Name;
+                    obj.freeGB = freeGB;
+
                     if(freeGB >= minGB)
                     {
-                        return true;
+                        obj.success = true;
+                    } else
+                    {
+                        obj.success = false;
                     }
+
+                    driveData.Add(obj);
                 }
             }
 
-            return false;
+            return driveData;
         }
     }
 }
