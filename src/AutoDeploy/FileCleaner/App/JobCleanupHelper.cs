@@ -101,6 +101,14 @@ namespace FileCleaner.App
                     }
                 }
 
+                if (x.Name.Contains("RingtailCertificate"))
+                {
+                    // we don't want to delete files from our own tool set.
+                    // in the future, we should probably copy fetch files to a subfolder.
+                    continue;
+                }
+
+
                 filteredFiles.Add(x);
             }
             return filteredFiles;
