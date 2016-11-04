@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="App\Upgrader.cs" />
     <Compile Include="Helpers\FileHelpers.cs" />
+    <Compile Include="Helpers\LaunchKeyRunnerHelper.cs" />
     <Compile Include="Helpers\ScriptInstallHelper.cs" />
     <Compile Include="Models\Coordinator.cs" />
     <Compile Include="Data\CoordinatorDataMapper.cs" />

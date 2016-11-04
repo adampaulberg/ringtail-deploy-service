@@ -8,6 +8,7 @@ using DatabaseUpgrader.App;
 using System.Web.Script.Serialization;
 using DataCamel.Helpers;
 
+
 namespace InstallerTests
 {
     [TestClass]
@@ -66,7 +67,7 @@ namespace InstallerTests
             // Write keys to temp file
             string tempFile = Path.GetTempFileName();
 
-            DataCamel.Helpers.ConfigHelper.WriteLaunchKeysAsJson(new ConfigHelper.ConfigOptions() { VolitleDataFile = tempFile, WriteLocation = Path.Combine(Directory.GetCurrentDirectory(), generateConfig()) });
+            ConfigHelper.WriteLaunchKeysAsJson(new ConfigHelper.ConfigOptions() { VolitleDataFile = tempFile, WriteLocation = Path.Combine(Directory.GetCurrentDirectory(), generateConfig()) });
 
             Assert.IsTrue(File.Exists(tempFile), "Keyfile was not created");
             string keyFileContents = File.ReadAllText(tempFile);
@@ -81,6 +82,31 @@ namespace InstallerTests
             {
                 Assert.Fail("JSon data could not be deserialized indicating bad data: " + ex.Message);
             }
+        }
+
+        [TestMethod]
+        public void ReconcileLaunchKeyswithFeatureSetList()
+        {
+            List<string> configs = new List<string>();
+            configs.Add("LAUNCHKEY|MyKey=\"someFeature\"");
+
+            List<string> featuresetList = new List<string>();
+            featuresetList.Add("MyKey");
+
+            // Same keys... no problems.
+            var result = LaunchKeyRunnerHelper.ReconcileExpectedKeysWithPostUpgradeKeys(configs, featuresetList);
+            Assert.AreEqual(0, result.Count);
+
+            // Featureset_list table has more keys.... no problems.
+            featuresetList.Add("MyKey2");
+            result = LaunchKeyRunnerHelper.ReconcileExpectedKeysWithPostUpgradeKeys(configs, featuresetList);
+            Assert.AreEqual(0, result.Count);
+
+            // volitle_data has a key that featureset list doesn't have ... 1 problem.
+            configs.Add("LAUNCHKEY|MyKey3=\"someFeature\"");
+            result = LaunchKeyRunnerHelper.ReconcileExpectedKeysWithPostUpgradeKeys(configs, featuresetList);
+            Assert.AreEqual(1, result.Count);
+            Assert.AreEqual("MyKey3", result[0]);
         }
 
         [TestMethod]
