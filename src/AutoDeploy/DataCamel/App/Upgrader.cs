@@ -286,7 +286,7 @@ namespace DataCamel.App
             }
             catch (Exception ex)
             {
-                Logger(string.Format("UPGRADE WARNING - {0} database upgrade failed.  Message:  {1} ", database, ex.Message));
+                Logger(string.Format("UPGRADE WARNING - {0} database upgrade failed.  Message:  {1}\r\n", database, ex.Message));
             }
         }
 

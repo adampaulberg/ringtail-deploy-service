@@ -32,20 +32,20 @@ namespace DataCamel.Helpers
             Helpers.ConfigHelper.WriteLaunchKeysAsJson(keysFile);
 
             var keyFileContents = ExpectedKeys();
-            if (keyFileContents.Count == 0)
+            if (keyFileContents.Count == 0 || keyFileContents.Count == 1 && keyFileContents[0].StartsWith("{}"))
             {
-                Logger("Launch Keys: No keys needed to be added.\r\n");
+                Logger("* Feature Keys: No keys needed to be added.\r\n");
                 return 0;
             }
 
             int exitCode = SpawnAndLog(Logger, filename, workingFolder, null, null);
             if (exitCode == 0)
             {
-                Logger("* Launch Keys: SUCCESS\r\n");
+                Logger("* Feature Keys: SUCCESS\r\n");
             }
             else
             {
-                Logger("* Launch Keys: FAILED\r\n");
+                Logger("* Feature Keys: FAILED\r\n");
             }
             return exitCode;
 
