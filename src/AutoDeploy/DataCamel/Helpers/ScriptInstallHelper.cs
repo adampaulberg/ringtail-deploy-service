@@ -91,22 +91,31 @@ namespace DataCamel.Helpers
             var script = GetScriptContents(resourceName);
             var scriptParts = script.Split(new string[] { "\r\ngo" }, StringSplitOptions.RemoveEmptyEntries);
 
-            Logger(string.Format("Creating master.dbo.{0}... ", scriptName));
-            string connStr = string.Format("Data Source={0};Initial Catalog={1};User Id={2};Password={3}", Options.Server, "master", Options.Username, Options.Password);
+            string log = string.Format("Creating master.dbo.{0}... ", scriptName);
 
-            using (SqlConnection conn = new SqlConnection(connStr))
+            try
             {
-                conn.Open();
-                foreach (var scriptPart in scriptParts)
+                
+                string connStr = string.Format("Data Source={0};Initial Catalog={1};User Id={2};Password={3}", Options.Server, "master", Options.Username, Options.Password);
+
+                using (SqlConnection conn = new SqlConnection(connStr))
                 {
-                    using (SqlCommand command = new SqlCommand(scriptPart, conn))
+                    conn.Open();
+                    foreach (var scriptPart in scriptParts)
                     {
-                        command.CommandType = System.Data.CommandType.Text;
-                        command.ExecuteNonQuery();
+                        using (SqlCommand command = new SqlCommand(scriptPart, conn))
+                        {
+                            command.CommandType = System.Data.CommandType.Text;
+                            command.ExecuteNonQuery();
+                        }
                     }
                 }
-            }            
-            Logger("Completed\r\n");
+            }
+            catch (Exception ex) {
+                Logger(log);
+                Logger(String.Format("Failed: {0}\r\n" + ex.Message));
+                throw;
+            }
         }
 
     }
