@@ -286,7 +286,12 @@ namespace DataCamel.App
             }
             catch (Exception ex)
             {
-                Logger(string.Format("UPGRADE WARNING - {0} database upgrade failed.  Message:  {1}\r\n", database, ex.Message));
+                string helpText = "";
+                if (ex.Message.StartsWith("Invalid object name 'dbo.list_variables'"))
+                {
+                    helpText = "Did you remove this database from the server but forget to remove its record from the portal's [main] table? ";
+                }
+                Logger(string.Format("UPGRADE WARNING - {0} database upgrade failed.  Message:  {1}{2}\r\n", database, helpText, ex.Message));
             }
         }
 
