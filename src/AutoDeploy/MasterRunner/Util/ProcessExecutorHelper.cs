@@ -48,20 +48,25 @@ namespace MasterRunner.App
             {
                 logger.AddAndWrite("-----------");
                 logger.AddAndWrite(headerInfo);
-                logger.AddAndWrite("* starting: " + workingFolder + command);
-                //logger.AddAndWrite("* time: " + DateTime.Now);
+
+                var split = command.Split(' ')[0];
+                logger.AddAndWrite("* starting: " + workingFolder + split);
+                DateTime dt = DateTime.Now;
+                
 
                 var result = SpawnProcess(command, workingFolder, username, password);
 
                 if (result.ExitCode != 0 && !result.ExitOk)
                 {
-                    logger.AddAndWrite("* time: " + DateTime.Now);
+                    logger.AddAndWrite("* time started: " + dt);
+                    logger.AddAndWrite("* time ended: " + DateTime.Now);
                     logger.AddAndWrite("* Exited with code " + result.ExitCode);
                     exitCode = result.ExitCode;
                 }
                 else if (result.ExitCode != 0 && result.ExitOk)
                 {
-                    logger.AddAndWrite("* time: " + DateTime.Now);
+                    logger.AddAndWrite("* time started: " + dt);
+                    logger.AddAndWrite("* time ended: " + DateTime.Now);
                     logger.AddAndWrite("* Exited with code " + result.ExitCode);
                     logger.AddAndWrite("* ...but this is a whitelisted exit code for this command");
                     exitCode = 0;

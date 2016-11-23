@@ -32,6 +32,9 @@ namespace DatabaseUpgrader.App
         [Option('c', "component", HelpText = "The SQL Component version to use, defaults to newest in install path")]
         public string Version { get; set; }
 
+        [Option('m', "max", DefaultValue = "3", HelpText = "The maximum number of concurrent DB upgrades to run at the same time.")]
+        public string Max { get; set; }
+
         [Option('i', "install-path", DefaultValue = @"C:\Program Files\Ringtail", HelpText = "SQL Components install path")]
         public string InstallPath { get; set; }
 
