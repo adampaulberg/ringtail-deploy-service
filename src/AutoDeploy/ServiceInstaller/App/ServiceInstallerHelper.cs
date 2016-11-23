@@ -292,70 +292,71 @@ namespace ServiceInstaller.App
             //Ringtail-Svc-ContentSearch|Username="DOMAIN\user"
             //Ringtail-Svc-ContentSearch|Password="PASSWORD"
             //Ringtail-Svc-ContentSearch|Version="1"
-            var userKeyValue = appConfigs.Find(x => x.Contains(applicationName + "|SERVICEUSERNAME="));
-            var pwdKeyValue = appConfigs.Find(x => x.Contains(applicationName + "|SERVICEPASSWORD="));
+            //var userKeyValue = appConfigs.Find(x => x.Contains(applicationName + "|SERVICEUSERNAME="));
+            //var pwdKeyValue = appConfigs.Find(x => x.Contains(applicationName + "|SERVICEPASSWORD="));
             var installPath = GetInstallPath(applicationName);
 
-            var user = "";
-            var pwd = "";
+            //var user = "";
+            //var pwd = "";
 
 
-            Console.WriteLine("userKeyValue: " + userKeyValue);
+            //Console.WriteLine("userKeyValue: " + userKeyValue);
 
-            bool includeUserPassword = false;
-            if (!String.IsNullOrEmpty(userKeyValue))
-            {
-                //Console.WriteLine(" Missing a required entry in volitleData.config for the key: " + " " + applicationName + "|SERVICEUSERNAME=");
-                includeUserPassword = true;
-            }
+            //bool includeUserPassword = false;
+            //if (!String.IsNullOrEmpty(userKeyValue))
+            //{
+            //    //Console.WriteLine(" Missing a required entry in volitleData.config for the key: " + " " + applicationName + "|SERVICEUSERNAME=");
+            //    includeUserPassword = true;
+            //}
 
-            if (!String.IsNullOrEmpty(pwdKeyValue))
-            {
-                //Console.WriteLine(" Missing a required entry in volitleData.config for the key: " + " " + applicationName + "|SERVICEPASSWORD=");
-                includeUserPassword = true;
-            }
+            //if (!String.IsNullOrEmpty(pwdKeyValue))
+            //{
+            //    //Console.WriteLine(" Missing a required entry in volitleData.config for the key: " + " " + applicationName + "|SERVICEPASSWORD=");
+            //    includeUserPassword = true;
+            //}
 
-            if (!includeUserPassword)
-            {
-                Console.WriteLine(" Did not find a service username or password for " + " " + applicationName + "|SERVICEPASSWORD=" + " will deploy with ApplicationPoolIdentity.");
-            }
+            //if (!includeUserPassword)
+            //{
+            //    Console.WriteLine(" Did not find a service username or password for " + " " + applicationName + "|SERVICEPASSWORD=" + " will deploy with ApplicationPoolIdentity.");
+            //}
 
 
-            try
-            {
-                //Console.WriteLine("...userkeyvalue: " + userKeyValue);
-                //Console.WriteLine("...pwdKeyValue: " + pwdKeyValue);
+            //try
+            //{
+            //    //Console.WriteLine("...userkeyvalue: " + userKeyValue);
+            //    //Console.WriteLine("...pwdKeyValue: " + pwdKeyValue);
 
-                if (!String.IsNullOrEmpty(userKeyValue))
-                {
-                    user = userKeyValue.Split('=')[1];
-                    user = user.Substring(1, user.Length - 2);
-                }
+            //    if (!String.IsNullOrEmpty(userKeyValue))
+            //    {
+            //        user = userKeyValue.Split('=')[1];
+            //        user = user.Substring(1, user.Length - 2);
+            //    }
 
-                if (!String.IsNullOrEmpty(pwdKeyValue))
-                {
-                    pwd = pwdKeyValue.Split('=')[1];
-                    pwd = pwd.Substring(1, pwd.Length - 2);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("...error reading configurations: " + ex.Message);
-                throw ex;
-            }
+            //    if (!String.IsNullOrEmpty(pwdKeyValue))
+            //    {
+            //        pwd = pwdKeyValue.Split('=')[1];
+            //        pwd = pwd.Substring(1, pwd.Length - 2);
+            //        pwd = pwd.Replace("%", "%%");           // batch files need the have % signs replaced with double %%.
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine("...error reading configurations: " + ex.Message);
+            //    throw ex;
+            //}
 
             //DeployToIIS.exe -u DOMAIN\user -p PASSWORD! -a RingtailSearchSvc -i "C:\Program Files\FTI Technology\Ringtail Search Service"
 
 
             string iisInstall = string.Empty;
-            if (includeUserPassword == true)
-            {
-                iisInstall = String.Format("DeployToIIS.exe -u {0} -p {1} -a {2} -i \"{3}\"", user, pwd, applicationName, installPath);
-            }
-            else
-            {
+            //if (includeUserPassword == true)
+            //{
+            //    iisInstall = String.Format("DeployToIIS.exe -u {0} -p {1} -a {2} -i \"{3}\"", user, pwd, applicationName, installPath);
+            //}
+            //else
+            //{
                 iisInstall = String.Format("DeployToIIS.exe -a {0} -i \"{1}\"", applicationName, installPath);
-            }
+            //}
             return iisInstall;
         }
 

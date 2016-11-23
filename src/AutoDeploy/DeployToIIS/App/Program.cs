@@ -1,4 +1,5 @@
-﻿using Microsoft.Web.Administration;
+﻿using DeployToIIS.Util;
+using Microsoft.Web.Administration;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeployToIIS
+namespace DeployToIIS.App
 {
     class Program
     {
@@ -21,6 +22,10 @@ namespace DeployToIIS
             if (CommandLine.Parser.Default.ParseArguments(args, options))
             {
                 options.InstallPath = options.InstallPath.Replace("\"", "");
+
+                string volitileData = "volitleData.config";
+                var volitileDataList = SimpleFileReader.Read(volitileData);
+                ConfigHelper.TryApplyCredentialsToOptions(volitileDataList, options);
 
 
                 DirectoryInfo di = new DirectoryInfo(options.InstallPath);
@@ -150,6 +155,8 @@ namespace DeployToIIS
 
             return exitCode;
         }
+
+
 
         private static void SetIdentityToAppPool(Options options, ApplicationPool appPool)
         {

@@ -13,11 +13,11 @@ namespace DatabaseUpgrader.App
             string str = string.Empty;
             if (opts.Actions[0].ToLower() == "upgradeportal")
             {
-                str = "DataCamel.exe " + opts.Actions[0] + " " + Options.ConvertOptionListToSingle(opts.Databases) + " -u " + opts.Username + " -p " + opts.Password;
+                str = "DataCamel.exe " + opts.Actions[0] + " " + Options.ConvertOptionListToSingle(opts.Databases) + " -u " + opts.Username + " -p " + opts.Password + " -m " + opts.Max;
             }
             else
             {
-                str = "DataCamel.exe " + opts.Actions[0] + " -u " + opts.Username + " -p " + opts.Password + " -d " + Options.ConvertOptionListToSingle(opts.Databases);
+                str = "DataCamel.exe " + opts.Actions[0] + " -u " + opts.Username + " -p " + opts.Password + " -d " + Options.ConvertOptionListToSingle(opts.Databases) + " -m " + opts.Max;
             }
 
             var commands = new List<string>();
