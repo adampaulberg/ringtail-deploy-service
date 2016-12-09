@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Composer", "AutoDeploy\Composer\Composer.csproj", "{B7D2D4E4-7FAE-40F0-9DBD-BBBB1BE3167E}"
 EndProject
@@ -65,6 +65,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{DAB2
 		AutoDeploy\Scripts\clean.bat = AutoDeploy\Scripts\clean.bat
 		AutoDeploy\Scripts\ConfiguratorAutomator.exe = AutoDeploy\Scripts\ConfiguratorAutomator.exe
 		AutoDeploy\Scripts\restart-supervisor.ps1 = AutoDeploy\Scripts\restart-supervisor.ps1
+		AutoDeploy\Scripts\restart.bat = AutoDeploy\Scripts\restart.bat
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configs", "Configs", "{34516DDE-7C6D-4289-80D1-519935B213A2}"

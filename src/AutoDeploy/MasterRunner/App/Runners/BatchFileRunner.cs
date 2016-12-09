@@ -68,6 +68,14 @@ namespace MasterRunner.App.Runners
                         continue;
                     }
                     var result = helper.SpawnAndLog(command, workingFolder, username, password, progress);
+
+                    Random rnd = new Random();
+                    int rand = rnd.Next(1, 100);
+                    if(rand <= 20)
+                    {
+                        result = rand;
+                    }
+
                     if (result != 0)
                     {
                         exitCode = result;

@@ -106,10 +106,10 @@ namespace Deployer.App
             {
                 Console.WriteLine("Verbose logs can be found here: " + logFileName);
 
-                Logger correctiveActoins = new Logger();
-                correctiveActoins.AddToLog("REBOOT");
-                correctiveActoins.AddToLog(@"C:\Upgrade\AutoDeploy\retry.bat");
-                correctiveActoins.Write("deployer-corrective.log");
+                Logger correctiveActions = new Logger();
+                correctiveActions.AddToLog("REBOOT");
+                correctiveActions.AddToLog(@"C:\Upgrade\AutoDeploy\retry.bat");
+                correctiveActions.Write("deployer-corrective.log");
 
                 Console.WriteLine("** CORRECTIVE ACTION **");
                 Console.WriteLine("   Reboot the machine.");
